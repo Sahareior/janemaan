@@ -35,12 +35,12 @@ const Dashboard = () => {
       label: 'Clue Management',
     },
     {
-      key: 'qr-code',
+      key: 'qr-management',
       icon: <MdQrCode size={20} />,
       label: 'QR Code',
     },
     {
-      key: 'prize-claim',
+      key: 'prize',
       icon: <MdEmojiEvents size={20} />,
       label: 'Prize Claim',
     },
@@ -52,7 +52,7 @@ const Dashboard = () => {
   ];
 
   const handleMenuClick = ({ key }) => {
-    navigate(`/dashboard/${key}`);
+    navigate(`/${key}`);
   };
 
   return (

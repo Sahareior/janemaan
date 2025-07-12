@@ -1,0 +1,24 @@
+/* modal.css */
+.custom-dark-modal .ant-modal-content {
+  background-color: #111827;
+  border-radius: 8px;
+  color: white;
+}
+
+.custom-dark-modal .ant-modal-header {
+  background-color: #111827;
+  border-bottom: 1px solid #1f2937;
+}
+
+.custom-dark-modal .ant-modal-title {
+  color: white;
+}
+
+.custom-dark-modal .ant-modal-close-x {
+  color: white;
+}
+
+.custom-dark-modal .ant-modal-footer {
+  background-color: #111827;
+  border-top: 1px solid #1f2937;
+}

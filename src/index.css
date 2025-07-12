@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,4 +6,69 @@
 
 body{
     background-color: #1E1E1E;
+}
+
+/* style.css or inside a module/global style file */
+.custom-ant-table .ant-table {
+  background-color: #030712;
+  color: white;
+  border: none;
+}
+
+.custom-ant-table .ant-table-thead > tr > th {
+  background-color: #030712 !important;
+  color: #fff !important;
+   border: none;
+}
+
+.custom-ant-table .ant-table-tbody > tr > td {
+  background-color: #030712 !important;
+  color: #ddd;
+   border: none;
+}
+
+.custom-ant-table .ant-table-row:hover > td {
+  background-color: #333 !important;
+   border: none;
+}
+
+
+.ant-table-tbody > tr > td {
+  border: none
+}
+
+/* Assuming .custom-ant-table is your table's custom class */
+.custom-ant-table .ant-table-thead > tr > th {
+  border-right: none !important; /* Remove vertical line */
+}
+
+/* Optional: remove borders from body cells if needed too */
+.custom-ant-table .ant-table-tbody > tr > td {
+  border-right: none !important;
+}
+
+
+
+.poplight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.popreg {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.popmed {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.popbold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
 }
