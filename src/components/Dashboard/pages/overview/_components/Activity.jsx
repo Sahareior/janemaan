@@ -88,12 +88,11 @@ const Activity = () => {
             </div>
 
             <div className="text-right flex flex-col items-center justify-center">
-              <Button
-                size="small"
-                className={`mb-2 h-[32px] px-11 text-white rounded-[32px] ${status.bg} popbold border-none hover:!bg-[${status.bg}] hover:!text-white hover:!border-none`}
-              >
-                {status.label}
-              </Button>
+
+
+              <div  className={`mb-2 h-[32px] px-11 text-white flex justify-center items-center rounded-[32px] ${status.bg} hover:none popbold border-none hover:!bg-[${status.bg}] hover:!text-white hover:!border-none`}>
+                    {status.label}  
+              </div>
               <p className="text-[13px] text-gray-400">{activity.time}</p>
             </div>
           </div>

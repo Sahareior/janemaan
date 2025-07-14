@@ -32,7 +32,7 @@ const Qrmodal = ({ open, onCancel }) => {
         <div className="w-full flex justify-center">
           <img
             className="w-[200px] sm:w-[240px] h-[200px] sm:h-[240px] rounded-md border border-gray-600 object-contain"
-            src="/images/image 1.png"
+            src="/images/qr.png"
             alt="QR Code"
           />
         </div>

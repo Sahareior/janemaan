@@ -31,17 +31,17 @@ const PrizeClaim = () => {
       height: '50px',
       paddingLeft: '48px', // increase to avoid overlap
     }}
-    className="w-full placeholder-gray-300"
+    className="w-full placeholder-gray-300 border border-[#5D87A3]"
     placeholder="Search hunts name, status, difficulty.."
   />
   <FaSearch size={15} className="absolute top-4 left-4 text-gray-400" />
 </div>
 
 
-    <Button  className='flex justify-center items-center border-none h-[50px] w-[174px] bg-[#123D74]  text-white gap-2' >
+    <button  className='flex justify-center items-center popreg hover:bg-blue-950 border-none h-[50px] w-[174px] bg-[#123D74]  text-white gap-2' >
         <FaPlus size={13} className="text-white" />
        All Status
-    </Button>
+    </button>
 </div>
             </div>
 

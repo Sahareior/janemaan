@@ -46,3 +46,8 @@
   background-color: #1e293b !important;
   color: white !important;
 }
+
+/* Make placeholder text white or any other color */
+.custom-dark-input input::placeholder {
+  color: #9E9E9E !important;
+}

@@ -1,18 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, Tag, Space } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import { PiQrCodeBold } from 'react-icons/pi';
 import { FaLocationPin } from 'react-icons/fa6';
+import { CiLocationOn } from 'react-icons/ci';
+import { MdOutlineCalendarToday } from 'react-icons/md';
+import Qrmodal from './modal/Qrmodal';
 
-const columns = [
+
+
+const data = [
+  {
+    key: 1,
+    qrcode: 'QRCODE001',
+    status: 'scanned',
+    scans: 480,
+    location: 'Cape Town',
+    created: '2023-10-01',
+    expires: '2024-10-01',
+  },
+  {
+    key: 2,
+    qrcode: 'QRCODE002',
+    status: 'expired',
+    scans: 342,
+    location: 'Cape Town',
+    created: '2023-11-15',
+    expires: '2024-11-15',
+  },
+];
+
+const QrTable = () => {
+              const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+              const columns = [
   {
     title: 'QR Code',
     dataIndex: 'qrcode',
     key: 'qrcode',
     render: (value) => (
-      <span className="text-[17px] text-[#9E9E9E] flex justify-start items-center gap-3 w-  px-3 py-2">
-        <PiQrCodeBold size={34} />
+      <span onClick={()=> setIsModalOpen(true)} className="text-[17px]  text-[#9E9E9E]  flex justify-start items-center gap-3 w-  px-3 py-2">
+        <img className='h-[50px] w-[50px]' src="/images/qr.png" alt="" />
         {value}
       </span>
     ),
@@ -51,7 +81,7 @@ render: (status) => {
     key: 'location',
     render: (location) => (
       <span className="text-[#9E9E9E] flex justify-center items-center gap-3  text-[17px] popreg">
-        <FaLocationPin />
+        <CiLocationOn  size={18} />
         {location}</span>
     ),
   },
@@ -60,7 +90,8 @@ render: (status) => {
     dataIndex: 'created',
     key: 'created',
     render: (date) => (
-      <span className="text-gray-400 text-[17px] popreg">{date}</span>
+        
+      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg"><MdOutlineCalendarToday /> {date}</span>
     ),
   },
   {
@@ -68,7 +99,7 @@ render: (status) => {
     dataIndex: 'expires',
     key: 'expires',
     render: (date) => (
-      <span className="text-gray-400 text-[17px] popreg">{date}</span>
+      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg"><MdOutlineCalendarToday /> {date}</span>
     ),
   },
   {
@@ -83,29 +114,6 @@ render: (status) => {
     ),
   },
 ];
-
-const data = [
-  {
-    key: 1,
-    qrcode: 'QRCODE001',
-    status: 'scanned',
-    scans: 480,
-    location: 'Cape Town',
-    created: '2023-10-01',
-    expires: '2024-10-01',
-  },
-  {
-    key: 2,
-    qrcode: 'QRCODE002',
-    status: 'expired',
-    scans: 342,
-    location: 'Cape Town',
-    created: '2023-11-15',
-    expires: '2024-11-15',
-  },
-];
-
-const QrTable = () => {
   return (
     <div className="p-4 rounded-xl bg-[#030712] text-white">
       <Table
@@ -115,6 +123,12 @@ const QrTable = () => {
         bordered={false}
         className="custom-ant-table bg-[#030712]"
       />
+      
+            <Qrmodal 
+             open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+            />
     </div>
   );
 };

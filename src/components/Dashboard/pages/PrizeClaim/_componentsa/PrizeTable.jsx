@@ -126,10 +126,10 @@ const PrizeTable = ({onOpenModal}) => {
     key: 'actions',
     render: () => (
       <div>
-        <Button onClick={()=> onOpenModal()} className='flex justify-center popreg bg-black w-[143px] h-[48px] text-gray-400 items-center gap-3'>
+        <button onClick={()=> onOpenModal()} className='flex justify-center popreg border border-[#5D87A3] hover:bg-slate-700 bg-black w-[143px] h-[48px] text-gray-400 items-center gap-3'>
             <FaEye size={22} />
             Review
-        </Button>
+        </button>
       </div>
     ),
   },

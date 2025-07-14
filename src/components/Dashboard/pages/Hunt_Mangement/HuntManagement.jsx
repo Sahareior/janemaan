@@ -30,17 +30,17 @@ const HuntManagement = () => {
       height: '50px',
       paddingLeft: '48px', // increase to avoid overlap
     }}
-    className="w-full placeholder-gray-300"
-    placeholder="Search hunts name, status, difficulty.."
+    className="w-full placeholder-gray-300 border border-[#5D87A3]"
+  
   />
   <FaSearch size={15} className="absolute top-4 left-4 text-gray-400" />
 </div>
 
 
-    <Button  onClick={() => setIsModalOpen(true)} className='flex justify-center items-center h-[50px] w-[174px] bg-[#123D74] text-white border-none gap-2' >
+    <button  onClick={() => setIsModalOpen(true)} className='flex justify-center hover:bg-blue-900 items-center h-[50px] w-[174px] bg-[#123D74] text-white border-none gap-2' >
         <FaPlus size={13} className="text-white" />
         Add Hunt
-    </Button>
+    </button>
 </div>
 
 {/* ................................Table......................................... */}

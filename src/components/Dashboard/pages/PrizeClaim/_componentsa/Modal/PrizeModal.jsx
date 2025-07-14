@@ -3,10 +3,41 @@ import { Modal, Input, Button } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './modal.css';
+import Swal from 'sweetalert2';
 
 const { TextArea } = Input;
 
 const PrizeModal = ({ open, onCancel }) => {
+
+    const handleClick =() =>{
+        Swal.fire({
+  title: "Approved!",
+  icon: "success",
+  draggable: true
+});
+    }
+
+
+    const handleCancel =()=>{
+        Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+  }
+});
+    }
+
   return (
     <Modal
       open={open}
@@ -58,10 +89,10 @@ const PrizeModal = ({ open, onCancel }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-4 justify-between flex-col sm:flex-row">
-          <Button className="w-full sm:w-1/2 h-[48px] popreg sm:h-[54px] bg-[#2C739E] text-[17px] text-white">
+          <Button onClick={()=> handleClick()} className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#2C739E] text-[17px] text-white">
             Approve Claim
           </Button>
-          <Button className="w-full sm:w-1/2 h-[48px] popreg sm:h-[54px] bg-[#E33629]/55 text-[17px] text-white">
+          <Button onClick={()=> handleCancel()} className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#E33629]/55 text-[17px] text-white">
             Reject Claim
           </Button>
         </div>

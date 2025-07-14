@@ -5,6 +5,9 @@ import HuntManagement from "./components/Dashboard/pages/Hunt_Mangement/HuntMana
 import ClueManagement from "./components/Dashboard/pages/Clue_Management/ClueManagement";
 import QrCodeManagement from "./components/Dashboard/pages/QrCode_Management/QrCodeManagement";
 import PrizeClaim from "./components/Dashboard/pages/PrizeClaim/PrizeClaim";
+import Settings from "./components/Dashboard/pages/Settings/Settings";
+import Privacy from "./components/Dashboard/pages/Settings/_components/Privacy";
+import Terms from "./components/Dashboard/pages/Settings/_components/Terms";
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
         <Route path="/clue-management" element={<ClueManagement />} />
         <Route path="/qr-management" element={<QrCodeManagement />} />
         <Route path="/prize" element={<PrizeClaim />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings/privacy" element={<Privacy />} />
+        <Route path="/settings/terms" element={<Terms />} />
       </Route>
     </Routes>
   );

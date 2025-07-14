@@ -4,9 +4,11 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { Button, Input } from 'antd';
 import QrTable from './_components/QrTable';
 import Qrmodal from './_components/modal/Qrmodal';
+import ClueModal from '../Clue_Management/_components/modal/ClueModal';
 
 const QrCodeManagement = () => {
-          const [isModalOpen, setIsModalOpen] = useState(false);
+      const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className='p-5'>
             <div>
@@ -26,17 +28,17 @@ const QrCodeManagement = () => {
       height: '50px',
       paddingLeft: '48px', // increase to avoid overlap
     }}
-    className="w-full placeholder-gray-300"
-    placeholder="Search hunts name, status, difficulty.."
+    className="w-full placeholder-gray-300 border border-[#5D87A3] hover:bg-[#5D87A3]"
+ 
   />
   <FaSearch size={15} className="absolute top-4 left-4 text-gray-400" />
 </div>
 
 
-    <Button onClick={()=> setIsModalOpen(true)}  className='flex justify-center border-none popreg items-center h-[50px] w-[174px] bg-[#123D74] text-white gap-2' >
+    <button onClick={()=> setIsModalOpen(true)}  className='flex hover:bg-blue-950 justify-center border-none popreg items-center h-[50px] w-[174px] bg-[#123D74] text-white gap-2' >
         <FaPlus size={13} className="text-white" />
         Create New
-    </Button>
+    </button>
 </div>
             </div>
 
@@ -46,11 +48,11 @@ const QrCodeManagement = () => {
                 <QrTable />
             </div>
 
-            <Qrmodal 
-             open={isModalOpen}
+      <ClueModal
+        open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
-            />
+      />
         </div>
     );
 };

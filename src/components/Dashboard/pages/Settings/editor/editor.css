@@ -1,0 +1,43 @@
+
+
+/* Customize Quill editor */
+.ql-toolbar {
+  background-color: #f2f2f2;
+  border: none;
+  /* border-radius: 8px 8px 0 0; */
+}
+
+.ql-container {
+  border: none;
+   color: #f2f2f2;
+  font-size: 16px;
+  
+  line-height: 1.6;
+  height: 40%;
+}
+
+.ql-container.ql-snow{
+    border: none;
+}
+
+.settings-page {
+      border: none;
+  max-width: 900px;
+  margin: 0 auto;
+  /* padding: 40px 20px; */
+  color: white;
+  font-family: 'Inter', sans-serif;
+  background-color: #121212;
+  min-height: 100vh;
+}
+
+.settings-title {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.settings-title .dimmed {
+  color: #aaa;
+  font-size: 18px;
+  margin-left: 10px;
+}

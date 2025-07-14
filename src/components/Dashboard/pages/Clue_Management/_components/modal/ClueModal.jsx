@@ -3,10 +3,19 @@ import { Modal, Input, Button } from 'antd';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './modal.css';
+import Swal from 'sweetalert2';
 
 const { TextArea } = Input;
 
 const ClueModal = ({ open, onCancel }) => {
+
+  const handleCreate =()=>{
+    Swal.fire({
+  title: "Drag me!",
+  icon: "success",
+  draggable: true
+});
+  }
   return (
     <Modal
       open={open}
@@ -24,7 +33,8 @@ const ClueModal = ({ open, onCancel }) => {
         </div>
       }
     >
-      <div className="flex flex-col mt-6 gap-8">
+<div className='h-[65vh] overflow-y-auto'>
+            <div className="flex flex-col mt-6 gap-8">
 
         {/* City + Description + Map */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -34,7 +44,7 @@ const ClueModal = ({ open, onCancel }) => {
               <Input
                 id="city"
                 placeholder="Enter Clue Name"
-                className="mt-2"
+                className="mt-2 placeholder-[#9E9E9E]"
                 style={{
                   backgroundColor: '#030712',
                   color: 'white',
@@ -49,7 +59,7 @@ const ClueModal = ({ open, onCancel }) => {
                 id="desc1"
                 placeholder="Enter Description"
                 rows={7}
-                className="resize-none mt-2"
+                className="resize-none mt-2 placeholder-[#9E9E9E]"
                 style={{
                   backgroundColor: '#030712',
                   color: 'white',
@@ -89,6 +99,7 @@ const ClueModal = ({ open, onCancel }) => {
                     id="lat"
                     placeholder="40.7128"
                     style={{ backgroundColor: '#030712', color: 'white', height: '50px' }}
+                    className='placeholder-[#9E9E9E]'
                   />
                 </div>
                 <div className="w-full">
@@ -96,6 +107,7 @@ const ClueModal = ({ open, onCancel }) => {
                   <Input
                     id="long"
                     placeholder="-74.0060"
+                    className='placeholder-[#9E9E9E]'
                     style={{ backgroundColor: '#030712', color: 'white', height: '50px' }}
                   />
                 </div>
@@ -106,6 +118,7 @@ const ClueModal = ({ open, onCancel }) => {
                   <label htmlFor="id" className="text-white block mb-1 popreg text-sm sm:text-base">Clue ID</label>
                   <Input
                     id="id"
+                    className='placeholder-[#9E9E9E]'
                     placeholder="Enter customized ID"
                     style={{ backgroundColor: '#030712', color: 'white', height: '50px', paddingLeft: '16px' }}
                   />
@@ -114,6 +127,7 @@ const ClueModal = ({ open, onCancel }) => {
                   <label htmlFor="expiry" className="text-white block mb-1 popreg text-sm sm:text-base">Expires On</label>
                   <Input
                     id="expiry"
+                    className='placeholder-[#9E9E9E]'
                     placeholder="Enter expiry date"
                     style={{ backgroundColor: '#030712', color: 'white', height: '50px', paddingLeft: '16px' }}
                   />
@@ -127,7 +141,7 @@ const ClueModal = ({ open, onCancel }) => {
                 id="desc2"
                 placeholder="Enter hints or notes"
                 rows={5}
-                className="resize-none"
+                className="resize-none placeholder-[#9E9E9E]"
                 style={{
                   backgroundColor: '#030712',
                   color: 'white',
@@ -135,7 +149,7 @@ const ClueModal = ({ open, onCancel }) => {
                 }}
               />
               <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-                <Button className="bg-[#2C739E] text-white w-full sm:w-[135px] h-[50px]">Create Clue</Button>
+                <Button onClick={()=> handleCreate()} className="bg-[#2C739E] text-white w-full sm:w-[135px] h-[50px]">Create Clue</Button>
                 <Button className="w-full sm:w-[135px] h-[50px] bg-black text-white">Cancel</Button>
               </div>
             </div>
@@ -143,6 +157,7 @@ const ClueModal = ({ open, onCancel }) => {
         </div>
 
       </div>
+</div>
     </Modal>
   );
 };

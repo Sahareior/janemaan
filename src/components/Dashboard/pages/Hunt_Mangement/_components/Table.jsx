@@ -1,12 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Space, Table, Tag } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FaTrophy } from 'react-icons/fa';
 import 'antd/dist/reset.css'; // optional, but recommended if you're styling manually
 import { BsFillTrophyFill, BsSuitDiamondFill } from 'react-icons/bs';
 import { RiPokerDiamondsLine } from 'react-icons/ri';
+import CustomModal from '../../../../others/CustomModal';
 
-const columns = [
+
+
+const data = [
+  {
+    key: 1,
+    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Treasure Trail Cape Town",
+    prize: 20000,
+    difficulty: "Easy",
+    status: "Active",
+    participants: 56,
+  },
+  {
+    key: 2,
+    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Treasure Trail Cape Town",
+    prize: 20000,
+    difficulty: "Medium",
+    status: "Active",
+    participants: 34,
+  },
+  {
+    key: 3,
+    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Treasure Trail Cape Town",
+    prize: 20000,
+    difficulty: "Easy",
+    status: "Draft",
+    participants: 90,
+  },
+  {
+    key: 4,
+    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Treasure Trail Cape Town",
+    prize: 20000,
+    difficulty: "Hard",
+    status: "Completed",
+    participants: 12,
+  },
+  {
+    key: 5,
+    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    title: "Treasure Trail Cape Town",
+    prize: 20000,
+    difficulty: "Hard",
+    status: "Draft",
+    participants: 31,
+  },
+];
+
+
+const CustomTable = () => {
+
+      const [isModalOpen, setIsModalOpen] = useState(false); 
+
+
+
+      const columns = [
   {
     title: "Hunts",
     dataIndex: "hunt",
@@ -104,63 +162,13 @@ const columns = [
     render: (_, record) => (
       <Space size="middle">
         <EyeOutlined className="  text-[#9E9E9E] text-xl hover:text-blue-400 cursor-pointer" />
-        <EditOutlined className="text-[#9E9E9E] text-xl hover:text-yellow-400 cursor-pointer" />
+        <EditOutlined onClick={()=> setIsModalOpen(true) } className="text-[#9E9E9E] text-xl hover:text-yellow-400 cursor-pointer" />
         <DeleteOutlined className="text-red-500 text-xl hover:text-red-700 cursor-pointer" />
       </Space>
     ),
   },
 ];
 
-const data = [
-  {
-    key: 1,
-    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Treasure Trail Cape Town",
-    prize: 20000,
-    difficulty: "Easy",
-    status: "Active",
-    participants: 56,
-  },
-  {
-    key: 2,
-    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Treasure Trail Cape Town",
-    prize: 20000,
-    difficulty: "Medium",
-    status: "Active",
-    participants: 34,
-  },
-  {
-    key: 3,
-    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Treasure Trail Cape Town",
-    prize: 20000,
-    difficulty: "Easy",
-    status: "Draft",
-    participants: 90,
-  },
-  {
-    key: 4,
-    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Treasure Trail Cape Town",
-    prize: 20000,
-    difficulty: "Hard",
-    status: "Completed",
-    participants: 12,
-  },
-  {
-    key: 5,
-    image: "https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Treasure Trail Cape Town",
-    prize: 20000,
-    difficulty: "Hard",
-    status: "Draft",
-    participants: 31,
-  },
-];
-
-
-const CustomTable = () => {
   return (
     <div className="p-1 rounded-xl bg-[#030712] text-white">
       <Table
@@ -169,6 +177,12 @@ const CustomTable = () => {
         pagination={{ pageSize: 5 }}
          bordered={false}
         className="custom-ant-table bg-[#030712]"
+      />
+          <CustomModal
+        open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+        edit={true}
       />
     </div>
   );
