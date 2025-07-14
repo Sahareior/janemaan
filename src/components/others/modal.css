@@ -22,3 +22,27 @@
   background-color: #111827;
   border-top: 1px solid #1f2937;
 }
+.custom-dark-modal .ant-modal-content {
+  background-color: #0f172a !important;
+  color: white;
+  border-radius: 10px;
+}
+
+.custom-dark-input {
+  background-color: #030712 !important;
+  color: white !important;
+  border: 1px solid #334155;
+  height: 48px;
+  padding-left: 16px;
+}
+
+.custom-dark-input .ant-select-selector {
+  background-color: #030712 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.custom-dark-dropdown {
+  background-color: #1e293b !important;
+  color: white !important;
+}

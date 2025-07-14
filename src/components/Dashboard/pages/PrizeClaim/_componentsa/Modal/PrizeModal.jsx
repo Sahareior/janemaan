@@ -58,10 +58,10 @@ const PrizeModal = ({ open, onCancel }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-4 justify-between flex-col sm:flex-row">
-          <Button className="w-full sm:w-1/2 h-[48px] sm:h-[54px] bg-[#2C739E] text-white">
+          <Button className="w-full sm:w-1/2 h-[48px] popreg sm:h-[54px] bg-[#2C739E] text-[17px] text-white">
             Approve Claim
           </Button>
-          <Button className="w-full sm:w-1/2 h-[48px] sm:h-[54px] bg-[#E33629]/25 text-white">
+          <Button className="w-full sm:w-1/2 h-[48px] popreg sm:h-[54px] bg-[#E33629]/55 text-[17px] text-white">
             Reject Claim
           </Button>
         </div>
