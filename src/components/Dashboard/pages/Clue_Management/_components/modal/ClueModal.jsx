@@ -28,7 +28,7 @@ const ClueModal = ({ open, onCancel }) => {
 
         {/* City + Description + Map */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-5">
+          <div className="flex flex-col justify-between">
             <div>
               <label htmlFor="city" className="text-white block mb-1 popmed text-sm sm:text-base">Enter Clue Name</label>
               <Input
@@ -38,7 +38,7 @@ const ClueModal = ({ open, onCancel }) => {
                 style={{
                   backgroundColor: '#030712',
                   color: 'white',
-                  height: '50px',
+                  height: '70px',
                   paddingLeft: '16px'
                 }}
               />
@@ -48,7 +48,7 @@ const ClueModal = ({ open, onCancel }) => {
               <TextArea
                 id="desc1"
                 placeholder="Enter Description"
-                rows={4}
+                rows={7}
                 className="resize-none mt-2"
                 style={{
                   backgroundColor: '#030712',
@@ -61,7 +61,8 @@ const ClueModal = ({ open, onCancel }) => {
 
           <div>
             <label className="text-white block mb-2 font-medium text-sm sm:text-base">Location</label>
-            <div className="rounded-lg overflow-hidden border border-gray-700">
+            <div className="rounded-lg p-8 overflow-hidden border border-gray-700">
+              <p className='text-slate-400 text-[17px] popreg'>📍 Johannesburg Expo Centre, Nasrec</p>
               <MapContainer center={[-33.9249, 18.4241]} zoom={13} scrollWheelZoom={false} className="h-[220px] w-full">
                 <TileLayer
                   attribution='&copy; OpenStreetMap contributors'

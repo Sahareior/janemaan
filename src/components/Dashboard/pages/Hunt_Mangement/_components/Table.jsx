@@ -28,30 +28,51 @@ const columns = [
     key: "prize",
     render: (value) => (
       <div className="flex items-center gap-2 text-[#9E9E9E]">
-        <BsFillTrophyFill size={17} className="text-yellow-400" />
-        RS {value}
+        <img className=' text-[14px]' src="/images/tro.png" alt="/images/tro.png" />
+        RS <br /> {value}
       </div>
     ),
   },
-  {
-    title: "Difficulty",
-    dataIndex: "difficulty",
-    key: "difficulty",
-    render: (level) => {
-      let color =
-        {
-          Easy: "bg-blue-600/25 border-blue-500",
-          Medium: "bg-yellow-600/25 border-yellow-500",
-          Hard: "bg-red-700/25 border-red-500",
-        }[level] || "bg-gray-500/25 border-gray-500";
+{
+  title: "Difficulty",
+  dataIndex: "difficulty",
+  key: "difficulty",
+  render: (level) => {
+    const styleMap = {
+      Easy: {
+        bg: "bg-blue-600/25",
+        border: "border-blue-500",
+        text: "text-blue-500",
+      },
+      Medium: {
+        bg: "bg-yellow-600/25",
+        border: "border-yellow-500",
+        text: "text-yellow-500",
+      },
+      Hard: {
+        bg: "bg-red-700/25",
+        border: "border-red-500",
+        text: "text-red-500",
+      },
+    };
 
-      return (
-        <Tag className={`${color} text-white flex popbold justify-center text-[16px] items-center w-[100px] h-[36px] gap-1  rounded-[22px]`}>
-         <BsSuitDiamondFill className={`text-${color}`} /> {level}
-        </Tag>
-      );
-    },
+    const { bg, border, text } = styleMap[level] || {
+      bg: "bg-gray-500/25",
+      border: "border-gray-500",
+      text: "text-gray-500",
+    };
+
+    return (
+      <Tag
+        className={`${bg} ${border} text-white flex popbold justify-center text-[16px] items-center w-[100px] h-[36px] gap-1 rounded-[22px]`}
+      >
+        <BsSuitDiamondFill className={text} />
+        {level}
+      </Tag>
+    );
   },
+},
+
   {
     title: "Status",
     dataIndex: "status",
@@ -61,11 +82,11 @@ const columns = [
         {
           Active: "bg-green-800",
           Draft: "bg-yellow-700",
-          Completed: "bg-sky-600",
+          Completed: "bg-sky-900",
         }[status] || "bg-gray-500";
 
       return (
-        <Tag className={`${color} text-white font-bold w-[100px] popbold h-[36px] px-20 text-[16px] flex justify-center items-center rounded-[22px]`}>
+        <Tag className={`${color} text-white border-none font-bold w-[100px] popbold h-[36px] px-20 text-[16px] flex justify-center items-center rounded-[22px]`}>
           {status}
         </Tag>
       );
@@ -82,8 +103,8 @@ const columns = [
     key: "actions",
     render: (_, record) => (
       <Space size="middle">
-        <EyeOutlined className="text-white text-xl hover:text-blue-400 cursor-pointer" />
-        <EditOutlined className="text-white text-xl hover:text-yellow-400 cursor-pointer" />
+        <EyeOutlined className="  text-[#9E9E9E] text-xl hover:text-blue-400 cursor-pointer" />
+        <EditOutlined className="text-[#9E9E9E] text-xl hover:text-yellow-400 cursor-pointer" />
         <DeleteOutlined className="text-red-500 text-xl hover:text-red-700 cursor-pointer" />
       </Space>
     ),

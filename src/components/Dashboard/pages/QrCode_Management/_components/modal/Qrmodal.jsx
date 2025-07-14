@@ -11,16 +11,16 @@ const Qrmodal = ({ open, onCancel }) => {
       footer={null}
       className="custom-dark-modal"
       width="90%" // Responsive default width
-      style={{ maxWidth: '480px' }} // Desktop max width
+      style={{ maxWidth: '700px' }} // Desktop max width
       title={
-        <div>
+        <div className='px-8'>
           <h4 className="text-lg sm:text-xl md:text-2xl popmed text-white">
             QR CODE - <span className="text-blue-400">564651463</span>
           </h4>
         </div>
       }
     >
-      <div className="flex flex-col justify-center py-10 gap-10 text-white text-sm sm:text-base md:text-lg">
+      <div className="flex flex-col justify-center px-20 py-10 gap-10 text-white text-sm sm:text-base md:text-lg">
         
         {/* Header Info */}
         <div className="space-y-2 text-left popmed">
@@ -38,7 +38,7 @@ const Qrmodal = ({ open, onCancel }) => {
         </div>
 
         {/* Details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 popreg text-sm sm:text-base md:text-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-14 popreg text-sm sm:text-base md:text-lg">
           <div className="space-y-2 text-left">
             <p><span className="font-medium text-gray-400">City:</span> Cape Town</p>
             <p><span className="font-medium text-gray-400">Expires on:</span> 05-09-2025</p>

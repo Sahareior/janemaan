@@ -32,6 +32,9 @@ body{
    border: none;
 }
 
+.ant-table-thead > tr > th::before {
+  display: none !important;
+}
 
 .ant-table-tbody > tr > td {
   border: none

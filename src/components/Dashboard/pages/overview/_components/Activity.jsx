@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import React from 'react';
-import { FaLocationArrow } from 'react-icons/fa';
+import { CiLocationOn } from "react-icons/ci";
 
 // Sample activities data
 const activities = [
@@ -69,20 +69,20 @@ const Activity = () => {
         Real Time Activity
       </h4>
 
-<div className='h-96 overflow-y-auto'>
+<div className='h-80 overflow-y-auto'>
           {activities.map((activity) => {
         const status = statusStyles[activity.status];
 
         return (
           <div
             key={activity.id}
-            className="flex justify-between items-center bg-[#1f2937] p-4 rounded-lg shadow-sm hover:shadow-md transition mb-4"
+            className="flex justify-between items-center bg-[#1f2937] p-4 rounded-lg shadow-sm hover:shadow-md transition mb-9"
           >
             <div className="space-y-2">
               <h3 className="text-[18px] popmed">{activity.title}</h3>
               <p className="text-[17px] popreg text-[#97BECA]">{activity.location}</p>
               <div className="flex items-center gap-1 text-xs text-gray-300 mt-1">
-                <FaLocationArrow size={10} />
+                <CiLocationOn  size={16} />
                 <span className="text-[12px] popreg">{activity.city}</span>
               </div>
             </div>

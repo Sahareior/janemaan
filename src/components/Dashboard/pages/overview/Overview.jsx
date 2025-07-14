@@ -43,14 +43,14 @@ const Overview = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title="Total Revenue" value="RS 83,45746" />
         <StatCard title="New Users" value="1,245" />
-        <StatCard title="Active Devices" value="512" />
-        <StatCard title="Completed Hunts" value="234" />
+        <StatCard title="Hunt Completion" value="55%" />
+        <StatCard title="Drop out" value="23%" />
       </div>
 
       {/* First Chart: Total Users */}
-      <div className="bg-[#1E1E1E] p-6 rounded-xl border border-[#5D87A3]">
-        <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center justify-center gap-11">
+      <div className="bg-[#111827] p-6 rounded-xl border border-[#5D87A3]">
+        <div className="flex justify-between bg-[#111827] items-center mb-4">
+        <div className="flex items-center bg-[#111827] justify-center gap-11">
                     <h3 className="text-white text-lg font-semibold">Total Users</h3>
 <div className="flex justify-between gap-12 popreg text-xs text-white">
   {/* This Year */}
@@ -70,7 +70,7 @@ const Overview = () => {
         </div>
           <div className="text-gray-300 text-sm">7 days</div>
         </div>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer className='bg-[#111827]' width="100%" height={300}>
           <LineChart data={userChartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
             <XAxis dataKey="day" stroke="#888" />
@@ -96,9 +96,9 @@ const Overview = () => {
       </div>
 
       {/* Second Chart: Revenue */}
-      <div className="bg-[#1E1E1E] p-6 rounded-xl border border-[#5D87A3]">
+      <div className="bg-[#111827] p-6 rounded-xl border border-[#5D87A3]">
         <div className="mb-4">
-          <h3 className="text-white text-lg font-semibold">Revenue</h3>
+          <h3 className="text-white text-[18px] popreg py-5">Revenue</h3>
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={revenueChartData}>

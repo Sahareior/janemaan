@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button, Space, Table, Tag } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { FaLocationPin } from 'react-icons/fa6';
-import { PiQrCodeBold } from 'react-icons/pi';
+import { MdOutlineCalendarToday } from "react-icons/md";
 import 'antd/dist/reset.css';
 import { FaEye } from 'react-icons/fa';
 
@@ -74,10 +72,10 @@ const PrizeTable = ({onOpenModal}) => {
     key: "user",
     render: (value) => {
         return (
-            <span className="text-[#97BECA] popreg text-[16px] truncate max-w-[160px] block">
-                <h3>{value.name}</h3>
+            <span className=" popreg text-[16px] truncate  block">
+                <h3 className='text-[#9E9E9E]'>{value.name}</h3>
 
-             {value.email}
+            <span className='text-[#97BECA]'> {value.email}</span>
             </span>
         );
     },
@@ -116,7 +114,10 @@ const PrizeTable = ({onOpenModal}) => {
   dataIndex: "submitted",
   key: "submitted",
  render: (value) => (
-      <span className="text-[#97BECA] truncate max-w-[160px] popreg block">{value}</span>
+      <span className="text-[#97BECA] truncate max-w-[160px] flex gap-2 popreg block">
+        <MdOutlineCalendarToday size={18} />
+
+        {value}</span>
     ),
 },
 
@@ -125,8 +126,8 @@ const PrizeTable = ({onOpenModal}) => {
     key: 'actions',
     render: () => (
       <div>
-        <Button onClick={()=> onOpenModal()} className='flex justify-center popreg bg-black w-[143px] h-[48px] text-gray-400 items-center gap-2'>
-            <FaEye />
+        <Button onClick={()=> onOpenModal()} className='flex justify-center popreg bg-black w-[143px] h-[48px] text-gray-400 items-center gap-3'>
+            <FaEye size={22} />
             Review
         </Button>
       </div>

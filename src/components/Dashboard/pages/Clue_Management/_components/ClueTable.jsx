@@ -11,7 +11,7 @@ const columns = [
     dataIndex: "order",
     key: "order",
     render: (value) => (
-      <span className="text-white font-medium popbold text-[16px]">{value}</span>
+      <span className="text-[#97BECA] font-medium popbold text-[16px]">{value}</span>
     ),
   },
   {
@@ -57,7 +57,7 @@ const color =
 
       return (
         <Tag
-          className={`${color} text-white font-bold w-[100px] h-[36px] text-[17px] popreg p-5 flex justify-center items-center rounded-[22px]`}
+          className={`${color} text-white font-bold w-[140px] h-[36px] text-[17px] popreg p-5 flex justify-center items-center rounded-[22px]`}
         >
           {status}
         </Tag>
@@ -70,7 +70,7 @@ const color =
     render: () => (
       <Space size="middle">
        
-        <EditOutlined  className="text-white hover:text-yellow-400 text-2xl cursor-pointer" />
+        <EditOutlined  className="text-[#9E9E9E] hover:text-yellow-400 text-2xl cursor-pointer" />
         <DeleteOutlined className="text-red-500 hover:text-red-700 text-[22px] cursor-pointer" />
       </Space>
     ),
@@ -80,7 +80,7 @@ const color =
 const data = [
   {
     key: 1,
-    order: 1,
+    order: 'CL001',
     title: "Treasure Trail Cape Town",
     location: "Cape Town",
     qrcode: "1234567890",
@@ -88,7 +88,7 @@ const data = [
   },
   {
     key: 2,
-    order: 2,
+    order: 'CL001',
     title: "hYYAS ASAD[P ADFNA KFMNO",
     location: "Uganda",
     qrcode: "1234567890",
@@ -96,7 +96,7 @@ const data = [
   },
   {
     key: 3,
-    order: 3,
+    order: 'CL001',
     title: "dIO KA? DIO Ka??",
     location: "Nigeria",
     qrcode: "1234567890",
