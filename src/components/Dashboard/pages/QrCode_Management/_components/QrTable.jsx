@@ -7,6 +7,8 @@ import { FaLocationPin } from 'react-icons/fa6';
 import { CiLocationOn } from 'react-icons/ci';
 import { MdOutlineCalendarToday } from 'react-icons/md';
 import Qrmodal from './modal/Qrmodal';
+import ClueModal from '../../Clue_Management/_components/modal/ClueModal';
+import Swal from 'sweetalert2';
 
 
 
@@ -33,8 +35,29 @@ const data = [
 
 const QrTable = () => {
               const [isModalOpen, setIsModalOpen] = useState(false);
+              const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+              const handleDelete =()=>{
+                Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+  }
+});
+              }
 
+              
               const columns = [
   {
     title: 'QR Code',
@@ -108,8 +131,8 @@ render: (status) => {
     render: () => (
       <Space size="middle">
     
-        <EditOutlined className="text-white hover:text-yellow-400 text-2xl cursor-pointer" />
-        <DeleteOutlined className="text-red-500 hover:text-red-700 text-2xl cursor-pointer" />
+        <EditOutlined onClick={()=> setIsEditModalOpen(true)} className="text-white hover:text-yellow-400 text-[22px] cursor-pointer" />
+        <DeleteOutlined onClick={()=> handleDelete()} className="text-red-500 hover:text-red-700 text-[22px] cursor-pointer" />
       </Space>
     ),
   },
@@ -129,6 +152,12 @@ render: (status) => {
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
             />
+                  <ClueModal
+                  edit={true}
+        open={isEditModalOpen}
+        onOk={() => setIsEditModalOpen(false)}
+        onCancel={() => setIsEditModalOpen(false)}
+      />
     </div>
   );
 };

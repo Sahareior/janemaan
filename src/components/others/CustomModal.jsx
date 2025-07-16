@@ -27,6 +27,27 @@ const CustomModal = ({ open, onCancel, edit }) => {
 });
   }
 
+    const handleCancel =()=>{
+      Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, cancel it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Cancelled!",
+        text: "Done.",
+        icon: "success"
+      });
+    }
+  });
+  
+    }
+
 
   return (
     <Modal
@@ -49,7 +70,7 @@ const CustomModal = ({ open, onCancel, edit }) => {
 </div>
       }
     >
-      <div className="space-y-4 p-6 h-[70vh] overflow-y-scroll">
+      <div className="space-y-4 p-2 h-[70vh] overflow-y-scroll">
 
       {
         edit? <div className='space-y-6'>
@@ -163,7 +184,7 @@ const CustomModal = ({ open, onCancel, edit }) => {
 
         {/* Footer Buttons */}
         <div className="flex justify-end  gap-4 mt-6">
-          <button className='w-[135px] h-[52px] bg-black border border-[#9E9E9E] popred ' onClick={onCancel}>Cancel</button>
+          <button className='w-[135px] h-[52px] bg-black border border-[#9E9E9E] popred ' onClick={()=> handleCancel()}>Cancel</button>
           <button   className="bg-[#2C739E] w-[135px] h-[52px] border-blue-600 hover:bg-blue-700 popreg text-white">
             Create Hunt
           </button>
@@ -279,7 +300,7 @@ const CustomModal = ({ open, onCancel, edit }) => {
 
         {/* Footer Buttons */}
         <div className="flex justify-end  gap-4 mt-6">
-          <button className='w-[135px] h-[52px] bg-black border border-[#9E9E9E] popred ' onClick={onCancel}>Cancel</button>
+          <button onClick={()=> handleCancel()} className='w-[135px] h-[52px] bg-black border border-[#9E9E9E] popred ' >Cancel</button>
           <button onClick={()=> handleCreate()}  className="bg-[#2C739E] w-[135px] h-[52px] border-blue-600 hover:bg-blue-700 popreg text-white">
             Create Hunt
           </button>

@@ -1,11 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Space, Table, Tag } from 'antd';
 import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import { FaLocationPin } from 'react-icons/fa6';
 import { PiQrCodeBold } from 'react-icons/pi';
+import ClueModal from './modal/ClueModal';
+import Swal from 'sweetalert2';
 
-const columns = [
+
+
+const data = [
+  {
+    key: 1,
+    order: 'CL001',
+    title: "Treasure Trail Cape Town",
+    location: "Cape Town",
+    qrcode: "1234567890",
+    status: "uploaded",
+  },
+  {
+    key: 2,
+    order: 'CL001',
+    title: "hYYAS ASAD[P ADFNA KFMNO",
+    location: "Uganda",
+    qrcode: "1234567890",
+    status: "uploaded",
+  },
+  {
+    key: 3,
+    order: 'CL001',
+    title: "dIO KA? DIO Ka??",
+    location: "Nigeria",
+    qrcode: "1234567890",
+    status: "draft",
+  },
+];
+
+const ClueTable = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+                 const handleDelete =()=>{
+                    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      }
+    });
+                  }
+    
+
+    const columns = [
   {
     title: "Order",
     dataIndex: "order",
@@ -70,41 +125,12 @@ const color =
     render: () => (
       <Space size="middle">
        
-        <EditOutlined  className="text-[#9E9E9E] hover:text-yellow-400 text-2xl cursor-pointer" />
-        <DeleteOutlined className="text-red-500 hover:text-red-700 text-[22px] cursor-pointer" />
+        <EditOutlined onClick={()=> setIsModalOpen(true)}  className="text-[#9E9E9E] hover:text-yellow-400 text-2xl cursor-pointer" />
+        <DeleteOutlined onClick={()=> handleDelete()} className="text-red-500 hover:text-red-700 text-[22px] cursor-pointer" />
       </Space>
     ),
   },
 ];
-
-const data = [
-  {
-    key: 1,
-    order: 'CL001',
-    title: "Treasure Trail Cape Town",
-    location: "Cape Town",
-    qrcode: "1234567890",
-    status: "uploaded",
-  },
-  {
-    key: 2,
-    order: 'CL001',
-    title: "hYYAS ASAD[P ADFNA KFMNO",
-    location: "Uganda",
-    qrcode: "1234567890",
-    status: "uploaded",
-  },
-  {
-    key: 3,
-    order: 'CL001',
-    title: "dIO KA? DIO Ka??",
-    location: "Nigeria",
-    qrcode: "1234567890",
-    status: "draft",
-  },
-];
-
-const ClueTable = () => {
   return (
     <div className="p-4 rounded-xl bg-[#030712] text-white">
       <Table
@@ -113,6 +139,13 @@ const ClueTable = () => {
         pagination={{ pageSize: 5 }}
         bordered={false}
         className="custom-ant-table bg-[#030712]"
+      />
+
+            <ClueModal
+        open={isModalOpen}
+        edit={true}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
       />
     </div>
   );

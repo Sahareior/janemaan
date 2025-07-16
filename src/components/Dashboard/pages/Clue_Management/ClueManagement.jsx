@@ -42,7 +42,7 @@ const ClueManagement = () => {
             />
             <div>
               <h3 className="text-[18px] popreg">Hunt Name</h3>
-              <h3 className="text-[18px] popreg">Treasure Trail Cape Town</h3>
+              <h3 className="text-[18px] text-[#97BECA] popreg">Treasure Trail Cape Town</h3>
             </div>
           </div>
 

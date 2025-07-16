@@ -6,6 +6,7 @@ import 'antd/dist/reset.css'; // optional, but recommended if you're styling man
 import { BsFillTrophyFill, BsSuitDiamondFill } from 'react-icons/bs';
 import { RiPokerDiamondsLine } from 'react-icons/ri';
 import CustomModal from '../../../../others/CustomModal';
+import Swal from 'sweetalert2';
 
 
 
@@ -62,6 +63,25 @@ const CustomTable = () => {
 
       const [isModalOpen, setIsModalOpen] = useState(false); 
 
+             const handleDelete =()=>{
+                Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+  }
+});
+              }
 
 
       const columns = [
@@ -161,9 +181,9 @@ const CustomTable = () => {
     key: "actions",
     render: (_, record) => (
       <Space size="middle">
-        <EyeOutlined className="  text-[#9E9E9E] text-xl hover:text-blue-400 cursor-pointer" />
-        <EditOutlined onClick={()=> setIsModalOpen(true) } className="text-[#9E9E9E] text-xl hover:text-yellow-400 cursor-pointer" />
-        <DeleteOutlined className="text-red-500 text-xl hover:text-red-700 cursor-pointer" />
+        <EyeOutlined className="  text-[#9E9E9E] text-[22px] hover:text-blue-400 cursor-pointer" />
+        <EditOutlined onClick={()=> setIsModalOpen(true) } className="text-[#9E9E9E] text-[22px] hover:text-yellow-400 cursor-pointer" />
+        <DeleteOutlined onClick={()=> handleDelete()} className="text-red-500 text-[22px] hover:text-red-700 cursor-pointer" />
       </Space>
     ),
   },
@@ -174,7 +194,7 @@ const CustomTable = () => {
       <Table
         columns={columns}
         dataSource={data}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 3 }}
          bordered={false}
         className="custom-ant-table bg-[#030712]"
       />

@@ -67,7 +67,7 @@ The App may use GPS and mapping data for tracking and navigation. We do not guar
   };
 
   return (
-    <div className="settings-container">
+    <div className="settings-container pb-11">
       <Editor
         ref={quillRef}
         readOnly={readOnly}

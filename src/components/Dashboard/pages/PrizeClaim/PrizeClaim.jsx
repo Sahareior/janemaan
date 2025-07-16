@@ -32,7 +32,7 @@ const PrizeClaim = () => {
       paddingLeft: '48px', // increase to avoid overlap
     }}
     className="w-full placeholder-gray-300 border border-[#5D87A3]"
-    placeholder="Search hunts name, status, difficulty.."
+    placeholder=""
   />
   <FaSearch size={15} className="absolute top-4 left-4 text-gray-400" />
 </div>

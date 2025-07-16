@@ -92,3 +92,26 @@ body{
   font-weight: 600;
   font-style: normal;
 }
+
+/* Stronger selectors */
+:where(.ant-table) :where(.ant-pagination-item) {
+  background-color: #2C739E !important;
+  border: 1px solid #d9d9d9 !important;
+  color: #333 !important;
+}
+
+:where(.ant-table) :where(.ant-pagination-item-active) {
+  background-color: #1890ff !important;
+  border-color: #1890ff !important;
+  color: white !important;
+}
+
+:where(.ant-table) :where(.ant-pagination-item:hover) {
+  border-color: #40a9ff !important;
+  color: #40a9ff !important;
+}
+
+:where(.ant-table) :where(.ant-pagination-prev),
+:where(.ant-table) :where(.ant-pagination-next) {
+  color: #1890ff !important;
+}
