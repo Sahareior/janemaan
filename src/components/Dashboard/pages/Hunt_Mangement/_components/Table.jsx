@@ -118,7 +118,7 @@ const CustomTable = () => {
             src="/images/tro.png"
             alt="/images/tro.png"
           />
-          RS <br /> {value}
+          R  {value}
         </div>
       ),
     },

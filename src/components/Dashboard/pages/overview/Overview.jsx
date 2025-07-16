@@ -60,7 +60,7 @@ const Overview = () => {
     <div className="p-5 space-y-12">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard color={true} title="Total Revenue" value="RS 83,45746" />
+        <StatCard color={true} title="Total Revenue" value="R 83,45746" />
         <StatCard color={true} title="New Users" value="1,245" />
         <StatCard color={true} title="Hunt Completion" value="55%" />
         <StatCard color={true} title="Drop out" value="23%" />

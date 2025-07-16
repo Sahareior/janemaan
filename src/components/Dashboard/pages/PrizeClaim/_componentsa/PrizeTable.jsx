@@ -81,7 +81,7 @@ const PrizeTable = ({ onOpenModal }) => {
       key: "prize",
       render: (value) => (
         <span className="text-[#9E9E9E] flex items-center gap-2 popreg text-[17px]">
-          RS {value}
+          R {value}
         </span>
       ),
     },

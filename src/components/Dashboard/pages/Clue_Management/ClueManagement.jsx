@@ -17,7 +17,7 @@ const ClueManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const detailItems = [
     { label: "City", value: "Cape Town" },
-    { label: "Prize", value: "3444 Rs" },
+    { label: "Prize", value: "3444 R" },
     { label: "Status", value: "Active" },
     { label: "Difficulty", value: "Medium" },
     { label: "Participants", value: "56" },
