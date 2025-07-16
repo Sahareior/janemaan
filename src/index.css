@@ -39,7 +39,9 @@ body{
 }
 
 
-
+.ant-table-tbody > tr.ant-table-row:hover > td {
+      background: none !important;
+  } 
 
 
 .custom-ant-table .ant-table-tbody > tr > td {
