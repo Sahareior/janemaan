@@ -108,11 +108,11 @@ const PrizeModal = ({ open, onCancel }) => {
         </h3>
 
         {/* Verification Section */}
-<div className="space-y-2">
+<div className="space-y-6">
   <h3 className="text-white font-medium">Verification Picture</h3>
 
   <div
-    className="w-full h-[180px] rounded-lg bg-[#1F2937] relative cursor-pointer overflow-hidden"
+    className="w-2/3 mx-auto h-[180px]  rounded-lg bg-[#1F2937] relative cursor-pointer overflow-hidden"
     onClick={handleImageClick}
   >
     {imagePreview ? (
@@ -120,7 +120,7 @@ const PrizeModal = ({ open, onCancel }) => {
         <img
           src={imagePreview}
           alt="Uploaded"
-          className="w-full h-full object-contain rounded-md"
+          className="w-full h-full object-cover rounded-md"
         />
         <button
           onClick={(e) => {
