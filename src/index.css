@@ -119,4 +119,15 @@ body{
 .ant-pagination .ant-pagination-item-active a {
   color: #fff !important;
 }
+/* Globally override Ant Dropdown menu */
+.ant-dropdown-menu {
+  background-color: #1e1e2f !important;
+  border: 1px solid #5D87A3 !important;
+  color: white !important;
+}
+
+.ant-dropdown-menu-item {
+  color: white !important;
+}
+
 

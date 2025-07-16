@@ -37,7 +37,7 @@ const revenueChartData = Array.from({ length: 12 }, (_, i) => ({
 }));
 
 export const StatCard = ({ title, value, color }) => (
-  <div className="w-full h-[115px] flex justify-center items-center bg-[#030712] border border-[#5D87A3] rounded-[12.76px] p-4">
+  <div className="w-full h-[115px] md:flex mx-auto justify-center items-center bg-[#030712] border border-[#5D87A3] rounded-[12.76px] p-4">
     <div>
       <h3 className="text-[19px] popreg text-[#9E9E9E]">{title}</h3>
       <h4 className={`${!color ? "text-[#2C739E]" : "text-white"} text-[29px] popbold font-bold`}>{value}</h4>

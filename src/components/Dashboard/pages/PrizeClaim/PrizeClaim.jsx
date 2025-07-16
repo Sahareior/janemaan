@@ -1,12 +1,31 @@
 import React, { useState } from "react";
 import { StatCard } from "../overview/Overview";
-import { Button, Input } from "antd";
+import { Button, Dropdown, Input, Radio, Space } from "antd";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import PrizeTable from "./_componentsa/PrizeTable";
 import PrizeModal from "./_componentsa/Modal/PrizeModal";
 
 const PrizeClaim = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedStatus, setSelectedStatus] = useState(null);
+
+const items = [
+  {
+    key: "status-filter",
+    label: (
+      <Radio.Group
+        onChange={(e) => setSelectedStatus(e.target.value)}
+        value={selectedStatus}
+        className="flex flex-col text-white gap-2"
+      >
+        <Radio className="text-white" value="pending">Pending</Radio>
+        <Radio className="text-white" value="approved">Approved</Radio>
+        <Radio className="text-white" value="rejected">Rejected</Radio>
+      </Radio.Group>
+    ),
+  },
+];
+
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -15,7 +34,7 @@ const PrizeClaim = () => {
   return (
     <div className="p-5">
       <div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard title="Total Revenue" value="R 83,45746" />
           <StatCard title="New Users" value="1,245" />
           <StatCard title="Active Devices" value="512" />
@@ -40,10 +59,19 @@ const PrizeClaim = () => {
             />
           </div>
 
+
+            <Dropdown menu={{ items }} trigger={['click']}>
+    <a onClick={e => e.preventDefault()}>
+      <Space>
+
           <button className="flex justify-center items-center popreg hover:bg-blue-950 border-none h-[50px] w-[174px] bg-[#123D74]  text-white gap-2">
             <FaPlus size={13} className="text-white" />
             All Status
           </button>
+      </Space>
+    </a>
+  </Dropdown>
+
         </div>
       </div>
 
