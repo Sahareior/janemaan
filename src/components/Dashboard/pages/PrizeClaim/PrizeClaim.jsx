@@ -16,7 +16,7 @@ const PrizeClaim = () => {
     <div className="p-5">
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard title="Total Revenue" value="RS 83,45746" />
+          <StatCard title="Total Revenue" value="R 83,45746" />
           <StatCard title="New Users" value="1,245" />
           <StatCard title="Active Devices" value="512" />
           <StatCard title="Completed Hunts" value="234" />
