@@ -22,6 +22,10 @@ body{
 }
 
 /* Customize the hover color for Menu items */
+.ant-menu-item{
+    padding: 30px;
+}
+
 .ant-menu-item:hover {
   background-color: #030712 !important;  /* Change to your preferred color */
   color: white !important;  /* Change text color on hover */
@@ -93,25 +97,24 @@ body{
   font-style: normal;
 }
 
-/* Stronger selectors */
-:where(.ant-table) :where(.ant-pagination-item) {
-  background-color: #2C739E !important;
-  border: 1px solid #d9d9d9 !important;
-  color: #333 !important;
+/* Override active pagination item background */
+.ant-pagination .ant-pagination-item-active {
+  background-color: #2C739E !important; /* Replace with your desired color */
+  border-color: #2765A1 !important;
 }
 
-:where(.ant-table) :where(.ant-pagination-item-active) {
-  background-color: #1890ff !important;
-  border-color: #1890ff !important;
-  color: white !important;
+
+.ant-pagination .ant-pagination-item {
+  background-color: #97BECA;  /* Inactive bg */
+  border-color: #1e293b !important;
 }
 
-:where(.ant-table) :where(.ant-pagination-item:hover) {
-  border-color: #40a9ff !important;
-  color: #40a9ff !important;
+.ant-pagination .ant-pagination-item a {
+  color: black /* Text color for inactive buttons */
 }
 
-:where(.ant-table) :where(.ant-pagination-prev),
-:where(.ant-table) :where(.ant-pagination-next) {
-  color: #1890ff !important;
+/* Optional: Change text color */
+.ant-pagination .ant-pagination-item-active a {
+  color: #fff !important;
 }
+

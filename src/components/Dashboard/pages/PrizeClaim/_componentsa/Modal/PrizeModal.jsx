@@ -1,42 +1,46 @@
-import React from 'react';
-import { Modal, Input, Button } from 'antd';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import './modal.css';
-import Swal from 'sweetalert2';
+import React from "react";
+import { Modal, Input, Button } from "antd";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import "./modal.css";
+import Swal from "sweetalert2";
 
 const { TextArea } = Input;
 
 const PrizeModal = ({ open, onCancel }) => {
-
-    const handleClick =() =>{
-        Swal.fire({
-  title: "Approved!",
-  icon: "success",
-  draggable: true
-});
-    }
-
-
-    const handleCancel =()=>{
-        Swal.fire({
-  title: "Are you sure?",
-  text: "You won't be able to revert this!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Yes, delete it!"
-}).then((result) => {
-  if (result.isConfirmed) {
+  const handleClick = () => {
     Swal.fire({
-      title: "Deleted!",
-      text: "Your file has been deleted.",
-      icon: "success"
+      title: "Approved!",
+      background: "#1e1e2f",
+      color: "#fff",
+      icon: "success",
+      draggable: true,
     });
-  }
-});
-    }
+  };
+
+  const handleCancel = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      background: "#1e1e2f",
+      color: "#fff",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          background: "#1e1e2f",
+          color: "#fff",
+          icon: "success",
+        });
+      }
+    });
+  };
 
   return (
     <Modal
@@ -45,7 +49,7 @@ const PrizeModal = ({ open, onCancel }) => {
       footer={null}
       className="custom-dark-modal"
       width="90%"
-      style={{ maxWidth: '500px' }} // Mobile first, max width for desktop
+      style={{ maxWidth: "550px" }} // Mobile first, max width for desktop
       title={
         <div>
           <h2 className="text-white text-base sm:text-lg md:text-xl popmed font-bold">
@@ -70,7 +74,10 @@ const PrizeModal = ({ open, onCancel }) => {
             Prize: <span className="text-[#97BECA]">Rs 6,65,0531</span>
           </h3>
           <h3 className="text-white">
-            Current Status: <span className="text-yellow-400 font-semibold capitalize">Pending</span>
+            Current Status:{" "}
+            <span className="text-yellow-400 font-semibold capitalize">
+              Pending
+            </span>
           </h3>
         </div>
 
@@ -89,10 +96,16 @@ const PrizeModal = ({ open, onCancel }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-4 justify-between flex-col sm:flex-row">
-          <Button onClick={()=> handleClick()} className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#2C739E] text-[17px] text-white">
+          <Button
+            onClick={() => handleClick()}
+            className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#2C739E] text-[17px] text-white"
+          >
             Approve Claim
           </Button>
-          <Button onClick={()=> handleCancel()} className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#E33629]/55 text-[17px] text-white">
+          <Button
+            onClick={() => handleCancel()}
+            className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#E33629]/55 text-[17px] text-white"
+          >
             Reject Claim
           </Button>
         </div>

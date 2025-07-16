@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Overview from "./components/Dashboard/pages/overview/Overview";
 import HuntManagement from "./components/Dashboard/pages/Hunt_Mangement/HuntManagement";
@@ -12,15 +12,19 @@ import Terms from "./components/Dashboard/pages/Settings/_components/Terms";
 function App() {
   return (
     <Routes>
+      {/* Redirect / to /overview */}
+      <Route path="/" element={<Navigate to="/overview" replace />} />
+
+      {/* Dashboard layout routes */}
       <Route path="/" element={<Dashboard />}>
-        <Route path="/overview" element={<Overview />} />
-        <Route path="/hunt-management" element={<HuntManagement />} />
-        <Route path="/clue-management" element={<ClueManagement />} />
-        <Route path="/qr-management" element={<QrCodeManagement />} />
-        <Route path="/prize" element={<PrizeClaim />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/settings/privacy" element={<Privacy />} />
-        <Route path="/settings/terms" element={<Terms />} />
+        <Route path="overview" element={<Overview />} />
+        <Route path="hunt-management" element={<HuntManagement />} />
+        <Route path="clue-management" element={<ClueManagement />} />
+        <Route path="qr-management" element={<QrCodeManagement />} />
+        <Route path="prize" element={<PrizeClaim />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="settings/privacy" element={<Privacy />} />
+        <Route path="settings/terms" element={<Terms />} />
       </Route>
     </Routes>
   );

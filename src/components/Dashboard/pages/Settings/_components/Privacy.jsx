@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import Quill from "quill";
-;
 import { useLocation, useNavigate } from "react-router-dom";
 import Editor from "../editor/Editor";
+import Swal from "sweetalert2";
 
 const Delta = Quill.import("delta");
 
-const Privacy = ({isText}) => {
+const Privacy = ({ isText }) => {
   const [range, setRange] = useState();
   const [lastChange, setLastChange] = useState();
   const [readOnly, setReadOnly] = useState(false);
@@ -14,12 +14,9 @@ const Privacy = ({isText}) => {
   const [previewHTML, setPreviewHTML] = useState(""); // ✅ Displayed HTML
   const navigate = useNavigate();
 
-
-
   const quillRef = useRef(null);
 
-
-    const text = `1. Acceptance of Terms
+  const text = `1. Acceptance of Terms
 By downloading, installing, or using the [Your Hunting App Name] (the “App”), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree, do not use the App.By downloading, installing, or using the [Your Hunting App Name] (the “App”), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree, do not use the App.
 2. Eligibility
 You must be at least 18 years old (or the age of majority in your jurisdiction) to use the App. By using the App, you confirm that you meet this requirement.By downloading, installing, or using the [Your Hunting App Name] (the “App”), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree, do not use the App.By downloading, installing, or using the [Your Hunting App Name] (the “App”), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree, do not use the App.
@@ -36,21 +33,23 @@ Share another user’s personal information without consent.
 6. GPS and Mapping Accuracy
 The App may use GPS and mapping data for tracking and navigation. We do not guarantee the accuracy of such data, and you assume all risk for its use.By downloading, installing, or using the [Your Hunting App Name] (the “App”), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree, do not use the App.By downloading, installing, or using the [Your Hunting App Name] (the “App”), you agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree, don’t use the App.`;
 
+  let finalText;
 
-
-
-  let finalText ;
-
-
-  if( isText){
-    finalText = isText
-  }
-  else{
-    finalText = text
+  if (isText) {
+    finalText = isText;
+  } else {
+    finalText = text;
   }
 
-
-
+  const handleUpdate = () => {
+    Swal.fire({
+      title: "Updated Successfully",
+      icon: "success",
+      background: "#1e1e2f",
+      color: "#fff",
+      draggable: true,
+    });
+  };
 
   const handleLogContent = () => {
     if (quillRef.current) {
@@ -79,21 +78,14 @@ The App may use GPS and mapping data for tracking and navigation. We do not guar
       <div className="settings-controls">
         <button
           className="get-length-btn text-white mt-7 popbold w-[153px] h-[40px] bg-[#2765A1]"
-          onClick={handleLogContent}
+          onClick={() => {
+            handleLogContent();
+            handleUpdate();
+          }}
         >
           Update
         </button>
       </div>
-
-      {previewHTML && (
-        <div className="preview-container mt-10">
-          <h3 className="preview-title">📄 Preview:</h3>
-          <div
-            className="preview-content"
-            dangerouslySetInnerHTML={{ __html: previewHTML }}
-          />
-        </div>
-      )}
     </div>
   );
 };

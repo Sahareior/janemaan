@@ -33,7 +33,7 @@ const ClueManagement = () => {
       <div className="bg-[#111827] p-6 rounded-xl text-white">
         <h2 className="text-[25px] popmed font-medium mb-6">Hunt Details</h2>
 
-        <div className="grid grid-cols-4 text-[18px] p-7 justify-items-center gap-y-12">
+        <div className="grid grid-cols-4 text-[18px] py-7 px-5 justify-items-center gap-y-12">
           <div className="flex gap-3 items-center ">
             <img
               className="h-[45px] w-[45px]"
@@ -42,7 +42,9 @@ const ClueManagement = () => {
             />
             <div>
               <h3 className="text-[18px] popreg">Hunt Name</h3>
-              <h3 className="text-[18px] text-[#97BECA] popreg">Treasure Trail Cape Town</h3>
+              <h3 className="text-[18px] text-[#97BECA] popreg">
+                Treasure Trail Cape Town
+              </h3>
             </div>
           </div>
 
@@ -79,7 +81,7 @@ const ClueManagement = () => {
       <div className="flex gap-5 mt-11">
         <div className="bg-[#030712] border-[#5D87A3] border text-[17px] popreg w-[198px] h-[50px] text-white flex items-center justify-between px-4">
           Total clues
-          <span className="bg-[#2C739E] text-white w-7 h-7 rounded-full flex items-center justify-center text-sm">
+          <span className="bg-[#97BECA] text-[#2C739E] popbold w-7 h-7 rounded-full flex items-center justify-center text-sm">
             3
           </span>
         </div>

@@ -12,12 +12,14 @@ import {
   MdGridOn,
 } from 'react-icons/md';
 import { GiTreasureMap } from 'react-icons/gi';
-import { useNavigate, Outlet, data } from 'react-router-dom';
+import { useNavigate, Outlet, data, useLocation } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+const currentKey = location.pathname.split('/')[1];
 
     const [activeTab, setActiveTab] = useState('privacy');
 
@@ -92,20 +94,20 @@ const onChange = key => {
     <Layout className="h-screen">
       <Sider
         breakpoint="lg"
-        width={300}
+        width={260}
         collapsedWidth="0"
         onBreakpoint={(broken) => console.log(broken)}
         onCollapse={(collapsed, type) => console.log(collapsed, type)}
       >
     
-        <Menu
-          className="mt-16 popmed text-[17px] pl-6  space-y-8"
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['overview']}
-          items={menuItems}
-          onClick={handleMenuClick}
-        />
+<Menu
+  theme="dark"
+  mode="inline"
+  selectedKeys={[currentKey]}
+  items={menuItems}
+  className='mt-16'
+  onClick={handleMenuClick}
+/>
       </Sider>
 
       <Layout className='bg-[#030717]'>
