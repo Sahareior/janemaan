@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Modal, Input, Button } from "antd";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Swal from "sweetalert2";
 import "leaflet/dist/leaflet.css";
 import "./modal.css";
-import Swal from "sweetalert2";
 
 const { TextArea } = Input;
 
 const PrizeModal = ({ open, onCancel }) => {
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
+
   const handleClick = () => {
     Swal.fire({
       title: "Approved!",
@@ -18,16 +20,16 @@ const PrizeModal = ({ open, onCancel }) => {
     });
   };
 
-  const handleCancel = () => {
+  const handleReject = () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
       background: "#1e1e2f",
       color: "#fff",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -42,6 +44,26 @@ const PrizeModal = ({ open, onCancel }) => {
     });
   };
 
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    fileInputRef.current.value = null;
+  };
+
   return (
     <Modal
       open={open}
@@ -49,7 +71,7 @@ const PrizeModal = ({ open, onCancel }) => {
       footer={null}
       className="custom-dark-modal"
       width="90%"
-      style={{ maxWidth: "550px" }} // Mobile first, max width for desktop
+      style={{ maxWidth: "550px" }}
       title={
         <div>
           <h2 className="text-white text-base sm:text-lg md:text-xl popmed font-bold">
@@ -86,24 +108,57 @@ const PrizeModal = ({ open, onCancel }) => {
         </h3>
 
         {/* Verification Section */}
-        <div className="space-y-2">
-          <h3 className="text-white font-medium">Verification Picture</h3>
-          <div className="w-full h-[180px] rounded-lg bg-[#1F2937] flex items-center justify-center text-gray-500 text-center px-4">
-            {/* Replace with actual image */}
-            Image Preview Placeholder
-          </div>
-        </div>
+<div className="space-y-2">
+  <h3 className="text-white font-medium">Verification Picture</h3>
+
+  <div
+    className="w-full h-[180px] rounded-lg bg-[#1F2937] relative cursor-pointer overflow-hidden"
+    onClick={handleImageClick}
+  >
+    {imagePreview ? (
+      <>
+        <img
+          src={imagePreview}
+          alt="Uploaded"
+          className="w-full h-full object-contain rounded-md"
+        />
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemoveImage();
+          }}
+          className="absolute top-2 right-2 bg-red-600 text-white rounded-full text-xs px-2 py-1 hover:bg-red-700 z-10"
+        >
+          ✕
+        </button>
+      </>
+    ) : (
+      <div className="w-full h-full flex items-center justify-center text-gray-500 text-center px-4">
+        Click to upload image
+      </div>
+    )}
+  </div>
+
+  {/* Hidden file input */}
+  <input
+    type="file"
+    accept="image/*"
+    ref={fileInputRef}
+    onChange={handleFileChange}
+    className="hidden"
+  />
+</div>
 
         {/* Action Buttons */}
         <div className="flex gap-4 justify-between flex-col sm:flex-row">
           <Button
-            onClick={() => handleClick()}
+            onClick={handleClick}
             className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#2C739E] text-[17px] text-white"
           >
             Approve Claim
           </Button>
           <Button
-            onClick={() => handleCancel()}
+            onClick={handleReject}
             className="w-full sm:w-1/2 h-[48px] border-none popreg sm:h-[54px] bg-[#E33629]/55 text-[17px] text-white"
           >
             Reject Claim
