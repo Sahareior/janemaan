@@ -8,12 +8,13 @@ import PrizeClaim from "./components/Dashboard/pages/PrizeClaim/PrizeClaim";
 import Settings from "./components/Dashboard/pages/Settings/Settings";
 import Privacy from "./components/Dashboard/pages/Settings/_components/Privacy";
 import Terms from "./components/Dashboard/pages/Settings/_components/Terms";
+import Login from './components/Authentications/Login';
 
 function App() {
   return (
     <Routes>
-      {/* Redirect / to /overview */}
-      <Route path="/" element={<Navigate to="/overview" replace />} />
+      {/* Show Login at "/" */}
+      <Route path="/" element={<Login />} />
 
       {/* Dashboard layout routes */}
       <Route path="/" element={<Dashboard />}>
@@ -26,6 +27,9 @@ function App() {
         <Route path="settings/privacy" element={<Privacy />} />
         <Route path="settings/terms" element={<Terms />} />
       </Route>
+
+      {/* Optional: Redirect unknown paths to login */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

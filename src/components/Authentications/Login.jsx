@@ -1,5 +1,6 @@
 import { Button, Input } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
@@ -47,12 +48,14 @@ const Login = () => {
       </div>
 
       {/* Login Button */}
+<Link to='/overview'>
       <Button
         type="primary"
         className="w-full h-[48px] bg-[#123d74] rounded-md text-white text-lg font-medium"
       >
         Login
       </Button>
+</Link>
     </div>
   );
 };

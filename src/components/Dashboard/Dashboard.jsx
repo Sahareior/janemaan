@@ -92,23 +92,40 @@ const onChange = key => {
 
   return (
     <Layout className="h-screen">
-      <Sider
-        breakpoint="lg"
-        width={260}
-        collapsedWidth="0"
-        onBreakpoint={(broken) => console.log(broken)}
-        onCollapse={(collapsed, type) => console.log(collapsed, type)}
-      >
-    
-<Menu
-  theme="dark"
-  mode="inline"
-  selectedKeys={[currentKey]}
-  items={menuItems}
-  className='mt-16'
-  onClick={handleMenuClick}
-/>
-      </Sider>
+<Sider
+  breakpoint="lg"
+  width={260}
+  collapsedWidth="0"
+  onBreakpoint={(broken) => console.log(broken)}
+  onCollapse={(collapsed, type) => console.log(collapsed, type)}
+  className="flex flex-col justify-between"
+>
+  <div>
+    <Menu
+      theme="dark"
+      mode="inline"
+      selectedKeys={[currentKey]}
+      items={menuItems}
+      className="mt-16"
+      onClick={handleMenuClick}
+    />
+  </div>
+
+  {/* Logout Button */}
+  <div className="p-4 mt-80">
+    <button
+      onClick={() => {
+        // ✅ You can add your logout logic here (e.g., clear auth token, navigate to login)
+        console.log("Logout clicked");
+        navigate("/login"); // or replace with your logout route
+      }}
+      className="w-full bg-red-500 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded"
+    >
+      Logout
+    </button>
+  </div>
+</Sider>
+
 
       <Layout className='bg-[#030717]'>
   <Header className="h-[100px] px-6 bg-[#001529] flex items-center justify-between relative">
