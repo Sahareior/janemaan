@@ -13,10 +13,10 @@ import Login from './components/Authentications/Login';
 function App() {
   return (
     <Routes>
-      {/* Show Login at "/" */}
+  
       <Route path="/" element={<Login />} />
 
-      {/* Dashboard layout routes */}
+  
       <Route path="/" element={<Dashboard />}>
         <Route path="overview" element={<Overview />} />
         <Route path="hunt-management" element={<HuntManagement />} />
@@ -28,7 +28,6 @@ function App() {
         <Route path="settings/terms" element={<Terms />} />
       </Route>
 
-      {/* Optional: Redirect unknown paths to login */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

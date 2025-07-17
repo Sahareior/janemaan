@@ -13,7 +13,7 @@ import {
   MdLogout,
 } from 'react-icons/md';
 import { GiTreasureMap } from 'react-icons/gi';
-import { useNavigate, Outlet, data, useLocation } from 'react-router-dom';
+import { useNavigate, Outlet, data, useLocation, Link } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -114,10 +114,11 @@ const onChange = key => {
       onClick={handleMenuClick}
     />
   </div>
-  <button className='text-red-600 mb-9 hover:text-green-400 flex justify-center items-center gap-2'>
+  <Link to='/login'
+   className='text-red-600 mb-9 hover:text-green-400 flex justify-center items-center gap-2'>
     <MdLogout className='-mt-1' size={16} />
     <h3 className='popmed'>Logout</h3>
-  </button>
+  </Link>
 </div>
 
 
