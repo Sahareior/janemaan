@@ -94,17 +94,24 @@ const ClueTable = () => {
         </span>
       ),
     },
-    {
-      title: "QR Code",
-      dataIndex: "qrcode",
-      key: "qrcode",
-      render: (value, idx) => (
-        <span className="text-[17px] text-[#9E9E9E] flex justify-center items-center gap-3 w-[190px] border-[#9E9E9E] border-[1px] rounded-[22px] px-3 py-2">
-          <PiQrCodeBold size={22} />
-          Qr Code
-        </span>
-      ),
-    },
+{
+  title: "QR Code",
+  dataIndex: "qrcode",
+  key: "qrcode",
+  render: () => (
+    <a
+      href="/images/qr.png"
+      download="qr-code.png"
+      className="no-underline"
+    >
+      <span className="text-[17px] text-[#9E9E9E] flex justify-center items-center gap-3 w-[190px] border-[#9E9E9E] border-[1px] rounded-[22px] px-3 py-2 hover:bg-[#1f2937] transition">
+        <PiQrCodeBold size={22} />
+        Qr Code
+      </span>
+    </a>
+  ),
+},
+
     {
       title: "Status",
       dataIndex: "status",

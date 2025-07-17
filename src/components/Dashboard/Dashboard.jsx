@@ -10,6 +10,7 @@ import {
   MdMyLocation,
   MdLink,
   MdGridOn,
+  MdLogout,
 } from 'react-icons/md';
 import { GiTreasureMap } from 'react-icons/gi';
 import { useNavigate, Outlet, data, useLocation } from 'react-router-dom';
@@ -65,6 +66,7 @@ const currentKey = location.pathname.split('/')[1];
       icon: <MdSettings size={20} />,
       label: 'Settings',
     },
+
   ];
 
 
@@ -98,9 +100,11 @@ const onChange = key => {
   collapsedWidth="0"
   onBreakpoint={(broken) => console.log(broken)}
   onCollapse={(collapsed, type) => console.log(collapsed, type)}
-  className="flex flex-col justify-between"
+  className="flex flex-col  justify-between  h-screen"
 >
-  <div>
+
+<div className='flex flex-col h-screen justify-around'>
+    <div className="flex-1 justify-between  h-screen overflow-auto">
     <Menu
       theme="dark"
       mode="inline"
@@ -110,21 +114,17 @@ const onChange = key => {
       onClick={handleMenuClick}
     />
   </div>
+  <button className='text-red-600 mb-9 hover:text-green-400 flex justify-center items-center gap-2'>
+    <MdLogout className='-mt-1' size={16} />
+    <h3 className='popmed'>Logout</h3>
+  </button>
+</div>
 
-  {/* Logout Button */}
-  <div className="p-4 mt-80">
-    <button
-      onClick={() => {
-        // ✅ You can add your logout logic here (e.g., clear auth token, navigate to login)
-        console.log("Logout clicked");
-        navigate("/login"); // or replace with your logout route
-      }}
-      className="w-full bg-red-500 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded"
-    >
-      Logout
-    </button>
-  </div>
+
+
+
 </Sider>
+
 
 
       <Layout className='bg-[#030717]'>
