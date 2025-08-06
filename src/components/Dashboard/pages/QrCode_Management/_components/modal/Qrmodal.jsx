@@ -13,7 +13,7 @@ const Qrmodal = ({ open, onCancel }) => {
       width="90%" // Responsive default width
       style={{ maxWidth: '700px' }} // Desktop max width
       title={
-        <div className='px-8'>
+        <div className='px-8 py-6'>
           <h4 className="text-lg sm:text-xl md:text-2xl popmed text-white">
             QR CODE - <span className="text-blue-400">564651463</span>
           </h4>
@@ -48,7 +48,11 @@ const Qrmodal = ({ open, onCancel }) => {
             <p><span className="font-medium text-gray-400">Scanned:</span> 450 times</p>
           </div>
         </div>
+      <div className='flex justify-center mt-6'>
+         <button className=' bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full sm:w-[135px] h-[46px] rounded-md shadow-md hover:shadow-lg'>Download</button>
+
       </div>
+             </div>
     </Modal>
   );
 };

@@ -9,6 +9,7 @@ import Settings from "./components/Dashboard/pages/Settings/Settings";
 import Privacy from "./components/Dashboard/pages/Settings/_components/Privacy";
 import Terms from "./components/Dashboard/pages/Settings/_components/Terms";
 import Login from './components/Authentications/Login';
+import Subscription from "./components/Dashboard/pages/subscribe/Subscription";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="hunt-management" element={<HuntManagement />} />
         <Route path="clue-management" element={<ClueManagement />} />
         <Route path="qr-management" element={<QrCodeManagement />} />
+        <Route path="subscription" element={<Subscription />} />
         <Route path="prize" element={<PrizeClaim />} />
         <Route path="settings" element={<Settings />} />
         <Route path="settings/privacy" element={<Privacy />} />

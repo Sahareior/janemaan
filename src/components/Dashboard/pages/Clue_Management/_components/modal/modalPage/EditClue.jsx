@@ -1,85 +1,52 @@
-import React, { useEffect } from "react";
-import { Modal, Input, Button } from "antd";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "./modal.css";
-import Swal from "sweetalert2";
-import EditClue from "./modalPage/EditClue";
-
-
+import React from 'react';
+import Swal from 'sweetalert2';
+import { Input, Button } from 'antd';
 const { TextArea } = Input;
 
-const ClueModal = ({ open, onCancel, edit }) => {
 
-  const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
+const EditClue = () => {
 
-  const handleCreate = () => {
-    Swal.fire({
-      title: "Done!",
-      icon: "success",
-      background: "#1e1e2f",
-      color: "#fff",
-      draggable: true,
-    });
-  };
+     const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
 
-  const handleCancel = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      background: "#1e1e2f",
-      color: "#fff",
-      confirmButtonText: "Yes, cancel it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Cancelled!",
-          text: "Done.",
-          background: "#1e1e2f",
-          color: "#fff",
-          icon: "success",
-        });
-      }
-    });
-  };
-
-  const ResizeMap = () => {
-    const map = useMap();
-    useEffect(() => {
-      setTimeout(() => {
-        map.invalidateSize();
-      }, 100); // Delay ensures container is fully rendered
-    }, [map]);
-    return null;
-  };
-
-  return (
-    <Modal
-      open={open}
-      onCancel={onCancel}
-      footer={null}
-      className="custom-dark-modal p-1 sm:p-8"
-      width="45%"
-      style={{ maxWidth: "960px", top: 20 }}
-      title={
+       const handleCreate = () => {
+         Swal.fire({
+           title: "Done!",
+           icon: "success",
+           background: "#1e1e2f",
+           color: "#fff",
+           draggable: true,
+         });
+       };
+     
+       const handleCancel = () => {
+         Swal.fire({
+           title: "Are you sure?",
+           text: "You won't be able to revert this!",
+           icon: "warning",
+           showCancelButton: true,
+           confirmButtonColor: "#3085d6",
+           cancelButtonColor: "#d33",
+           background: "#1e1e2f",
+           color: "#fff",
+           confirmButtonText: "Yes, cancel it!",
+         }).then((result) => {
+           if (result.isConfirmed) {
+             Swal.fire({
+               title: "Cancelled!",
+               text: "Done.",
+               background: "#1e1e2f",
+               color: "#fff",
+               icon: "success",
+             });
+           }
+         });
+       };
+    return (
         <div>
-<p className="text-[30px] popreg text-center">Create New Clue</p>
-<p className="text-[17px] popreg text-center text-[#9E9E9E]">Design a clue for participants</p>
-        </div>
-      }
-    >
- {
-  edit? (
-<EditClue />
-  ):(
-         <div className="h-[65vh] overflow-y-auto pb-9">
+                  <div className="h-[65vh] pb-9 overflow-y-auto ">
 <div className="flex justify-center my-5 items-center gap-14 text-[23px]">
-  <h3 className={isQrcodeOpen ? '' : 'text-[#97BECA]'}>Step 1: Create Clue</h3>
-  <h3 className={isQrcodeOpen ? 'text-[#97BECA]' : ''}>Step 2: Create Qr Code</h3>
+  <h3 className={isQrcodeOpen ? '' : 'text-[#97BECA]'}>Step 1: Edit Clue</h3>
+  <h3 className={isQrcodeOpen ? 'text-[#97BECA]' : ''}>Step 2: Edit Qr Code</h3>
 </div>
 
         {isQrcodeOpen ? (
@@ -89,7 +56,7 @@ const ClueModal = ({ open, onCancel, edit }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-white text-[16px] block mb-1">
-                 Latitude
+                 Edit Latitude
                 </label>
                 <Input
                   placeholder="Enter Latitude"
@@ -98,7 +65,7 @@ const ClueModal = ({ open, onCancel, edit }) => {
               </div>
               <div>
                 <label className="text-white text-[16px] block mb-1">
-                 Longitude
+                Edit Longitude
                 </label>
                 <Input
                   placeholder="Enter Longitude"
@@ -136,7 +103,7 @@ const ClueModal = ({ open, onCancel, edit }) => {
                     htmlFor="city"
                     className="text-white block mb-1 popmed text-sm sm:text-base"
                   >
-                    Clue Order
+                    Edit Clue Order
                   </label>
                   <Input
                     id="city"
@@ -157,7 +124,7 @@ const ClueModal = ({ open, onCancel, edit }) => {
                     htmlFor="city"
                     className="text-white block mb-1 popmed text-sm sm:text-base"
                   >
-                   Clue Name
+                 Edit  Clue Name
                   </label>
                   <Input
                     id="city"
@@ -177,7 +144,7 @@ const ClueModal = ({ open, onCancel, edit }) => {
                     htmlFor="desc2"
                     className="text-white block mb-2 popmed text-sm sm:text-base"
                   >
-                    Riddle
+                   Edit Riddle
                   </label>
                   <TextArea
                     id="desc2"
@@ -196,7 +163,7 @@ const ClueModal = ({ open, onCancel, edit }) => {
                     htmlFor="desc2"
                     className="text-white block mb-2 popmed text-sm sm:text-base"
                   >
-                    Hints
+                   Edit Hints
                   </label>
                   <TextArea
                     id="desc2"
@@ -218,14 +185,13 @@ const ClueModal = ({ open, onCancel, edit }) => {
 <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
   <button
     onClick={() => setIsQrcodeOpen(true)}
-    className="w-full sm:w-auto px-6 h-[46px] rounded-md bg-[#2C739E] text-white shadow-md hover:bg-[#1f5471] hover:shadow-lg transition-all duration-300"
+    className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full sm:w-[135px] h-[46px] rounded-md shadow-md hover:shadow-lg"
   >
-    Create Clue
+    Edit Create Clue
   </button>
-  
   <button
     onClick={handleCancel}
-    className="w-full sm:w-[135px] h-[46px] rounded-md bg-black text-white hover:bg-[#1a1a1a] transition-all duration-300"
+    className="w-full sm:w-[135px] h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
   >
     Cancel
   </button>
@@ -237,10 +203,8 @@ const ClueModal = ({ open, onCancel, edit }) => {
           
         )}
       </div>
-  )
- }
-    </Modal>
-  );
+        </div>
+    );
 };
 
-export default ClueModal;
+export default EditClue;

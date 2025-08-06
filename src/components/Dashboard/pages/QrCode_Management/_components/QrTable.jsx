@@ -69,7 +69,7 @@ const QrTable = () => {
           onClick={() => setIsModalOpen(true)}
           className="text-[17px]  text-[#9E9E9E]  flex justify-start items-center gap-3 w-  px-3 py-2"
         >
-          <img className="h-[50px] w-[50px]" src="/images/qr.png" alt="" />
+          <img className="h-[50px] hover:cursor-pointer w-[50px]" src="/images/qr.png" alt="" />
           {value}
         </span>
       ),

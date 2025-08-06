@@ -131,3 +131,28 @@ body{
 }
 
 
+/* modal.css */
+.custom-dark-input .ant-select-selector {
+  background-color: #1e1e2f !important;
+  color: white !important;
+  border: 1px solid #4b4b4b;
+}
+
+.custom-dark-input .ant-select-selection-placeholder {
+  color: white !important; /* This affects placeholder text */
+}
+
+
+.example::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.example {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

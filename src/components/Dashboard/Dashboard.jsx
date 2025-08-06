@@ -11,6 +11,7 @@ import {
   MdLink,
   MdGridOn,
   MdLogout,
+  MdOutlineSubscriptions,
 } from 'react-icons/md';
 import { GiTreasureMap } from 'react-icons/gi';
 import { useNavigate, Outlet, data, useLocation, Link } from 'react-router-dom';
@@ -55,6 +56,11 @@ const currentKey = location.pathname.split('/')[1];
       key: 'qr-management',
       icon: <MdGridOn size={20} />,
       label: 'QR Code',
+    },
+    {
+      key: 'subscription',
+      icon: <MdOutlineSubscriptions size={20} />,
+      label: 'Subscription',
     },
     {
       key: 'prize',

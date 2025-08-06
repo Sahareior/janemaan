@@ -39,7 +39,7 @@ const HuntManagement = () => {
           className="flex justify-center hover:bg-blue-900 items-center h-[50px] w-[174px] bg-[#123D74] text-white border-none gap-2"
         >
           <FaPlus size={13} className="text-white" />
-          Add Hunt
+          Create New
         </button>
       </div>
 
