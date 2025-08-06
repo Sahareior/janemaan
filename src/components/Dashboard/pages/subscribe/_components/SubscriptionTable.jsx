@@ -105,10 +105,11 @@ const columns = [
 ];
 
   return (
-    <div className="p-4 w- rounded-xl bg-[#030712] text-white">
+    <div className="p-4  flex-1 justify-center rounded-xl bg-[#030712] text-white">
       <Table
         columns={columns}
         dataSource={data}
+        
         pagination={{ pageSize: 5 }}
         bordered={false}
         className="custom-ant-table bg-[#030712]"

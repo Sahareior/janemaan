@@ -32,6 +32,18 @@ const currentKey = location.pathname.split('/')[1];
   };
 
 
+  const pageTitles = {
+  'overview': 'Overview',
+  'hunt-management': 'Hunt Management',
+  'clue-management': 'Clue Management',
+  'qr-management': 'QR Code',
+  'subscription': 'Subscription',
+  'prize': 'Prize Claim',
+  'settings': 'Settings',
+};
+
+
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -139,10 +151,15 @@ const onChange = key => {
       {/* Right: Tab-style Settings Buttons */}
 
 {
-    !location.pathname.startsWith('/settings') &&         <div>
-    <h4 className="text-white text-[24px] font-semibold">Analytics & Reporting</h4>
-  </div>
+  !location.pathname.startsWith('/settings') && (
+    <div>
+      <h4 className="text-white text-[24px] font-semibold">
+        {pageTitles[currentKey] || 'Dashboard'}
+      </h4>
+    </div>
+  )
 }
+
 
 {
     location.pathname.startsWith('/settings') &&       <div className="flex gap-6">

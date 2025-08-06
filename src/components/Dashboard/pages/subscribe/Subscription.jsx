@@ -28,7 +28,7 @@ setIsModalOpen
       </div>
 
       <div className="mt-7">
-        <h3 className="text-[25px] text-white px-5">All Clues</h3>
+        <h3 className="text-[25px] text-white px-5">ALL Plans</h3>
         <SubscriptionTable />
       </div>
 
