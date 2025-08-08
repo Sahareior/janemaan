@@ -4,14 +4,16 @@ import { Button, Input } from "antd";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import CustomTable from "./_components/Table";
 import CustomModal from "../../../others/CustomModal";
+import { useGetHuntsQuery } from "../../../../redux/slices/apiSlice";
 
 const HuntManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+   const {data:huntData, isLoading} = useGetHuntsQuery();
+  console.log(huntData);
   return (
     <div className="p-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Total hunts" value="46" />
+        <StatCard title="Total hunts" value={huntData?.count} />
         <StatCard title="Active hunts" value="1,245" />
         <StatCard title="Draft hunts" value="52" />
         <StatCard title="Completed hunts" value="23" />
@@ -47,7 +49,7 @@ const HuntManagement = () => {
 
       <div className="mt-7">
         <h2 className="text-[25px] text-white popmed">All Hunts</h2>
-        <CustomTable />
+        <CustomTable data={huntData?.results} />
       </div>
       <CustomModal
         open={isModalOpen}

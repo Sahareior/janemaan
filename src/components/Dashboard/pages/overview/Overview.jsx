@@ -12,6 +12,7 @@ import {
 import { FaChevronDown } from "react-icons/fa";
 import ParticipantProgress from "./_components/ParticipantProgress";
 import Activity from "./_components/Activity";
+import { useGetDashboardStatsQuery, useGetPrgressQuery } from "../../../../redux/slices/apiSlice";
 
 const userChartData = {
   "7days": [
@@ -49,6 +50,10 @@ const Overview = () => {
   const [timeRange, setTimeRange] = useState("7days");
   const [userData, setUserData] = useState(userChartData["7days"]);
 
+   const { data: progress, error, isLoading } = useGetPrgressQuery();
+   const {data:overviewData, isLoading: overviewLoading} = useGetDashboardStatsQuery();
+
+   console.log(overviewData)
   // Function to toggle between 7 days and 30 days
   const handleTimeRangeClick = () => {
     const newTimeRange = timeRange === "7days" ? "30days" : "7days";
@@ -60,8 +65,8 @@ const Overview = () => {
     <div className="p-5 space-y-12">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard color={true} title="Total Revenue" value="R 83,45746" />
-        <StatCard color={true} title="New Users" value="1,245" />
+        <StatCard color={true} title="Total Revenue" value={overviewData?.total_revenue} />
+        <StatCard color={true} title="New Users" value={overviewData?.total_user} />
         <StatCard color={true} title="Hunt Completion" value="55%" />
         <StatCard color={true} title="Drop out" value="23%" />
       </div>

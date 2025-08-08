@@ -14,11 +14,13 @@ import {
   MdOutlineSubscriptions,
 } from 'react-icons/md';
 import { GiTreasureMap } from 'react-icons/gi';
-import { useNavigate, Outlet, data, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Outlet,  useLocation, Link } from 'react-router-dom';
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
+
   const navigate = useNavigate();
   const location = useLocation();
 const currentKey = location.pathname.split('/')[1];

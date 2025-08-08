@@ -89,7 +89,7 @@ const columns = [
     key: "actions",
     render: () => (
       <Space size="middle">
-         <EyeOutlined className="text-[#9E9E9E] text-[22px] hover:text-blue-400 cursor-pointer" />
+         <EyeOutlined onClick={() => setIsModalOpen(true)} className="text-[#9E9E9E] text-[22px] hover:text-blue-400 cursor-pointer" />
 
         <EditOutlined
           onClick={() => setIsModalOpen(true)}
