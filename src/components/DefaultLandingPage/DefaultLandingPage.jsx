@@ -8,7 +8,7 @@ const DefaultLandingPage = () => {
         <img
           src="/images/logo2.png"
           alt="Company Logo"
-          className="w-56 h-auto object-contain"
+          className="w-64 h-auto object-contain"
         />
 
         {/* "Coming Soon" Title */}
