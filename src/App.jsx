@@ -10,28 +10,33 @@ import Privacy from "./components/Dashboard/pages/Settings/_components/Privacy";
 import Terms from "./components/Dashboard/pages/Settings/_components/Terms";
 import Login from './components/Authentications/Login';
 import Subscription from "./components/Dashboard/pages/subscribe/Subscription";
+import DefaultLandingPage from "./components/DefaultLandingPage/DefaultLandingPage";
 
 function App() {
   return (
-    <Routes>
-  
-      <Route path="/" element={<Login />} />
+<Routes>
+  {/* Landing Page */}
+  <Route path="/" element={<DefaultLandingPage />} />
 
-  
-      <Route path="/" element={<Dashboard />}>
-        <Route path="overview" element={<Overview />} />
-        <Route path="hunt-management" element={<HuntManagement />} />
-        <Route path="clue-management" element={<ClueManagement />} />
-        <Route path="qr-management" element={<QrCodeManagement />} />
-        <Route path="subscription" element={<Subscription />} />
-        <Route path="prize" element={<PrizeClaim />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="settings/privacy" element={<Privacy />} />
-        <Route path="settings/terms" element={<Terms />} />
-      </Route>
+  {/* Dashboard Pages */}
+  <Route path="/dashboard" element={<Dashboard />}>
+    <Route path="overview" element={<Overview />} />
+    <Route path="hunt-management" element={<HuntManagement />} />
+    <Route path="clue-management" element={<ClueManagement />} />
+    <Route path="qr-management" element={<QrCodeManagement />} />
+    <Route path="subscription" element={<Subscription />} />
+    <Route path="prize" element={<PrizeClaim />} />
+    <Route path="settings" element={<Settings />} />
+    <Route path="settings/privacy" element={<Privacy />} />
+    <Route path="settings/terms" element={<Terms />} />
+  </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+  <Route path="/login" element={<Login />} />
+
+  {/* Redirect unknown routes */}
+  {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+</Routes>
+
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu, Tabs, theme } from 'antd';
 import {
   MdOutlineDashboard,
@@ -21,8 +21,15 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
 
-  const navigate = useNavigate();
+ const navigate = useNavigate();
   const location = useLocation();
+  
+  // Redirect to /dashboard/overview when base path is accessed
+  useEffect(() => {
+    if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
+      navigate('/dashboard/overview', { replace: true });
+    }
+  }, [location.pathname, navigate]);
 const currentKey = location.pathname.split('/')[1];
 
     const [activeTab, setActiveTab] = useState('privacy');
@@ -52,37 +59,37 @@ const currentKey = location.pathname.split('/')[1];
 
   const menuItems = [
     {
-      key: 'overview',
+      key: 'dashboard/overview',
       icon: <MdPieChart size={20} />,
       label: 'Overview',
     },
     {
-      key: 'hunt-management',
+      key: 'dashboard/hunt-management',
       icon: <MdMyLocation size={20} />,
       label: 'Hunt Management',
     },
     {
-      key: 'clue-management',
+      key: 'dashboard/clue-management',
       icon:  <div><img src="/images/link.png" alt="" /></div>,
       label: 'Clue Management',
     },
     {
-      key: 'qr-management',
+      key: 'dashboard/qr-management',
       icon: <MdGridOn size={20} />,
       label: 'QR Code',
     },
     {
-      key: 'subscription',
+      key: 'dashboard/subscription',
       icon: <MdOutlineSubscriptions size={20} />,
       label: 'Subscription',
     },
     {
-      key: 'prize',
+      key: 'dashboard/prize',
       icon: <MdEmojiEvents size={20} />,
       label: 'Prize Claim',
     },
     {
-      key: 'settings',
+      key: 'dashboard/settings',
       icon: <MdSettings size={20} />,
       label: 'Settings',
     },
