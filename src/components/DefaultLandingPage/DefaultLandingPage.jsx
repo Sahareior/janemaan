@@ -17,7 +17,7 @@ const DefaultLandingPage = () => {
         </h3>
 
         {/* Description */}
-        <p className="text-gray-300 text-xl font-bold md:text-base leading-relaxed">
+        <p className="text-gray-300 text-xl font-extrabold md:text-base leading-relaxed">
           We are working hard to bring you a new and improved website. <br />
           Please check back soon!
         </p>
