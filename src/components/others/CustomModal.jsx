@@ -88,6 +88,7 @@ const CustomModal = ({ open, onCancel, edit }) => {
     >
       <div className="space-y-4 p-2 h-[70vh] overflow-y-scroll">
         {edit ? (
+          
    <EditHunt handleCreate={handleCreate} handleCancel={handleCancel} />
         ) : (
 <CreateHunt handleCreate={handleCreate} handleCancel={handleCancel} />

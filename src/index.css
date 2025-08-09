@@ -21,6 +21,13 @@ body{
    border: none;
 }
 
+/* In your CSS file */
+.ant-select-selection-placeholder {
+  color: white !important;
+  opacity: 0.6; /* optional for lighter look */
+}
+
+
 /* Customize the hover color for Menu items */
 .ant-menu-item{
     padding: 30px;
@@ -162,4 +169,8 @@ body{
 
 .ant-pagination .ant-pagination-next .ant-pagination-item-link{
   color: white !important;
+}
+
+.custom-select-placeholder .ant-select-selection-placeholder {
+  @apply text-white opacity-60;
 }

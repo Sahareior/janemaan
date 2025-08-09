@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Select } from "antd";
+import { RiArrowDropDownLine } from 'react-icons/ri';
 
 const { TextArea } = Input;
 
@@ -59,33 +60,51 @@ const CreateSubs = () => {
         </div>
         <div>
           <label className="block mb-1 popreg text-[14px]">Currency</label>
-          <Select
-            placeholder="Select Currency"
-            className="w-full custom-dark-input"
-            dropdownClassName="custom-dark-dropdown"
-            value={formData.currency}
-            onChange={(value) => handleChange("currency", value)}
-          >
-            <Select.Option value="usd">USD</Select.Option>
-            <Select.Option value="eur">EUR</Select.Option>
-            <Select.Option value="gbp">GBP</Select.Option>
-          </Select>
+
+  <div className="relative w-full">
+      <select
+        value={formData.currency}
+        onChange={(e) => handleChange(e.target.value)}
+        className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
+        // appearance-none removes default arrow, pr-10 for space for custom icon
+      >
+  <option value="" disabled>
+          Select Currency
+        </option>
+  <option value="usd">USD</option>
+  <option value="eur">EUR</option>
+  <option value="gbp">GBP</option>
+      </select>
+      <RiArrowDropDownLine
+        className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+        aria-hidden="true"
+      />
+    </div>
+
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div>
           <label className="block mb-1 popreg text-[14px]">Interval</label>
-          <Select
-            placeholder="Select Interval"
-            className="w-full custom-dark-input"
-            dropdownClassName="custom-dark-dropdown"
-            value={formData.interval}
-            onChange={(value) => handleChange("interval", value)}
-          >
-            <Select.Option value="month">Month</Select.Option>
-            <Select.Option value="year">Year</Select.Option>
-          </Select>
+  <div className="relative w-full">
+      <select
+        value={formData.interval}
+        onChange={(e) => handleChange(e.target.value)}
+        className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
+        // appearance-none removes default arrow, pr-10 for space for custom icon
+      >
+        <option value="" disabled>
+          Select Interval
+        </option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+      </select>
+      <RiArrowDropDownLine
+        className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+        aria-hidden="true"
+      />
+    </div>
         </div>
         <div>
           <label className="block mb-1 popreg text-[14px]">Discount Percent</label>
@@ -103,7 +122,7 @@ const CreateSubs = () => {
           onClick={handleSubmit}
           className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
         >
-          Confirm Edit Plan
+          Create Plan
         </button>
         <button
           className="w-full h-[46px] border border-[#9E9E9E] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"

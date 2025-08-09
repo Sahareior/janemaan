@@ -3,10 +3,10 @@ import React from 'react';
 const ViewSubs = () => {
     return (
         <div>
-             <div className="bg-[#101522] text-white p-8 rounded-lg w-full max-w-md mx-auto shadow-lg">
+             <div className="bg-[#101522] text-white p-8 rounded-lg w-full mx-auto shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">View Plan</h2>
-        <button className="text-gray-400 hover:text-gray-200 text-xl">&times;</button>
+        {/* <button className="text-gray-400 hover:text-gray-200 text-xl">&times;</button> */}
       </div>
       <p className="text-sm text-gray-400 mb-6">View plan that have created</p>
 

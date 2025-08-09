@@ -35,7 +35,7 @@ const EditClue = () => {
 
   const handleCreate = () => {
     // Example API call can be placed here
-    console.log("Sending data:", clueData);
+    console.log("Sending edit clue data:", clueData);
 
     Swal.fire({
       title: "Done!",

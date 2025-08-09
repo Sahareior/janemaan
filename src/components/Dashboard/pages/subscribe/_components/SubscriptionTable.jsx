@@ -25,7 +25,7 @@ const data = [
 
 const SubscriptionTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [target,setTarget] = useState(null);
 
   const handleDelete = () => {
     Swal.fire({
@@ -89,10 +89,16 @@ const columns = [
     key: "actions",
     render: () => (
       <Space size="middle">
-         <EyeOutlined onClick={() => setIsModalOpen(true)} className="text-[#9E9E9E] text-[22px] hover:text-blue-400 cursor-pointer" />
+         <EyeOutlined onClick={() => {
+           setTarget("view");
+          setIsModalOpen(true);
+         }} className="text-[#9E9E9E] text-[22px] hover:text-blue-400 cursor-pointer" />
 
         <EditOutlined
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setTarget("edit");
+            setIsModalOpen(true);
+          } }
           className="text-white hover:text-yellow-400 text-[22px] cursor-pointer"
         />
         <DeleteOutlined
@@ -119,7 +125,7 @@ const columns = [
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
-        edit={true}
+        edit={target}
       />
     </div>
   );

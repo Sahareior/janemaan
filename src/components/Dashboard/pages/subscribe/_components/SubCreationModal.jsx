@@ -1,18 +1,10 @@
-import React, { useRef, useState } from "react";
-import { Modal, Input,Select, Button } from "antd";
-import Swal from "sweetalert2";
+import React from "react";
+import { Modal } from "antd";
 import EditSubs from "./modalPages/EditSubs";
 import CreateSubs from "./modalPages/CreateSubs";
+import ViewSubs from "./modalPages/ViewSubs";
 
-
-const { TextArea } = Input;
-
-
-
-
-const SubCreationModal = ({ open, onCancel,edit }) => {
-
-
+const SubCreationModal = ({ open, onCancel, edit }) => {
   return (
     <Modal
       open={open}
@@ -24,23 +16,27 @@ const SubCreationModal = ({ open, onCancel,edit }) => {
       title={
         <div>
           <h2 className="text-white text-base text-center sm:text-lg md:text-xl popmed font-bold">
-          {
-            edit === true ? "Edit Subscription Plan" : "Create New Subscription Plan"
-          }
+            {edit === "edit"
+              ? "Edit Subscription Plan"
+              : edit === "view"
+              ? "View Subscription Plan"
+              : "Create New Subscription Plan"}
           </h2>
           <p className="text-gray-400 text-sm text-center sm:text-base popreg">
-            Fill in the details to create a new subscription plan.
+            {edit === "view"
+              ? "Details of the subscription plan."
+              : "Fill in the details to create a new subscription plan."}
           </p>
         </div>
       }
     >
-{
-    edit === true? (
-<CreateSubs />
-    ): (
-      <EditSubs />
-    )
-}
+      {edit === "view" ? (
+        <ViewSubs />
+      ) : edit === "edit" ? (
+        <EditSubs />
+      ) : (
+        <CreateSubs />
+      )}
     </Modal>
   );
 };

@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { useUpdateHuntMutation } from "../../../redux/slices/apiSlice";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -110,7 +111,7 @@ const payload = {
   duration: formData.duration,
   city: formData.city,
   label: "none",
-  status: formData.status?.toLowerCase(),
+  status: formData.status,
   start_date: startDateTime,
   end_date: endDateTime,
   is_premium_only: formData.isPremium,
@@ -247,38 +248,61 @@ const handleUpdate = () => {
       </div>
 
       {/* Status & Difficulty */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="text-white text-[16px] block mb-1">Edit Status</label>
-          <Select
+    
+
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-white text-[16px] block mb-2">Status</label>
+                    <div className="relative w-full">
+            <select
             value={formData.status}
             onChange={(value) => handleSelectChange("status", value)}
-            placeholder="Select Status"
-            className="custom-dark-input w-full"
-            dropdownClassName="custom-dark-dropdown"
-          >
-            <Option value="Draft">Draft</Option>
-            <Option value="Active">Active</Option>
-            <Option value="Completed">Completed</Option>
-            <Option value="Cancelled">Cancelled</Option>
-          </Select>
-        </div>
-
-        <div>
-          <label className="text-white text-[16px] block mb-1">Edit Difficulty</label>
-          <Select
-            value={formData.difficulty}
+              className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
+              // appearance-none removes default arrow, pr-10 for space for custom icon
+            >
+              <option value="" disabled>
+                Select Interval
+              </option>
+              <option value="draft">Draft</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <RiArrowDropDownLine
+              className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+              aria-hidden="true"
+            />
+          </div>
+                </div>
+                <div>
+                  <label className="text-white text-[16px] block mb-2">
+                    Difficulty
+                  </label>
+      
+      
+        <div className="relative w-full">
+            <select
+                value={formData.difficulty}
             onChange={(value) => handleSelectChange("difficulty", value)}
-            placeholder="Select Difficulty"
-            className="custom-dark-input w-full"
-            dropdownClassName="custom-dark-dropdown"
-          >
-            <Option value="Easy">Easy</Option>
-            <Option value="Medium">Medium</Option>
-            <Option value="Hard">Hard</Option>
-          </Select>
-        </div>
-      </div>
+              className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
+              // appearance-none removes default arrow, pr-10 for space for custom icon
+            >
+              <option value="" disabled>
+                Select Interval
+              </option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+            <RiArrowDropDownLine
+              className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+              aria-hidden="true"
+            />
+          </div>
+      
+                </div>
+              </div>
 
       {/* Image Upload */}
       <div>

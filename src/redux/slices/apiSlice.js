@@ -52,12 +52,9 @@ getHunts: build.query({
 }),
 
     createHunts: build.mutation({
-      query: (newHunt) => ({
-        url: "hunts/create/",
-        method: "POST",
-        body: newHunt,
-        formData: true,
-      }),
+      query: (newHunt) => {
+        console.log(newHunt);
+      }
     }),
 
 updateHunt: build.mutation({
