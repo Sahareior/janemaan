@@ -1,9 +1,32 @@
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSignInMutation } from "../../redux/slices/apiSlice";
 
 const Login = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const navigate = useNavigate();
+  const [signIn, { isLoading }] = useSignInMutation();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      message.error("Please enter both email and password");
+      return;
+    }
+navigate("/overview");
+    try {
+      const res = await signIn({ email, password }).unwrap();
+      message.success("Login successful!");
+      // Store token if needed
+      localStorage.setItem("token", res?.token);
+      
+    } catch (err) {
+      message.error(err?.data?.message || "Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="w-screen h-screen flex items-center justify-center">
@@ -18,12 +41,10 @@ const Login = () => {
         </div>
 
         {showForgotPassword ? (
-          /* Forgot Password Section */
           <>
             <h4 className="text-[28px] text-white font-semibold text-center">
               Reset Password
             </h4>
-
             <div className="flex flex-col gap-4">
               <div>
                 <h4 className="text-[#9E9E9E]">Your Email</h4>
@@ -33,7 +54,6 @@ const Login = () => {
                 />
               </div>
             </div>
-
             <div className="flex gap-4">
               <Button
                 onClick={() => setShowForgotPassword(false)}
@@ -50,17 +70,17 @@ const Login = () => {
             </div>
           </>
         ) : (
-          /* Login Section */
           <>
             <h4 className="text-[28px] text-white font-semibold text-center">
               Login
             </h4>
 
-            {/* Input Fields */}
             <div className="flex flex-col gap-4">
               <div>
                 <h4 className="text-[#9E9E9E]">Your Email</h4>
                 <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full mt-2 h-[48px] rounded-md"
                   placeholder="Enter your email or username"
                 />
@@ -68,13 +88,14 @@ const Login = () => {
               <div>
                 <h4 className="text-[#9E9E9E]">Your Password</h4>
                 <Input.Password
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full mt-2 h-[48px] rounded-md"
                   placeholder="Enter your password"
                 />
               </div>
             </div>
 
-            {/* Forget Password */}
             <div className="text-right">
               <span
                 onClick={() => setShowForgotPassword(true)}
@@ -84,15 +105,14 @@ const Login = () => {
               </span>
             </div>
 
-            {/* Login Button */}
-            <Link to="/overview">
-              <Button
-                type="primary"
-                className="w-full h-[48px] bg-[#123d74] rounded-md text-white text-lg font-medium"
-              >
-                Login
-              </Button>
-            </Link>
+            <Button
+              type="primary"
+              loading={isLoading}
+              onClick={handleLogin}
+              className="w-full h-[48px] bg-[#123d74] rounded-md text-white text-lg font-medium"
+            >
+              Login
+            </Button>
           </>
         )}
       </div>

@@ -55,6 +55,7 @@ const HuntManagement = () => {
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
+        edit ={true}
       />
     </div>
   );

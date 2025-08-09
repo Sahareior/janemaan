@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import {
   Input,
   DatePicker,
@@ -9,11 +10,13 @@ import {
   Button,
 } from "antd";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { useUpdateHuntMutation } from "../../../redux/slices/apiSlice";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
+  const [updateHunt] = useUpdateHuntMutation()
   const [formData, setFormData] = useState({
     title: "",
     city: "",
@@ -37,17 +40,18 @@ const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
       setFormData({
         title: huntData.title || "",
         city: huntData.city || "",
-        prize: huntData.prize || "",
+        prize_amount: huntData.prize || "",
         description: huntData.description || "",
         rules: huntData.rules || "",
-        startDate: huntData.startDate ? dayjs(huntData.startDate) : null,
-        startTime: huntData.startTime ? dayjs(huntData.startTime) : null,
-        endDate: huntData.endDate ? dayjs(huntData.endDate) : null,
-        endTime: huntData.endTime ? dayjs(huntData.endTime) : null,
+        start_date: huntData.startDate ? dayjs(huntData.startDate) : null,
+        // start_time: huntData.startTime ? dayjs(huntData.startTime) : null,
+        end_date: huntData.endDate ? dayjs(huntData.endDate) : null,
+        // endTime: huntData.endTime ? dayjs(huntData.endTime) : null,
         isPremium: huntData.isPremium || false,
         duration: huntData.duration || "",
         status: huntData.status || "",
-        difficulty: huntData.difficulty || "",
+        label: "none",
+        difficulty_level: huntData.difficulty || "",
       });
 
       if (huntData.imageUrl) {
@@ -83,6 +87,48 @@ const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
     setFileList(newFileList);
   };
 
+
+
+  // import dayjs from "dayjs";
+
+const startDateTime = 
+  formData.startDate && formData.startTime
+    ? dayjs(`${formData.startDate.format("YYYY-MM-DD")} ${formData.startTime.format("HH:mm:ss")}`).toISOString()
+    : null;
+
+const endDateTime = 
+  formData.endDate && formData.endTime
+    ? dayjs(`${formData.endDate.format("YYYY-MM-DD")} ${formData.endTime.format("HH:mm:ss")}`).toISOString()
+    : null;
+
+const payload = {
+  title: formData.title,
+  description: formData.description,
+  rules: formData.rules,
+  prize_amount: formData.prize,
+  difficulty_level: formData.difficulty,
+  duration: formData.duration,
+  city: formData.city,
+  label: "none",
+  status: formData.status?.toLowerCase(),
+  start_date: startDateTime,
+  end_date: endDateTime,
+  is_premium_only: formData.isPremium,
+  image: FileList
+};
+
+const id =4
+const items ={
+id , payload
+}
+const handleUpdate = () => {
+  updateHunt(items);
+}
+
+
+
+  // console.log(payload)
+
   return (
     <div className="space-y-6">
       <div>
@@ -98,20 +144,26 @@ const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
 
       {/* City & Prize Amount */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
+    <div>
+      <label className="text-white text-[16px] block mb-2 " htmlFor="">City</label>
+          <Input
           name="city"
           value={formData.city}
           onChange={handleInputChange}
           placeholder="Enter City"
           className="custom-dark-input placeholder-[#9E9E9E]"
         />
-        <Input
+    </div>
+<div>
+  <label className=" text-white text-[16px] block mb-2" htmlFor="">Price</label>
+          <Input
           name="prize"
           value={formData.prize}
           onChange={handleInputChange}
           placeholder="Enter Prize amount"
           className="custom-dark-input placeholder-[#9E9E9E]"
         />
+</div>
       </div>
 
       <div>
@@ -274,7 +326,10 @@ const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
           Cancel
         </button>
         <button
-          onClick={() => handleCreate(formData, fileList)}
+          onClick={() => {
+            handleCreate(payload, fileList);
+            handleUpdate()
+          }}
           className="bg-[#2C739E] w-[135px] h-[45px] border-none hover:bg-[#2C739E]/70 popreg text-white"
         >
           Update Hunt

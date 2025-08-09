@@ -1,12 +1,13 @@
 import React from "react";
+import { Input } from "antd";
 import Swal from "sweetalert2";
-import { Input, Button } from "antd";
+
 const { TextArea } = Input;
 
-const EditClue = () => {
+const CreateClue = () => {
   const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
 
-  // Single state matching your JSON format
+  // Main state following your JSON structure
   const [clueData, setClueData] = React.useState({
     name: "",
     riddle: "",
@@ -20,7 +21,7 @@ const EditClue = () => {
     is_final_clue: false,
   });
 
-  // Handle main fields
+  // Handle top-level fields
   const handleChange = (field, value) => {
     setClueData((prev) => ({ ...prev, [field]: value }));
   };
@@ -34,9 +35,7 @@ const EditClue = () => {
   };
 
   const handleCreate = () => {
-    // Example API call can be placed here
-    console.log("Sending data:", clueData);
-
+    console.log("Creating clue with data:", clueData);
     Swal.fire({
       title: "Done!",
       icon: "success",
@@ -72,13 +71,14 @@ const EditClue = () => {
 
   return (
     <div>
-      <div className="h-[65vh] pb-9 overflow-y-auto ">
+      <div className="h-[65vh] overflow-y-auto pb-9">
         <div className="flex justify-center my-5 items-center gap-14 text-[23px]">
-          <h3 className={isQrcodeOpen ? "" : "text-[#97BECA]"}>Step 1: Edit Clue</h3>
-          <h3 className={isQrcodeOpen ? "text-[#97BECA]" : ""}>Step 2: Edit Qr Code</h3>
+          <h3 className={isQrcodeOpen ? "" : "text-[#97BECA]"}>Step 1: Create Clue</h3>
+          <h3 className={isQrcodeOpen ? "text-[#97BECA]" : ""}>Step 2: Create Qr Code</h3>
         </div>
 
         {isQrcodeOpen ? (
+          // Step 2 - QR Code
           <div className="space-y-6 p-5">
             <div className="mt-6">
               <p className="text-[#9E9E9E]">
@@ -86,9 +86,7 @@ const EditClue = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-white text-[16px] block mb-1">
-                    Edit Latitude
-                  </label>
+                  <label className="text-white text-[16px] block mb-1">Latitude</label>
                   <Input
                     placeholder="Enter Latitude"
                     value={clueData.qr_code.latitude}
@@ -99,9 +97,7 @@ const EditClue = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-white text-[16px] block mb-1">
-                    Edit Longitude
-                  </label>
+                  <label className="text-white text-[16px] block mb-1">Longitude</label>
                   <Input
                     placeholder="Enter Longitude"
                     value={clueData.qr_code.longitude}
@@ -116,9 +112,7 @@ const EditClue = () => {
                 <Input
                   type="checkbox"
                   checked={clueData.qr_code.is_active}
-                  onChange={(e) =>
-                    handleQrChange("is_active", e.target.checked)
-                  }
+                  onChange={(e) => handleQrChange("is_active", e.target.checked)}
                   className="custom-dark-input w-4 h-4"
                 />
                 <label className="text-[#97BECA] text-[16px] block mb-1">
@@ -128,13 +122,13 @@ const EditClue = () => {
               <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
                 <button
                   onClick={handleCreate}
-                  className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full  h-[46px] rounded-md shadow-md hover:shadow-lg"
+                  className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
                 >
-                  Edit Clue
+                  Create Clue
                 </button>
                 <button
                   onClick={() => setIsQrcodeOpen(false)}
-                  className="w-full  h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
+                  className="w-full h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
                 >
                   Cancel
                 </button>
@@ -142,12 +136,13 @@ const EditClue = () => {
             </div>
           </div>
         ) : (
+          // Step 1 - Clue Info
           <div className="flex flex-col p-3 mt-6 gap-8">
             <h5 className="text-[20px] popmed">✅ QR Code Created</h5>
 
             <div>
               <label className="text-white block mb-1 popmed text-sm sm:text-base">
-                Edit Clue Order
+                Clue Order
               </label>
               <Input
                 placeholder="Enter Clue Order"
@@ -165,7 +160,7 @@ const EditClue = () => {
 
             <div>
               <label className="text-white block mb-1 popmed text-sm sm:text-base">
-                Edit Clue Name
+                Clue Name
               </label>
               <Input
                 placeholder="Enter Clue Name"
@@ -183,7 +178,7 @@ const EditClue = () => {
 
             <div>
               <label className="text-white block mb-2 popmed text-sm sm:text-base">
-                Edit Riddle
+                Riddle
               </label>
               <TextArea
                 placeholder="Enter Riddle"
@@ -201,7 +196,7 @@ const EditClue = () => {
 
             <div>
               <label className="text-white block mb-2 popmed text-sm sm:text-base">
-                Edit Hints
+                Hints
               </label>
               <TextArea
                 placeholder="Enter hints or notes"
@@ -222,26 +217,23 @@ const EditClue = () => {
                 <Input
                   type="checkbox"
                   checked={clueData.is_final_clue}
-                  onChange={(e) =>
-                    handleChange("is_final_clue", e.target.checked)
-                  }
+                  onChange={(e) => handleChange("is_final_clue", e.target.checked)}
                   className="custom-dark-input rounded-full w-5 h-5"
                 />
                 <label className="text-[#97BECA] text-[16px] block mb-1">
                   Is it Final Clue?
                 </label>
               </div>
-
               <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
                 <button
                   onClick={() => setIsQrcodeOpen(true)}
-                  className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full sm:w-[135px] h-[46px] rounded-md shadow-md hover:shadow-lg"
+                  className="w-full sm:w-auto px-6 h-[46px] rounded-md bg-[#2C739E] text-white shadow-md hover:bg-[#1f5471] hover:shadow-lg transition-all duration-300"
                 >
-                  Edit Create Clue
+                  Create Clue
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="w-full sm:w-[135px] h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
+                  className="w-full sm:w-[135px] h-[46px] rounded-md bg-black text-white hover:bg-[#1a1a1a] transition-all duration-300"
                 >
                   Cancel
                 </button>
@@ -254,4 +246,4 @@ const EditClue = () => {
   );
 };
 
-export default EditClue;
+export default CreateClue;

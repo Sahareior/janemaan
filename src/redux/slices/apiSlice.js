@@ -20,9 +20,30 @@ export const apiSlice = createApi({
     getDashboardStats: build.query({
       query: () => "dashboard-stats",
     }),
+    // auth...................
+    signIn : build.mutation({
+      query: (signinData) => (
+// console.log(signinData)
+        { 
+        url: "/accounts/login",
+        method: "POST",
+        body: signinData,
+      }
+    )
+    }),
+
+    getProfile: build.query({
+      query: () => "/accounts/profile"
+    }),
+
+// overview...............................
 
     getPrgress: build.query({
-      query: () => "progress",
+      query: () => "/progress",
+    }),
+
+    getUserList: build.query({
+      query: () => "accounts/users"
     }),
 
 // hunts.......................................
@@ -39,11 +60,69 @@ getHunts: build.query({
       }),
     }),
 
+updateHunt: build.mutation({
+  query: (data) => {
+    console.log(data.payload); // just log
+    // return {
+    //   url: `/hunts/${id}/update`,
+    //   method: "PATCH",
+    //   body: updatedData
+    // };
+  }
+}),
+
+// claims
+
+getClaims: build.query({
+query: () => "claims"
+}),
+
+
+// cluse..................
+
+createClues: build.mutation({
+  query: (data) => {
+    console.log(data)
+    // return {
+    //  url: `clues/${data.id}/create/`,
+    //     method: "POST",
+    //     body: data.clues,
+    // }
+
+  }
+}),
+
+getClues : build.query({
+  query: () => "clues"
+}),
+
+// plans.................................................
+
+getPlan: build.query({
+  query: () => "/subscriptions/plans"
+}),
+
+createPlans: build.mutation({
+  query: (data) => {
+    console.log(data)
+    // return {
+    //  url: `/subscriptions/plans/create`,
+    //     method: "POST",
+    //     body: data.clues,
+    // }
+
+  }
+}),
+
+
+
+
   }),
 });
 
 export const
- { useGetPrgressQuery, useGetDashboardStatsQuery,useGetHuntsQuery, useCreateHuntsMutation
+ { useGetPrgressQuery, useGetDashboardStatsQuery,useGetHuntsQuery, useCreateHuntsMutation, 
+  useSignInMutation, useUpdateHuntMutation, useCreatePlansMutation
 
 
  } = apiSlice;
