@@ -9,14 +9,13 @@ import {
   Button,
 } from "antd";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
 import { useCreateHuntsMutation } from "../../../redux/slices/apiSlice";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const CreateHunt = ({ handleCancel, handleCreate }) => {
+const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
   // Add state for each input
   const [huntTitle, setHuntTitle] = useState("");
   const [city, setCity] = useState("");
@@ -32,11 +31,7 @@ const CreateHunt = ({ handleCancel, handleCreate }) => {
   const [status, setStatus] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [fileList, setFileList] = useState([]);
-  const [createHunts]=useCreateHuntsMutation()
-
-
-
-
+  const [createHunts] = useCreateHuntsMutation();
 
   const handleRemove = () => {
     setFileList([]);
@@ -47,64 +42,65 @@ const CreateHunt = ({ handleCancel, handleCreate }) => {
   };
 
   // Gather and send data on create
-const handleSubmit = async () => {
-  const startDateTime =
-    startDate && startTime
-      ? `${startDate.format("YYYY-MM-DD")}T${startTime.format("HH:mm")}:00.000Z`
-      : null;
+  const handleSubmit = async () => {
+    const startDateTime =
+      startDate && startTime
+        ? `${startDate.format("YYYY-MM-DD")}T${startTime.format(
+            "HH:mm"
+          )}:00.000Z`
+        : null;
 
-  const endDateTime =
-    endDate && endTime
-      ? `${endDate.format("YYYY-MM-DD")}T${endTime.format("HH:mm")}:00.000Z`
-      : null;
+    const endDateTime =
+      endDate && endTime
+        ? `${endDate.format("YYYY-MM-DD")}T${endTime.format("HH:mm")}:00.000Z`
+        : null;
 
-      const parseDuration = (input) => {
-  const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
-  const match = input.match(regex);
+    const parseDuration = (input) => {
+      const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
+      const match = input.match(regex);
 
-  if (!match) return "00:00:00";
+      if (!match) return "00:00:00";
 
-  const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
-  const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
+      const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
+      const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
 
-  return `${hours}:${minutes}:00`;
-};
+      return `${hours}:${minutes}:00`;
+    };
 
+    const formData = new FormData();
+    formData.append("title", huntTitle);
+    formData.append("city", city);
+    formData.append("prize_amount", prizeAmount.toString());
+    formData.append("description", description);
+    formData.append("rules", rules);
+    formData.append("start_date", startDateTime);
+    formData.append("end_date", endDateTime);
+    formData.append("is_premium_only", isPremium);
+    formData.append("duration", parseDuration(duration));
+    formData.append("status", status);
+    formData.append("difficulty_level", difficulty);
+    formData.append("label", "none");
 
-  const formData = new FormData();
-  formData.append("title", huntTitle);
-  formData.append("city", city);
-  formData.append("prize_amount", prizeAmount.toString());
-  formData.append("description", description);
-  formData.append("rules", rules);
-  formData.append("start_date", startDateTime);
-  formData.append("end_date", endDateTime);
-  formData.append("is_premium_only", isPremium);
-  formData.append("duration", parseDuration(duration));
-  formData.append("status", status);
-  formData.append("difficulty_level", difficulty);
-  formData.append("label", "none");
+    if (fileList[0]?.originFileObj) {
+      formData.append("image", fileList[0].originFileObj);
+    }
 
-  if (fileList[0]?.originFileObj) {
-    formData.append("image", fileList[0].originFileObj);
-  }
-
-//   try {
-//     const res = await createHunts(formData).unwrap();
-//     console.log("Hunt created:", res);
-//     handleCreate?.(); // If you have a callback
-//   } catch (error) {
-//     console.error("Failed to create hunt:", error);
-//   }
-  const formDataObj = {};
-  for (const [key, value] of formData.entries()) {
-    formDataObj[key] = value;
-  }
+    try {
+      const res = await createHunts(formData).unwrap();
+      console.log("Hunt created:", res);
+      refetch();
+      handleCreate?.(); // If you have a callback
+    } catch (error) {
+      console.error("Failed to create hunt:", error);
+    }
+    const formDataObj = {};
+    for (const [key, value] of formData.entries()) {
+      formDataObj[key] = value;
+    }
     const res = await createHunts(formDataObj).unwrap();
     console.log("Hunt created:", res);
-  console.log('FormData contents:', formDataObj);
-};
-
+    console.log("FormData contents:", formDataObj);
+  };
 
   return (
     <div>
@@ -139,6 +135,7 @@ const handleSubmit = async () => {
             </label>
             <Input
               placeholder="Enter Prize amount"
+              type="number"
               value={prizeAmount}
               onChange={(e) => setPrizeAmount(e.target.value)}
               className="custom-dark-input placeholder-[#9E9E9E]"
@@ -238,53 +235,51 @@ const handleSubmit = async () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-white text-[16px] block mb-2">Status</label>
-              <div className="relative w-full">
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-        className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
-        // appearance-none removes default arrow, pr-10 for space for custom icon
-      >
-        <option value="" disabled>
-          Select Interval
-        </option>
-        <option value="draft">Draft</option>
-        <option value="active">Active</option>
-        <option value="completed">Completed</option>
-        <option value="cancelled">Cancelled</option>
-      </select>
-      <RiArrowDropDownLine
-        className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-        aria-hidden="true"
-      />
-    </div>
+            <div className="relative w-full">
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
+                // appearance-none removes default arrow, pr-10 for space for custom icon
+              >
+                <option value="" disabled>
+                  Select Interval
+                </option>
+                <option value="draft">Draft</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <RiArrowDropDownLine
+                className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                aria-hidden="true"
+              />
+            </div>
           </div>
           <div>
             <label className="text-white text-[16px] block mb-2">
               Difficulty
             </label>
 
-
-  <div className="relative w-full">
-      <select
-        value={difficulty}
-        onChange={(e) => setDifficulty(e.target.value)}
-        className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
-        // appearance-none removes default arrow, pr-10 for space for custom icon
-      >
-        <option value="" disabled>
-          Select Interval
-        </option>
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </select>
-      <RiArrowDropDownLine
-        className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-        aria-hidden="true"
-      />
-    </div>
-
+            <div className="relative w-full">
+              <select
+                value={difficulty}
+                onChange={(e) => setDifficulty(e.target.value)}
+                className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
+                // appearance-none removes default arrow, pr-10 for space for custom icon
+              >
+                <option value="" disabled>
+                  Select Interval
+                </option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+              <RiArrowDropDownLine
+                className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+                aria-hidden="true"
+              />
+            </div>
           </div>
         </div>
 

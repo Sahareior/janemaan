@@ -10,14 +10,15 @@ import {
   Button,
 } from "antd";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import { useUpdateHuntMutation } from "../../../redux/slices/apiSlice";
+import { useGetHuntsQuery, useUpdateHuntMutation } from "../../../redux/slices/apiSlice";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
+const EditHunt = ({ handleCancel, handleCreate,data}) => {
   const [updateHunt] = useUpdateHuntMutation()
+    const { data: e, refetch } = useGetHuntsQuery();
   const [formData, setFormData] = useState({
     title: "",
     city: "",
@@ -36,37 +37,37 @@ const EditHunt = ({ huntData, handleCancel, handleCreate }) => {
 
   const [fileList, setFileList] = useState([]);
 
-  useEffect(() => {
-    if (huntData) {
-      setFormData({
-        title: huntData.title || "",
-        city: huntData.city || "",
-        prize_amount: huntData.prize || "",
-        description: huntData.description || "",
-        rules: huntData.rules || "",
-        start_date: huntData.startDate ? dayjs(huntData.startDate) : null,
-        // start_time: huntData.startTime ? dayjs(huntData.startTime) : null,
-        end_date: huntData.endDate ? dayjs(huntData.endDate) : null,
-        // endTime: huntData.endTime ? dayjs(huntData.endTime) : null,
-        isPremium: huntData.isPremium || false,
-        duration: huntData.duration || "",
-        status: huntData.status || "",
-        label: "none",
-        difficulty_level: huntData.difficulty || "",
-      });
+useEffect(() => {
+  if (data) {
+    setFormData({
+      title: data.title || "",
+      city: data.city || "",
+      prize: data.prize_amount || "",
+      description: data.description || "",
+      rules: data.rules || "",
+      startDate: data.start_date ? dayjs(data.start_date) : null,
+      startTime: data.start_date ? dayjs(data.start_date) : null,
+      endDate: data.end_date ? dayjs(data.end_date) : null,
+      endTime: data.end_date ? dayjs(data.end_date) : null,
+      isPremium: data.is_premium_only || false,
+      duration: data.duration || "",
+      status: data.status || "",
+      difficulty: data.difficulty_level || "",
+    });
 
-      if (huntData.imageUrl) {
-        setFileList([
-          {
-            uid: "-1",
-            name: "existing_image.jpg",
-            status: "done",
-            url: huntData.imageUrl,
-          },
-        ]);
-      }
+    if (data.image) {
+      setFileList([
+        {
+          uid: "-1",
+          name: "existing_image.jpg",
+          status: "done",
+          url: data.image,
+        },
+      ]);
     }
-  }, [huntData]);
+  }
+}, [data]);
+
 
   const handleInputChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -118,17 +119,19 @@ const payload = {
   image: FileList
 };
 
-const id =4
+
 const items ={
-id , payload
+data:data.id , payload
 }
-const handleUpdate = () => {
-  updateHunt(items);
+const handleUpdate = async() => {
+   const res = await updateHunt(items).unwrap();
+   refetch()
+   console.log("Hunt updated:", res);
+  //  console.log(payload)
 }
 
 
 
-  // console.log(payload)
 
   return (
     <div className="space-y-6">
@@ -252,56 +255,44 @@ const handleUpdate = () => {
 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-white text-[16px] block mb-2">Status</label>
-                    <div className="relative w-full">
-            <select
-            value={formData.status}
-            onChange={(value) => handleSelectChange("status", value)}
-              className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
-              // appearance-none removes default arrow, pr-10 for space for custom icon
-            >
-              <option value="" disabled>
-                Select Interval
-              </option>
-              <option value="draft">Draft</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-            <RiArrowDropDownLine
-              className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-              aria-hidden="true"
-            />
-          </div>
-                </div>
-                <div>
-                  <label className="text-white text-[16px] block mb-2">
-                    Difficulty
-                  </label>
-      
-      
-        <div className="relative w-full">
-            <select
-                value={formData.difficulty}
-            onChange={(value) => handleSelectChange("difficulty", value)}
-              className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
-              // appearance-none removes default arrow, pr-10 for space for custom icon
-            >
-              <option value="" disabled>
-                Select Interval
-              </option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-            <RiArrowDropDownLine
-              className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-              aria-hidden="true"
-            />
-          </div>
-      
-                </div>
+<div className="relative w-full">
+  <select
+    value={formData.status}
+    onChange={(e) => handleSelectChange("status", e.target.value)}
+    className="w-full custom-dark-input custom-select-placeholder text-white border-none focus:outline-none appearance-none pr-10"
+  >
+    <option value="" disabled>
+      Select Status
+    </option>
+    <option value="draft">Draft</option>
+    <option value="active">Active</option>
+    <option value="completed">Completed</option>
+    {/* <option value="cancelled">Cancelled</option> */}
+  </select>
+  <RiArrowDropDownLine
+    className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+    aria-hidden="true"
+  />
+</div>
+
+<div className="relative w-full">
+  <select
+    value={formData.difficulty}
+    onChange={(e) => handleSelectChange("difficulty", e.target.value)}
+    className="w-full custom-dark-input custom-select-placeholder text-white border-none focus:outline-none appearance-none pr-10"
+  >
+    <option value="" disabled>
+      Select Difficulty
+    </option>
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+  <RiArrowDropDownLine
+    className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
+    aria-hidden="true"
+  />
+</div>
               </div>
 
       {/* Image Upload */}

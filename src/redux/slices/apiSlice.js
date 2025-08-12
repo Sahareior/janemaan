@@ -5,121 +5,271 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://10.10.13.19:8000/api/v1/",
     // http://10.10.13.19:8000/api/v1/hunts/  "http://10.10.13.19:8000/api/v1/cores/", hunts/create/
+    // http://10.10.13.19:8000/api/v1/qrcodes/5c989af1-95ec-4cd6-ac76-dfdd80da2baa/update/
+    // http://10.10.13.19:8000/api/v1/cores/dashboard-stats/ /api/v1/accounts/login/
+    // http://10.10.13.19:8000/api/v1/hunts/f9460baf-847c-405e-8330-96be17e33103/update/
+    // http://10.10.13.19:8000/api/v1/hunts/96ae9c5c-2269-44ae-b70f-df964398878b/update/
+    // http://10.10.13.19:8000/api/v1/subscriptions/plans/3/create/
 
     prepareHeaders: (headers) => {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU0NzM2NzUxLCJpYXQiOjE3NTQ2NTAzNTEsImp0aSI6IjU5Y2VhOGY3ODZiZDRjOGM5MDkzYTkzNzM3MzA0MTVhIiwidXNlcl9pZCI6Nn0.1vHTuD7mC0S4koISvl8tsMKjdkH6Cjn77wgMm6P_ioM";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3NDA0OTc4LCJpYXQiOjE3NTQ4MTI5NzgsImp0aSI6IjEzNzA3N2M1MGVjNzRiZDU4YWZiZjhmNDM5OWM2NGJjIiwidXNlcl9pZCI6N30.-QjELi7TAAOKeRC4z0HZErG3sDUJdJ1r3HRqI_Sz9ws";
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
+      //    headers.set("Content-Type", "application/json");
       return headers;
     },
   }),
   endpoints: (build) => ({
-    getDashboardStats: build.query({
-      query: () => "dashboard-stats",
-    }),
     // auth...................
-    signIn : build.mutation({
-      query: (signinData) => (
-// console.log(signinData)
-        { 
-        url: "/accounts/login",
-        method: "POST",
-        body: signinData,
+    signIn: build.mutation({
+      query: (signinData) =>{
+          console.log(signinData, "from slice")
+        return {
+          url: "accounts/login/",
+          method: "POST",
+          body: signinData,
+        }
       }
-    )
+      
     }),
 
     getProfile: build.query({
-      query: () => "/accounts/profile"
+      query: () => "/accounts/profile",
     }),
 
-// overview...............................
+    // overview...............................
 
     getPrgress: build.query({
       query: () => "/progress",
     }),
 
-    getUserList: build.query({
-      query: () => "accounts/users"
+    getDashboardStats: build.query({
+      query: () => "cores/dashboard-stats/",
     }),
 
-// hunts.......................................
-getHunts: build.query({
-    query: () => "hunts",
-}),
+    getUserList: build.query({
+      query: () => "accounts/users",
+    }),
+
+    // hunts.......................................
+    getHunts: build.query({
+      query: () => "hunts",
+    }),
 
     createHunts: build.mutation({
       query: (newHunt) => {
         console.log(newHunt);
+        return {
+          url: "hunts/create/",
+
+          method: "POST",
+          body: newHunt,
+        };
+      },
+    }),
+    // http://10.10.13.19:8000/api/v1/hunts/f9460baf-847c-405e-8330-96be17e33103/update/
+    updateHunt: build.mutation({
+      query: (data) => {
+        console.log(data.data, data.payload);
+        return {
+          url: `hunts/${data.data}/update/`,
+
+          method: "PATCH",
+          body: data.payload,
+        };
+      },
+    }),
+
+    deleteHunt: build.mutation({
+      query: (id) => ({
+        url: `hunts/${id}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+
+    // claims
+
+    getClaims: build.query({
+      query: () => "claims",
+    }),
+
+    // cluse..................
+
+    createClues: build.mutation({
+      query: (data) => {
+        console.log(data);
+        return {
+          url: `clues/${data.id}/create/`,
+          method: "POST",
+          body: data.clues,
+        };
+      },
+    }),
+    updateClues: build.mutation({
+      query: ({id,clueData}) => {
+        console.log(id,clueData);
+        return {
+          url: `clues/${id}/update/`,
+          method: "PATCH",
+          body:clueData,
+        };
+      },
+    }),
+
+
+    claimsUpdate: build.mutation({
+      query: ({id,formData}) => {
+        console.log(id,formData);
+        return {
+          url: `claims/${id}/update/`,
+          method: "PATCH",
+          body:formData,
+        };
+      },
+    }),
+    // claims/1/update/
+
+    getClues: build.query({
+      query: () => "clues",
+    }),
+
+    // plans.................................................
+
+    getPlan: build.query({
+      query: () => "/subscriptions/plans",
+    }),
+
+    createPlans: build.mutation({
+      query: (data) => {
+        console.log(data);
+        return {
+          url: `subscriptions/plans/create/`,
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+
+    updatePlans: build.mutation({
+      query: ({id, dataToLog}) => {
+        console.log(id)
+        return {
+          url: `subscriptions/plans/${id}/update/`,
+          method: "PATCH",
+          body: dataToLog
+        }
       }
     }),
 
-updateHunt: build.mutation({
-  query: (data) => {
-    console.log(data.payload); // just log
-    // return {
-    //   url: `/hunts/${id}/update`,
-    //   method: "PATCH",
-    //   body: updatedData
-    // };
-  }
-}),
+      deletePlan: build.mutation({
+      query: (id) => ({
+        url: `subscriptions/plans/${id}/delete/`,
+        method: "DELETE",
+      }),
+    }),
 
-// claims
-
-getClaims: build.query({
-query: () => "claims"
-}),
+     getUserGrowth: build.query({
+      query: ()=> 'subscriptions/growth-history/'
+    }),
+     getUserRevinew: build.query({
+      query: ()=> 'subscriptions/revenue-history/'
+    }),
 
 
-// cluse..................
+// http://10.10.13.19:8000/api/v1/subscriptions/plans/3/create/
+    // Qr Codes.............................
 
-createClues: build.mutation({
-  query: (data) => {
-    console.log(data)
-    // return {
-    //  url: `clues/${data.id}/create/`,
-    //     method: "POST",
-    //     body: data.clues,
-    // }
+    getQrCodes: build.query({
+      query: () => "/qrcodes",
+    }),
 
-  }
-}),
+      deleteQrCode: build.mutation({
+      query: (id) => ({
+        url: `qrcodes/${id}/delete/`,
+        method: "DELETE",
+      }),
+    }),
 
-getClues : build.query({
-  query: () => "clues"
-}),
+    updateQrCode: build.mutation ({
+      query: ({id,qrData}) =>{
+        console.log(id,qrData)
+        return{
+          url: `qrcodes/${id}/update/`,
+          method: "PATCH",
+          body: qrData
+        }
+      }
+    }),
 
-// plans.................................................
+    // settings...............................................
+    getPrivacy: build.query({
+      query: () => "cores/privacy-policy/",
+    }),
 
-getPlan: build.query({
-  query: () => "/subscriptions/plans"
-}),
+    getPolicy: build.query({
+      query: () => 'cores/terms-conditions/'
+    }),
 
-createPlans: build.mutation({
-  query: (data) => {
-    console.log(data)
-    // return {
-    //  url: `/subscriptions/plans/create`,
-    //     method: "POST",
-    //     body: data.clues,
-    // }
+    updatePolicy: build.mutation({
+      query: (data) => {
+        console.log(data)
+        return{
+          url: 'cores/terms-conditions/update/',
+          method: "POST",
+          body: data
+        }
+      }
+    }),
 
-  }
-}),
+    updatePrivacy: build.mutation({
+      query: (data) => {
+        console.log(data);
+        return {
+          url: `cores/privacy-policy/update/`,
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+    // users.....................
 
-
+    getUsers: build.query({
+      query: ()=> 'accounts/users/'
+    }),
 
 
   }),
 });
 
-export const
- { useGetPrgressQuery, useGetDashboardStatsQuery,useGetHuntsQuery, useCreateHuntsMutation, 
-  useSignInMutation, useUpdateHuntMutation, useCreatePlansMutation
-
-
- } = apiSlice;
+export const {
+  useClaimsUpdateMutation,
+  useGetPrgressQuery,
+  useGetDashboardStatsQuery,
+  useGetPolicyQuery,
+  useGetHuntsQuery,
+  useCreateHuntsMutation,
+  useUpdatePolicyMutation,
+  useDeleteHuntMutation,
+  useSignInMutation,
+  useUpdateHuntMutation,
+  useCreatePlansMutation,
+  useGetPrivacyQuery,
+  useUpdatePrivacyMutation,
+  useCreateCluesMutation,
+  useGetCluesQuery,
+  useGetQrCodesQuery,
+  getClueProgress,
+  useGetPlanQuery,
+  useDeletePlanMutation,
+  useUpdatePlansMutation,
+  useUpdateQrCodeMutation,
+  useGetUsersQuery,
+  useGetUserGrowthQuery,
+  useGetUserRevinewQuery,
+  useGetClaimsQuery,
+  useUpdateCluesMutation,
+  useDeleteQrCodeMutation
+} = apiSlice;

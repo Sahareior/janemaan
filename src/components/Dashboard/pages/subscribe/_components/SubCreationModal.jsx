@@ -4,7 +4,9 @@ import EditSubs from "./modalPages/EditSubs";
 import CreateSubs from "./modalPages/CreateSubs";
 import ViewSubs from "./modalPages/ViewSubs";
 
-const SubCreationModal = ({ open, onCancel, edit }) => {
+const SubCreationModal = ({ open, onCancel, edit,data }) => {
+
+  console.log("dada",data)
   return (
     <Modal
       open={open}
@@ -33,7 +35,7 @@ const SubCreationModal = ({ open, onCancel, edit }) => {
       {edit === "view" ? (
         <ViewSubs />
       ) : edit === "edit" ? (
-        <EditSubs />
+        <EditSubs data={data} />
       ) : (
         <CreateSubs />
       )}

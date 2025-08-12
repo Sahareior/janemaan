@@ -9,57 +9,71 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { FaChevronDown } from "react-icons/fa";
 import ParticipantProgress from "./_components/ParticipantProgress";
 import Activity from "./_components/Activity";
-import { useGetDashboardStatsQuery, useGetPrgressQuery } from "../../../../redux/slices/apiSlice";
-
-const userChartData = {
-  "7days": [
-    { day: "Mon", thisYear: 12000, lastYear: 9000 },
-    { day: "Tue", thisYear: 15000, lastYear: 10000 },
-    { day: "Wed", thisYear: 20000, lastYear: 12000 },
-    { day: "Thu", thisYear: 18000, lastYear: 14000 },
-    { day: "Fri", thisYear: 22000, lastYear: 16000 },
-    { day: "Sat", thisYear: 24000, lastYear: 17000 },
-    { day: "Sun", thisYear: 26000, lastYear: 20000 },
-  ],
-  "30days": [
-    { day: "Week 1", thisYear: 18000, lastYear: 13000 },
-    { day: "Week 2", thisYear: 21000, lastYear: 14000 },
-    { day: "Week 3", thisYear: 24000, lastYear: 17000 },
-    { day: "Week 4", thisYear: 28000, lastYear: 20000 },
-  ],
-};
-
-const revenueChartData = Array.from({ length: 12 }, (_, i) => ({
-  value: 20 + Math.sin(i / 2) * 30 + i * 4,
-  name: `${(i + 1) * 5}k`,
-}));
+import {
+  useGetDashboardStatsQuery,
+  useGetPrgressQuery,
+  useGetUserGrowthQuery,
+  useGetUserRevinewQuery,
+} from "../../../../redux/slices/apiSlice";
 
 export const StatCard = ({ title, value, color }) => (
   <div className="w-full h-[115px] md:flex mx-auto justify-center items-center bg-[#030712] border border-[#5D87A3] rounded-[12.76px] p-4">
     <div>
       <h3 className="text-[19px] popreg text-[#9E9E9E]">{title}</h3>
-      <h4 className={`${!color ? "text-[#2C739E]" : "text-white"} text-[29px] popbold font-bold`}>{value}</h4>
+      <h4
+        className={`${
+          !color ? "text-[#2C739E]" : "text-white"
+        } text-[29px] popbold font-bold`}
+      >
+        {value}
+      </h4>
     </div>
   </div>
 );
 
 const Overview = () => {
-  const [timeRange, setTimeRange] = useState("7days");
-  const [userData, setUserData] = useState(userChartData["7days"]);
+  const currentYear = new Date().getFullYear();
 
-   const { data: progress, error, isLoading } = useGetPrgressQuery();
-   const {data:overviewData, isLoading: overviewLoading} = useGetDashboardStatsQuery();
+  // Separate state for User Growth chart year filter
+  const [selectedGrowthYear, setSelectedGrowthYear] = useState(currentYear);
 
-   console.log(overviewData)
-  // Function to toggle between 7 days and 30 days
-  const handleTimeRangeClick = () => {
-    const newTimeRange = timeRange === "7days" ? "30days" : "7days";
-    setTimeRange(newTimeRange);
-    setUserData(userChartData[newTimeRange]); // Update chart data
-  };
+  // Separate state for Revenue chart year filter
+  const [selectedRevenueYear, setSelectedRevenueYear] = useState(currentYear);
+
+  const { data: progress } = useGetPrgressQuery();
+  const { data: overviewData } = useGetDashboardStatsQuery();
+  const { data: userGrowthRaw } = useGetUserGrowthQuery();
+  const { data: userRevinewRaw } = useGetUserRevinewQuery();
+
+  // USER GROWTH FILTERING
+  const filteredGrowthData = userGrowthRaw?.filter(
+    (item) => item.year === selectedGrowthYear
+  ) || [];
+
+  const lastYearGrowthData = userGrowthRaw?.filter(
+    (item) => item.year === selectedGrowthYear - 1
+  ) || [];
+
+  // Map last year for easy lookup
+  const lastYearGrowthMap = new Map();
+  lastYearGrowthData.forEach((item) => {
+    lastYearGrowthMap.set(item.month, item.growth_percentage);
+  });
+
+  const userGrowth = filteredGrowthData.map((item) => ({
+    day: item.month,
+    thisYear: item.growth_percentage,
+    lastYear: lastYearGrowthMap.get(item.month) || 0,
+  }));
+
+  // REVENUE FILTERING
+  const revenueChartData =
+    userRevinewRaw?.filter((item) => item.year === selectedRevenueYear).map((item) => ({
+      name: item.month,
+      value: item.revenue_percentage,
+    })) || [];
 
   return (
     <div className="p-5 space-y-12">
@@ -71,35 +85,38 @@ const Overview = () => {
         <StatCard color={true} title="Drop out" value="23%" />
       </div>
 
-      {/* First Chart: Total Users */}
-      <div className="bg-[#111827] p-6 rounded-xl border border-[#5D87A3]">
-        <div className="flex justify-between bg-[#111827] items-center mb-4">
-          <div className="flex items-center bg-[#111827] justify-center gap-11">
-            <h3 className="text-white text-lg font-semibold">Total Users</h3>
-            <div className="flex justify-between gap-12 popreg text-xs text-white">
-              {/* This Year */}
-              <div className="flex items-center gap-2">
-                <span className="inline-block h-3 w-3 rounded-full bg-[#189EFE]"></span>
-                <span className="text-sm">This Year</span>
-              </div>
+      {/* User Growth Year Selector */}
+ 
 
-              {/* Last Year */}
-              <div className="flex items-center gap-2">
-                <span className="inline-block h-3 w-3 rounded-full bg-[#AAAAAA]"></span>
-                <span className="text-sm">Last Year</span>
-              </div>
-            </div>
-          </div>
-          {/* Clicking on this will toggle between 7 days and 30 days */}
-          <div
-            onClick={handleTimeRangeClick}
-            className="text-gray-300 text-sm flex justify-center items-center gap-3 cursor-pointer"
-          >
-            {timeRange === "7days" ? "7 days" : "30 days"} <FaChevronDown />
-          </div>
+      {/* User Growth Chart */}
+      <div className="bg-[#111827] p-6 rounded-xl border border-[#5D87A3]">
+        <div className="flex gap-3">
+          <h3 className="text-white text-lg font-semibold flex mb-4">Total Users Growth</h3>
+               <div className="flex gap-4 mb-4">
+        <button
+          onClick={() => setSelectedGrowthYear(currentYear)}
+          className={`px-4 py-2 flex items-center gap-2 rounded ${
+            selectedGrowthYear === currentYear
+              ? "bg-black text-white"
+              : "bg-black text-gray-400"
+          }`}
+        >
+         <div className="h-3 w-3 rounded-full bg-green-500" /> This Year ({currentYear})
+        </button>
+        <button
+          onClick={() => setSelectedGrowthYear(currentYear - 1)}
+          className={`px-4 py-2 flex items-center gap-2 rounded ${
+            selectedGrowthYear === currentYear - 1
+              ? "bg-black text-white"
+              : "bg-black text-gray-400"
+          }`}
+        >
+         <div className="h-3 w-3 rounded-full bg-red-500" /> Last Year ({currentYear - 1})
+        </button>
+      </div>
         </div>
-        <ResponsiveContainer className="bg-[#111827]" width="100%" height={300}>
-          <LineChart data={userData}>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={userGrowth}>
             <CartesianGrid strokeDasharray="1" stroke="#444" />
             <XAxis dataKey="day" stroke="#888" />
             <YAxis stroke="#888" />
@@ -123,11 +140,12 @@ const Overview = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Second Chart: Revenue */}
+      {/* Revenue Year Selector */}
+
+
+      {/* Revenue Chart */}
       <div className="bg-[#111827] p-6 rounded-xl border border-[#5D87A3]">
-        <div className="mb-4">
-          <h3 className="text-white text-[18px] popreg py-5">Revenue</h3>
-        </div>
+        <h3 className="text-white text-[18px] popreg py-5">Revenue</h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={revenueChartData}>
             <CartesianGrid stroke="#333" strokeDasharray="3 3" />
@@ -146,7 +164,7 @@ const Overview = () => {
       </div>
 
       <div className="flex justify-between gap-5">
-        <ParticipantProgress />
+        <ParticipantProgress participants={progress} />
         <Activity />
       </div>
     </div>

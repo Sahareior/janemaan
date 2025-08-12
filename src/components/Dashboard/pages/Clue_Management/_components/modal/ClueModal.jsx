@@ -6,12 +6,14 @@ import "./modal.css";
 import Swal from "sweetalert2";
 import EditClue from "./modalPage/EditClue";
 import CreateClue from "./modalPage/CreateClue";
+import EditQrPage from "../../../QrCode_Management/_components/EditQrPage";
 
 
 const { TextArea } = Input;
 
-const ClueModal = ({ open, onCancel, edit }) => {
+const ClueModal = ({ open, onCancel, edit,huntId,data,position }) => {
 
+  console.log(data)
  
   return (
     <Modal
@@ -28,13 +30,18 @@ const ClueModal = ({ open, onCancel, edit }) => {
         </div>
       }
     >
- {
-  edit? (
-<EditClue />
-  ):(
-<CreateClue />
+{
+  edit ? (
+    position ? (
+      <EditQrPage data={data} />
+    ) : (
+      <EditClue data={data} huntId={huntId} />
+    )
+  ) : (
+    <CreateClue huntId={huntId} />
   )
- }
+}
+
     </Modal>
   );
 };

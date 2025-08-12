@@ -11,6 +11,7 @@ import Terms from "./components/Dashboard/pages/Settings/_components/Terms";
 import Login from './components/Authentications/Login';
 import Subscription from "./components/Dashboard/pages/subscribe/Subscription";
 import DefaultLandingPage from "./components/DefaultLandingPage/DefaultLandingPage";
+import ProtectedRoute from "./components/Authentications/ProtectedRoute";
 
 function App() {
   return (
@@ -19,7 +20,14 @@ function App() {
   <Route path="/" element={<DefaultLandingPage />} />
 
   {/* Dashboard Pages */}
-  <Route path="/dashboard" element={<Dashboard />}>
+ <Route
+    path="/dashboard"
+    element={
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    }
+  >
     <Route path="overview" element={<Overview />} />
     <Route path="hunt-management" element={<HuntManagement />} />
     <Route path="clue-management" element={<ClueManagement />} />

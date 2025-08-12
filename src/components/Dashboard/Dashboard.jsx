@@ -34,11 +34,16 @@ const currentKey = location.pathname.split('/')[1];
 
     const [activeTab, setActiveTab] = useState('privacy');
 
-  const handleClick = (key) => {
-    setActiveTab(key);
-    navigate(`/settings/${key}`)
-    console.log(`Clicked: ${key}`);
-  };
+
+    const handleLogOut =()=>{
+      localStorage.removeItem('token')
+    }
+
+const handleClick = (key) => {
+  setActiveTab(key);
+ navigate(`/dashboard/settings/${key}`);
+
+};
 
 
   const pageTitles = {
@@ -68,11 +73,7 @@ const currentKey = location.pathname.split('/')[1];
       icon: <MdMyLocation size={20} />,
       label: 'Hunt Management',
     },
-    {
-      key: 'dashboard/clue-management',
-      icon:  <div><img src="/images/link.png" alt="" /></div>,
-      label: 'Clue Management',
-    },
+
     {
       key: 'dashboard/qr-management',
       icon: <MdGridOn size={20} />,
@@ -141,7 +142,7 @@ const onChange = key => {
       onClick={handleMenuClick}
     />
   </div>
-  <Link to='/login'
+  <Link to='/login' onClick={()=> handleLogOut()}
    className='text-red-600 mb-9 hover:text-green-400 flex justify-center items-center gap-2'>
     <MdLogout className='-mt-1' size={16} />
     <h3 className='popmed'>Logout</h3>
@@ -160,7 +161,7 @@ const onChange = key => {
       {/* Right: Tab-style Settings Buttons */}
 
 {
-  !location.pathname.startsWith('/settings') && (
+  !location.pathname.startsWith('/dashboard/settings') && (
     <div>
       <h4 className="text-white text-[24px] font-semibold">
         {pageTitles[currentKey] || 'Dashboard'}
@@ -171,21 +172,23 @@ const onChange = key => {
 
 
 {
-    location.pathname.startsWith('/settings') &&       <div className="flex gap-6">
-        {settings.map((item) => (
-          <button
-            key={item.key}
-            onClick={() => handleClick(item.key ?? 'privacy')}
-
-            className={`text-white font-semibold transition-all duration-200 ${
-              activeTab === item.key ? 'text-[28px]' : 'text-[18px]'
-            }`}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
+  location.pathname.startsWith('/dashboard/settings') && (
+    <div className="flex gap-6">
+      {settings.map((item) => (
+        <button
+          key={item.key}
+          onClick={() => handleClick(item.key)}
+          className={`text-white font-semibold transition-all duration-200 ${
+            activeTab === item.key ? 'text-[28px]' : 'text-[18px]'
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+    </div>
+  )
 }
+
 
       {/* Blue Line at Bottom */}
       <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#5D87A3]" />

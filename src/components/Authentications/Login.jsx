@@ -16,12 +16,14 @@ const Login = () => {
       message.error("Please enter both email and password");
       return;
     }
-navigate("/overview");
+
     try {
       const res = await signIn({ email, password }).unwrap();
       message.success("Login successful!");
       // Store token if needed
-      localStorage.setItem("token", res?.token);
+      navigate('/dashboard')
+      console.log(res)
+      localStorage.setItem("token", res?.access_token);
       
     } catch (err) {
       message.error(err?.data?.message || "Login failed. Please try again.");

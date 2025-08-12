@@ -1,12 +1,15 @@
 import React from "react";
 import Swal from "sweetalert2";
 import { Input, Button } from "antd";
+import { data } from "react-router-dom";
+import { useGetHuntsQuery, useUpdateCluesMutation } from "../../../../../../../redux/slices/apiSlice";
 const { TextArea } = Input;
 
-const EditClue = () => {
+const EditClue = ({data}) => {
   const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
+  const [updateClues] = useUpdateCluesMutation()
+   const { data: huntData, isLoading,refetch } = useGetHuntsQuery();
 
-  // Single state matching your JSON format
   const [clueData, setClueData] = React.useState({
     name: "",
     riddle: "",
@@ -19,6 +22,25 @@ const EditClue = () => {
     },
     is_final_clue: false,
   });
+
+  // Initialize clueData state from incoming data prop on mount or when data changes
+React.useEffect(() => {
+  if (data) {
+    setClueData({
+      name: data.name || "",
+      riddle: data.riddle || "",
+      hint: data.hint || "",
+      order: data.order || "",
+      qr_code: {
+        latitude: data.qr_code?.latitude ?? 0,    // ✅ nested path
+        longitude: data.qr_code?.longitude ?? 0,  // ✅ nested path
+        is_active: data.qr_code?.is_active ?? true,
+      },
+      is_final_clue: data.is_final_clue || false,
+    });
+  }
+}, [data]);
+
 
   // Handle main fields
   const handleChange = (field, value) => {
@@ -33,18 +55,39 @@ const EditClue = () => {
     }));
   };
 
-  const handleCreate = () => {
-    // Example API call can be placed here
+const handleCreate = async () => {
+  const editData = {
+    id: data?.id,
+    clueData,
+  };
+
+  try {
+    const res = await updateClues(editData).unwrap();
     console.log("Sending edit clue data:", clueData);
+    console.log("Response:", res);
 
     Swal.fire({
-      title: "Done!",
+      title: "Clue Updated!",
       icon: "success",
       background: "#1e1e2f",
       color: "#fff",
       draggable: true,
     });
-  };
+
+    refetch();
+  } catch (error) {
+    console.error("Failed to update clue:", error);
+
+    Swal.fire({
+      title: "Error",
+      text: error?.data?.message || "Failed to update clue.",
+      icon: "error",
+      background: "#1e1e2f",
+      color: "#fff",
+      draggable: true,
+    });
+  }
+};
 
   const handleCancel = () => {
     Swal.fire({

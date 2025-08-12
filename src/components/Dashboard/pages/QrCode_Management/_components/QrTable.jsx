@@ -9,6 +9,8 @@ import { MdOutlineCalendarToday } from "react-icons/md";
 import Qrmodal from "./modal/Qrmodal";
 import ClueModal from "../../Clue_Management/_components/modal/ClueModal";
 import Swal from "sweetalert2";
+import { useDeleteQrCodeMutation, useGetQrCodesQuery } from "../../../../../redux/slices/apiSlice";
+
 
 const data = [
   {
@@ -31,131 +33,154 @@ const data = [
   },
 ];
 
-const QrTable = () => {
+const QrTable = ({qrCode}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [qrdata, setQrdata] = useState()
+  const [deleteQrCode] = useDeleteQrCodeMutation()
+    const { data,refetch } = useGetQrCodesQuery();
+  
 
-  const handleDelete = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      background: "#1e1e2f",
-      color: "#fff",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          background: "#1e1e2f",
-          color: "#fff",
-          icon: "success",
-        });
-      }
-    });
-  };
+const handleDelete = async (id) => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    background: "#1e1e2f",
+    color: "#fff",
+    confirmButtonText: "Yes, delete it!",
+  });
 
-  const columns = [
-    {
-      title: "QR Code",
-      dataIndex: "qrcode",
-      key: "qrcode",
-      render: (value) => (
-        <span
-          onClick={() => setIsModalOpen(true)}
-          className="text-[17px]  text-[#9E9E9E]  flex justify-start items-center gap-3 w-  px-3 py-2"
+  if (result.isConfirmed) {
+    try {
+      await deleteQrCode(id); // make sure deleteQrCode returns a promise
+
+      await Swal.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        background: "#1e1e2f",
+        color: "#fff",
+        icon: "success",
+      });
+
+      // Optionally refetch or update UI here
+      refetch();
+    } catch (error) {
+      await Swal.fire({
+        title: "Error!",
+        text: error.message || "Failed to delete file.",
+        background: "#1e1e2f",
+        color: "#fff",
+        icon: "error",
+      });
+    }
+  }
+};
+
+const columns = [
+  {
+    title: "QR Code",
+    dataIndex: "qr_image",
+    key: "qr_image",
+    render: (qr_image, record) => (
+      <span
+        onClick={() => setIsModalOpen(true)}
+        className="text-[17px] text-[#9E9E9E] flex justify-start items-center gap-3 px-3 py-2"
+      >
+        <img
+          className="h-[50px] w-[50px] hover:cursor-pointer"
+          src={qr_image}
+          alt={record.code}
+        />
+        {record.code}
+      </span>
+    ),
+  },
+  {
+    title: "Status",
+    dataIndex: "is_active",
+    key: "is_active",
+    render: (is_active) => {
+      const status = is_active ? "active" : "inactive";
+      const tagColor = is_active
+        ? "bg-[#2765A1]/25 border border-[#2765A1]"
+        : "bg-[#995900]/25 border border-[#995900]";
+
+      return (
+        <Tag
+          className={`${tagColor} text-white font-bold w-[100px] h-[36px] flex justify-center items-center rounded-[22px]`}
         >
-          <img className="h-[50px] hover:cursor-pointer w-[50px]" src="/images/qr.png" alt="" />
-          {value}
-        </span>
-      ),
+          {status}
+        </Tag>
+      );
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => {
-        const tagColor =
-          {
-            scanned: "bg-[#2765A1]/25 border border-[#2765A1]",
-            draft: "bg-[#995900]/25 border border-[#995900]",
-            expired: "bg-red-500/25 border border-red-500", // <-- Add this too
-          }[status] || "bg-gray-500";
-
-        return (
-          <Tag
-            className={`${tagColor} text-white font-bold w-[100px] h-[36px] flex justify-center items-center rounded-[22px]`}
-          >
-            {status}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Scans",
-      dataIndex: "scans",
-      key: "scans",
-      render: (scans) => (
-        <span className="text-[#9E9E9E] font-bold text-[17px]">{scans}</span>
-      ),
-    },
-    {
-      title: "Location",
-      dataIndex: "location",
-      key: "location",
-      render: (location) => (
-        <span className="text-[#9E9E9E] flex justify-center items-center gap-3  text-[17px] popreg">
-          <CiLocationOn size={18} />
-          {location}
-        </span>
-      ),
-    },
-    {
-      title: "Created On",
-      dataIndex: "created",
-      key: "created",
-      render: (date) => (
-        <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
-          <MdOutlineCalendarToday /> {date}
-        </span>
-      ),
-    },
-    {
-      title: "Expires On",
-      dataIndex: "expires",
-      key: "expires",
-      render: (date) => (
-        <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
-          <MdOutlineCalendarToday /> {date}
-        </span>
-      ),
-    },
-    {
+  },
+  {
+    title: "Scans",
+    key: "scans",
+    render: () => (
+      <span className="text-[#9E9E9E] font-bold text-[17px]">—</span>
+    ), // No scans in your object, placeholder used
+  },
+  {
+    title: "Location",
+    key: "location",
+    render: (record) => (
+      <span className="text-[#9E9E9E] flex justify-center items-center gap-3 text-[17px] popreg">
+        <CiLocationOn size={18} />
+        {record.latitude}, {record.longitude}
+      </span>
+    ),
+  },
+  {
+    title: "Created On",
+    dataIndex: "created_at",
+    key: "created_at",
+    render: (date) => (
+      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
+        <MdOutlineCalendarToday /> {new Date(date).toLocaleDateString()}
+      </span>
+    ),
+  },
+  {
+    title: "Expires On",
+    dataIndex: "updated_at", // Not in object, but using updated_at as placeholder
+    key: "updated_at",
+    render: (date) => (
+      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
+        <MdOutlineCalendarToday /> {new Date(date).toLocaleDateString()}
+      </span>
+    ),
+  },
+  {
       title: "Actions",
       key: "actions",
-      render: () => (
+      render: (_, record) => (
         <Space size="middle">
           <EditOutlined
-            onClick={() => setIsEditModalOpen(true)}
+            onClick={() => {
+              setQrdata(record); 
+              setIsEditModalOpen(true);
+            }}
             className="text-white hover:text-yellow-400 text-[22px] cursor-pointer"
           />
           <DeleteOutlined
-            onClick={() => handleDelete()}
+            onClick={() => handleDelete(record.id)}
             className="text-red-500 hover:text-red-700 text-[22px] cursor-pointer"
           />
         </Space>
       ),
     },
-  ];
+];
+
   return (
     <div className="p-4 rounded-xl bg-[#030712] text-white">
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={qrCode}
         pagination={{ pageSize: 5 }}
         bordered={false}
         className="custom-ant-table bg-[#030712]"
@@ -171,6 +196,8 @@ const QrTable = () => {
         open={isEditModalOpen}
         onOk={() => setIsEditModalOpen(false)}
         onCancel={() => setIsEditModalOpen(false)}
+        data={qrdata}
+        position = {true}
       />
     </div>
   );

@@ -1,42 +1,16 @@
 import React, { useState } from "react";
 import { Space, Table, Tag } from "antd";
-import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/reset.css";
-import { FaLocationPin } from "react-icons/fa6";
+import { CiLocationOn } from "react-icons/ci";
 import { PiQrCodeBold } from "react-icons/pi";
 import ClueModal from "./modal/ClueModal";
 import Swal from "sweetalert2";
-import { CiLocationOn } from "react-icons/ci";
+import { data } from 'react-router-dom';
 
-const data = [
-  {
-    key: 1,
-    order: "CL001",
-    title: "Treasure Trail Cape Town",
-    location: "Cape Town",
-    qrcode: "1234567890",
-    status: "uploaded",
-  },
-  {
-    key: 2,
-    order: "CL001",
-    title: "hYYAS ASAD[P ADFNA KFMNO",
-    location: "Uganda",
-    qrcode: "1234567890",
-    status: "uploaded",
-  },
-  {
-    key: 3,
-    order: "CL001",
-    title: "dIO KA? DIO Ka??",
-    location: "Nigeria",
-    qrcode: "1234567890",
-    status: "draft",
-  },
-];
-
-const ClueTable = () => {
+const ClueTable = ({ filteredClues }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editClue, setEditClue] = useState({})
 
   const handleDelete = () => {
     Swal.fire({
@@ -62,6 +36,8 @@ const ClueTable = () => {
     });
   };
 
+  console.log(editClue,"adadadadaa")
+
   const columns = [
     {
       title: "Order",
@@ -75,8 +51,8 @@ const ClueTable = () => {
     },
     {
       title: "Title",
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "name",
+      key: "name",
       render: (value) => (
         <span className="text-[#97BECA] popmed truncate max-w-[160px] block">
           {value}
@@ -85,49 +61,49 @@ const ClueTable = () => {
     },
     {
       title: "Location",
-      dataIndex: "location",
       key: "location",
-      render: (value) => (
+      render: (_, record) => (
         <span className="text-[#9E9E9E] flex justify-start popreg text-[17px] items-center gap-3">
           <CiLocationOn size={18} />
-          {value}
+          {record.qr_code?.latitude ?? "—"}, {record.qr_code?.longitude ?? "—"}
         </span>
       ),
     },
-{
-  title: "QR Code",
-  dataIndex: "qrcode",
-  key: "qrcode",
-  render: () => (
-    <a
-      href="/images/qr.png"
-      download="qr-code.png"
-      className="no-underline"
-    >
-      <span className="text-[17px] text-[#9E9E9E] flex justify-center items-center gap-3 w-[190px] border-[#9E9E9E] border-[1px] rounded-[22px] px-3 py-2 hover:bg-[#1f2937] transition">
-        <PiQrCodeBold size={22} />
-        Qr Code
-      </span>
-    </a>
-  ),
-},
-
+    {
+      title: "QR Code",
+      key: "qrcode",
+      render: (_, record) =>
+        record.qr_code?.qr_image ? (
+          <a
+            href={record.qr_code.qr_image}
+            download={`${record.qr_code?.code || "qr-code"}.png`}
+            className="no-underline"
+          >
+            <span className="text-[17px] text-[#9E9E9E] flex justify-center items-center gap-3 w-[190px] border-[#9E9E9E] border-[1px] rounded-[22px] px-3 py-2 hover:bg-[#1f2937] transition">
+              <PiQrCodeBold size={22} />
+              QR Code
+            </span>
+          </a>
+        ) : (
+          <span className="text-gray-500">No QR</span>
+        ),
+    },
     {
       title: "Status",
-      dataIndex: "status",
       key: "status",
-      render: (status) => {
-        const color =
-          {
-            uploaded: "bg-[#2765A1]/25 border border-[#2765A1]",
-            draft: "bg-[#995900]/25 border border-[#995900]",
-          }[status] || "bg-gray-500";
+      render: (_, record) => {
+        const isActive = record?.qr_code?.is_active;
+        console.log(isActive)
+        const color = isActive
+          ? "bg-[#2765A1]/25 border border-[#2765A1]"
+          : "bg-[#995900]/25 border border-[#995900]";
+        const text = isActive ? "Active" : "Inactive";
 
         return (
           <Tag
             className={`${color} text-white font-bold w-[140px] h-[36px] text-[17px] popreg p-5 flex justify-center items-center rounded-[22px]`}
           >
-            {status}
+            {text}
           </Tag>
         );
       },
@@ -135,10 +111,13 @@ const ClueTable = () => {
     {
       title: "Actions",
       key: "actions",
-      render: () => (
+      render: (_, record) => (
         <Space size="middle">
           <EditOutlined
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true);
+              setEditClue(record)
+            }}
             className="text-[#9E9E9E] hover:text-yellow-400 text-2xl cursor-pointer"
           />
           <DeleteOutlined
@@ -149,19 +128,22 @@ const ClueTable = () => {
       ),
     },
   ];
+
   return (
     <div className="p-4 rounded-xl bg-[#030712] text-white">
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={filteredClues}
         pagination={{ pageSize: 5 }}
         bordered={false}
+        rowKey="id"
         className="custom-ant-table bg-[#030712]"
       />
 
       <ClueModal
         open={isModalOpen}
         edit={true}
+        data={editClue}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
       />

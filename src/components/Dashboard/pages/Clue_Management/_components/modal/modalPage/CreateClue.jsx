@@ -1,11 +1,16 @@
 import React from "react";
 import { Input } from "antd";
 import Swal from "sweetalert2";
+import { useCreateCluesMutation, useGetHuntsQuery } from "../../../../../../../redux/slices/apiSlice";
 
 const { TextArea } = Input;
 
-const CreateClue = () => {
+const CreateClue = ({huntId}) => {
   const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
+  const [createClues] = useCreateCluesMutation()
+   const { data: huntData, isLoading,refetch } = useGetHuntsQuery();
+
+   console.log(huntId)
 
   // Main state following your JSON structure
   const [clueData, setClueData] = React.useState({
@@ -33,17 +38,36 @@ const CreateClue = () => {
       qr_code: { ...prev.qr_code, [field]: value },
     }));
   };
+  
 
-  const handleCreate = () => {
-    console.log("Creating clue with data:", clueData);
+const handleCreate = async () => {
+  console.log("Creating clue with data:", clueData);
+
+  try {
+    const res = await createClues({ id: huntId, clues: clueData }).unwrap();
+    console.log("Create Clue Response:", res);
+    refetch()
     Swal.fire({
-      title: "Done!",
+      title: "Clue Created!",
       icon: "success",
       background: "#1e1e2f",
       color: "#fff",
       draggable: true,
     });
-  };
+  } catch (error) {
+    console.error("Failed to create clue:", error);
+
+    Swal.fire({
+      title: "Error",
+      text: error?.data?.message || "Failed to create clue.",
+      icon: "error",
+      background: "#1e1e2f",
+      color: "#fff",
+      draggable: true,
+    });
+  }
+};
+
 
   const handleCancel = () => {
     Swal.fire({

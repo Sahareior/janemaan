@@ -4,11 +4,14 @@ import { FaPlus, FaSearch } from "react-icons/fa";
 import { Button, Input } from "antd";
 import SubscriptionTable from "./_components/SubscriptionTable";
 import SubCreationModal from "./_components/SubCreationModal";
+import { useGetPlanQuery } from "../../../../redux/slices/apiSlice";
 
 
 const Subscription = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-setIsModalOpen
+const {data} =useGetPlanQuery()
+
+console.log('plans', data)
   return (
     <div className="p-5">
       <div>
@@ -29,7 +32,7 @@ setIsModalOpen
 
       <div className="mt-7">
         <h3 className="text-[25px] text-white px-5">ALL Plans</h3>
-        <SubscriptionTable />
+        <SubscriptionTable plans={data} />
       </div>
 
       <SubCreationModal

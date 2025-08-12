@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import ClueTable from "./_components/ClueTable";
 import ClueModal from "./_components/modal/ClueModal";
+import { data, useLocation } from "react-router-dom";
+import { useGetCluesQuery, useGetHuntsQuery } from "../../../../redux/slices/apiSlice";
 
 // Helper to chunk array into rows of 4
 const chunkArray = (arr, chunkSize) => {
@@ -15,19 +17,16 @@ const chunkArray = (arr, chunkSize) => {
 
 const ClueManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const detailItems = [
-    { label: "City", value: "Cape Town" },
-    { label: "Prize", value: "3444 R" },
-    { label: "Status", value: "Active" },
-    { label: "Difficulty", value: "Medium" },
-    { label: "Participants", value: "56" },
-    { label: "Start Date", value: "12 July 2025" },
-    { label: "Active Time", value: "9pm - 9am" },
-    { label: "End Date", value: "15 July 2025" },
-  ];
+  const location = useLocation();
+  const {data} = useGetCluesQuery()
+  const huntData = location.state?.data || {}; // Get hunt data from state
+ const { data: fetchHuntdata, isLoading,refetch } = useGetHuntsQuery();
 
-  const rows = chunkArray(detailItems, 4); // ⬅️ Group in rows of 4
 
+  const filteredHunts = fetchHuntdata?.results?.filter(hunts => hunts.id === huntData?.id)
+  
+ 
+  console.log('ada',huntData)
   return (
     <div className="p-5">
       <div className="bg-[#111827] p-6 rounded-xl text-white">
@@ -37,44 +36,44 @@ const ClueManagement = () => {
           <div className="flex gap-3 items-center ">
             <img
               className="h-[45px] w-[45px]"
-              src="https://images.unsplash.com/photo-1751076547556-f816d884e972?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={huntData?.image || "https://via.placeholder.com/45"}
               alt=""
             />
             <div>
               <h3 className="text-[18px] popreg">Hunt Name</h3>
               <h3 className="text-[18px] text-[#97BECA] popreg">
-                Treasure Trail Cape Town
+                {huntData?.title}
               </h3>
             </div>
           </div>
 
           <div className="flex text-[18px] flex-col gap-2">
             <h3 className="text-[18px] popreg">Price</h3>
-            <h3 className="text-[#97BECA] popreg">RS 12345</h3>
+            <h3 className="text-[#97BECA] popreg">RS {filteredHunts?.[0]?.prize_amount}</h3>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-[18px] popreg">City</h3>
-            <h3 className="text-[#97BECA] popreg">Cape Town</h3>
+            <h3 className="text-[#97BECA] popreg">{filteredHunts?.[0]?.city}</h3>
           </div>
           <div className="flex flex-col text-start gap-2">
             <h3 className="text-[18px] popreg">Status</h3>
-            <h3 className="text-[#97BECA] popreg">Active</h3>
+            <h3 className="text-[#97BECA] popreg">{filteredHunts?.[0]?.status}</h3>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-[18px] popreg">Participate</h3>
-            <h3 className="text-[#97BECA] popreg">43</h3>
+            <h3 className="text-[#97BECA] popreg">{filteredHunts?.[0]?.hunters}</h3>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-[18px] popreg">Difficulty</h3>
-            <h3 className="text-[#97BECA] popreg">Easy</h3>
+            <h3 className="text-[#97BECA] popreg">{filteredHunts?.[0]?.difficulty_level}</h3>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-[18px] popreg">Date</h3>
-            <h3 className="text-[#97BECA] popreg">03.09.2025</h3>
+            <h3 className="text-[18px] popreg">Start Date</h3>
+            <h3 className="text-[#97BECA] popreg">{filteredHunts?.[0]?.start_date}</h3>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-[18px] popreg">Active time</h3>
-            <h3 className="text-[#97BECA] popreg">3:00pm - 6:00pm</h3>
+            <h3 className="text-[18px] popreg">End Date</h3>
+            <h3 className="text-[#97BECA] popreg">{filteredHunts?.[0]?.end_date}</h3>
           </div>
         </div>
       </div>
@@ -98,13 +97,14 @@ const ClueManagement = () => {
         <h3 className="text-[25px] font-semibold text-white pt-7 px-6 ">
           All Clues
         </h3>
-        <ClueTable />
+        <ClueTable filteredClues={ filteredHunts?.[0].clues} data={data} />
       </div>
 
       <ClueModal
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
+        huntId={filteredHunts?.[0].id}
       />
     </div>
   );

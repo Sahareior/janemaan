@@ -17,9 +17,9 @@ import CreateHunt from "./ModalPage/CreateHunt";
 
 
 
-const CustomModal = ({ open, onCancel, edit }) => {
+const CustomModal = ({ open, onCancel, edit,data,refetch }) => {
 
-
+// console.log("Selected Record:", data);
   const handleCreate = () => {
     Swal.fire({
       title: "Done!",
@@ -28,6 +28,7 @@ const CustomModal = ({ open, onCancel, edit }) => {
       color: "#fff",
       draggable: true,
     });
+
   };
 
   const handleCancel = () => {
@@ -89,9 +90,9 @@ const CustomModal = ({ open, onCancel, edit }) => {
       <div className="space-y-4 p-2 h-[70vh] overflow-y-scroll">
         {edit ? (
           
-   <EditHunt handleCreate={handleCreate} handleCancel={handleCancel} />
+   <EditHunt data={data} handleCreate={handleCreate} refetch={refetch} handleCancel={handleCancel} />
         ) : (
-<CreateHunt handleCreate={handleCreate} handleCancel={handleCancel} />
+<CreateHunt handleCreate={handleCreate} refetch={refetch} handleCancel={handleCancel} />
         )}
       </div>
     </Modal>
