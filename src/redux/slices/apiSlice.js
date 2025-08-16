@@ -6,7 +6,7 @@ const token = localStorage.getItem('token')
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://10.10.13.19:8000/api/v1/",
+    baseUrl: "https://chasethecashsa.com/api/v1/",
     // http://10.10.13.19:8000/api/v1/hunts/  "http://10.10.13.19:8000/api/v1/cores/", hunts/create/
     // http://10.10.13.19:8000/api/v1/qrcodes/5c989af1-95ec-4cd6-ac76-dfdd80da2baa/update/
     // http://10.10.13.19:8000/api/v1/cores/dashboard-stats/ /api/v1/accounts/login/

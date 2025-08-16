@@ -20,20 +20,32 @@ import {
   useGetUserRevinewQuery,
 } from "../../../../redux/slices/apiSlice";
 
-export const StatCard = ({ title, value, color }) => (
-  <div className="w-full h-[115px] md:flex mx-auto justify-center items-center bg-[#030712] border border-[#5D87A3] rounded-[12.76px] p-4">
-    <div>
-      <h3 className="text-[19px] popreg text-[#9E9E9E]">{title}</h3>
-      <h4
-        className={`${
-          !color ? "text-[#2C739E]" : "text-white"
-        } text-[29px] popbold font-bold`}
-      >
-        {value}
-      </h4>
+export const StatCard = ({ title, value, color }) => {
+  // Ensure value is never null/undefined/empty
+  const displayValue = value ?? 0;
+
+  // Optional: format numbers with commas if it's a number
+  const formattedValue =
+    typeof displayValue === "number"
+      ? displayValue.toLocaleString()
+      : displayValue;
+
+  return (
+    <div className="w-full h-[115px] md:flex mx-auto justify-center items-center bg-[#030712] border border-[#5D87A3] rounded-[12.76px] p-4">
+      <div>
+        <h3 className="text-[19px] popreg text-[#9E9E9E]">{title}</h3>
+        <h4
+          className={`${
+            !color ? "text-[#2C739E]" : "text-white"
+          } text-[29px] popbold font-bold`}
+        >
+          {formattedValue}
+        </h4>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
 
 const Overview = () => {
   const currentYear = new Date().getFullYear();
@@ -95,13 +107,29 @@ console.log(`Hunt completion: ${completionPercentage}%`);
   return (
     <div className="p-5 space-y-12">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard color={true} title="Total Revenue" value={`${overviewData?.total_revenue} R`} />
-        <StatCard color={true} title="New Users" value={overviewData?.total_user} />
-        <StatCard color={true} title="Hunt Completion" value={`${completionPercentage}%`} />
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <StatCard 
+    color={true} 
+    title="Total Revenue" 
+    value={`${overviewData?.total_revenue ?? 0} R`} 
+  />
+  <StatCard 
+    color={true} 
+    title="New Users" 
+    value={overviewData?.total_user ?? 0} 
+  />
+  <StatCard 
+    color={true} 
+    title="Hunt Completion" 
+    value={`${completionPercentage ?? 0}%`} 
+  />
+  <StatCard 
+    color={true} 
+    title="Subscriber" 
+    value={overviewData?.total_subscriber ?? 0} 
+  />
+</div>
 
-        <StatCard color={true} title="Subscriber" value={overviewData?.total_subscriber} />
-      </div>
 
       {/* User Growth Year Selector */}
  
