@@ -1,4 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+
+
+const token = localStorage.getItem('token')
 
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
@@ -12,8 +15,6 @@ export const apiSlice = createApi({
     // http://10.10.13.19:8000/api/v1/subscriptions/plans/3/create/
 
     prepareHeaders: (headers) => {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU3NDA0OTc4LCJpYXQiOjE3NTQ4MTI5NzgsImp0aSI6IjEzNzA3N2M1MGVjNzRiZDU4YWZiZjhmNDM5OWM2NGJjIiwidXNlcl9pZCI6N30.-QjELi7TAAOKeRC4z0HZErG3sDUJdJ1r3HRqI_Sz9ws";
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
@@ -25,15 +26,14 @@ export const apiSlice = createApi({
   endpoints: (build) => ({
     // auth...................
     signIn: build.mutation({
-      query: (signinData) =>{
-          console.log(signinData, "from slice")
+      query: (signinData) => {
+        console.log(signinData, "from slice");
         return {
           url: "accounts/login/",
           method: "POST",
           body: signinData,
-        }
-      }
-      
+        };
+      },
     }),
 
     getProfile: build.query({
@@ -90,10 +90,25 @@ export const apiSlice = createApi({
       }),
     }),
 
+    getTopHunt: build.query ({
+      query: () => "/top-hunts/"
+    }),
+
+getHuntProgress: build.query({
+  query: (id) => `/hunt-progress/${id}/`
+}),
     // claims
 
     getClaims: build.query({
       query: () => "claims",
+    }),
+
+
+        deleteClaims: build.mutation({
+      query: (id) => ({
+        url: `claims/${id}/delete/`,
+        method: "DELETE",
+      }),
     }),
 
     // cluse..................
@@ -109,24 +124,32 @@ export const apiSlice = createApi({
       },
     }),
     updateClues: build.mutation({
-      query: ({id,clueData}) => {
-        console.log(id,clueData);
+      query: ({ id, clueData }) => {
+        console.log(id, clueData);
         return {
           url: `clues/${id}/update/`,
           method: "PATCH",
-          body:clueData,
+          body: clueData,
         };
       },
     }),
 
+    deleteClue: build.mutation({
+      query: (id) => ({
+        url: `clues/${id}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+
+    // /clues/341e0a73-f78e-4b90-a344-3f2fef501144/delete/
 
     claimsUpdate: build.mutation({
-      query: ({id,formData}) => {
-        console.log(id,formData);
+      query: ({ id, formData }) => {
+        console.log(id, formData);
         return {
           url: `claims/${id}/update/`,
           method: "PATCH",
-          body:formData,
+          body: formData,
         };
       },
     }),
@@ -154,54 +177,53 @@ export const apiSlice = createApi({
     }),
 
     updatePlans: build.mutation({
-      query: ({id, dataToLog}) => {
-        console.log(id)
+      query: ({ id, dataToLog }) => {
+        console.log(id);
         return {
           url: `subscriptions/plans/${id}/update/`,
           method: "PATCH",
-          body: dataToLog
-        }
-      }
+          body: dataToLog,
+        };
+      },
     }),
 
-      deletePlan: build.mutation({
+    deletePlan: build.mutation({
       query: (id) => ({
         url: `subscriptions/plans/${id}/delete/`,
         method: "DELETE",
       }),
     }),
 
-     getUserGrowth: build.query({
-      query: ()=> 'subscriptions/growth-history/'
+    getUserGrowth: build.query({
+      query: () => "subscriptions/growth-history/",
     }),
-     getUserRevinew: build.query({
-      query: ()=> 'subscriptions/revenue-history/'
+    getUserRevinew: build.query({
+      query: () => "subscriptions/revenue-history/",
     }),
 
-
-// http://10.10.13.19:8000/api/v1/subscriptions/plans/3/create/
+    // http://10.10.13.19:8000/api/v1/subscriptions/plans/3/create/
     // Qr Codes.............................
 
     getQrCodes: build.query({
       query: () => "/qrcodes",
     }),
 
-      deleteQrCode: build.mutation({
+    deleteQrCode: build.mutation({
       query: (id) => ({
         url: `qrcodes/${id}/delete/`,
         method: "DELETE",
       }),
     }),
 
-    updateQrCode: build.mutation ({
-      query: ({id,qrData}) =>{
-        console.log(id,qrData)
-        return{
+    updateQrCode: build.mutation({
+      query: ({ id, qrData }) => {
+        console.log(id, qrData);
+        return {
           url: `qrcodes/${id}/update/`,
           method: "PATCH",
-          body: qrData
-        }
-      }
+          body: qrData,
+        };
+      },
     }),
 
     // settings...............................................
@@ -210,18 +232,18 @@ export const apiSlice = createApi({
     }),
 
     getPolicy: build.query({
-      query: () => 'cores/terms-conditions/'
+      query: () => "cores/terms-conditions/",
     }),
 
     updatePolicy: build.mutation({
       query: (data) => {
-        console.log(data)
-        return{
-          url: 'cores/terms-conditions/update/',
+        console.log(data);
+        return {
+          url: "cores/terms-conditions/update/",
           method: "POST",
-          body: data
-        }
-      }
+          body: data,
+        };
+      },
     }),
 
     updatePrivacy: build.mutation({
@@ -237,10 +259,8 @@ export const apiSlice = createApi({
     // users.....................
 
     getUsers: build.query({
-      query: ()=> 'accounts/users/'
+      query: () => "accounts/users/",
     }),
-
-
   }),
 });
 
@@ -262,6 +282,7 @@ export const {
   useGetCluesQuery,
   useGetQrCodesQuery,
   getClueProgress,
+  useDeleteClueMutation,
   useGetPlanQuery,
   useDeletePlanMutation,
   useUpdatePlansMutation,
@@ -271,5 +292,8 @@ export const {
   useGetUserRevinewQuery,
   useGetClaimsQuery,
   useUpdateCluesMutation,
-  useDeleteQrCodeMutation
+  useDeleteQrCodeMutation,
+  useGetTopHuntQuery,
+  useGetHuntProgressQuery,
+  useDeleteClaimsMutation
 } = apiSlice;

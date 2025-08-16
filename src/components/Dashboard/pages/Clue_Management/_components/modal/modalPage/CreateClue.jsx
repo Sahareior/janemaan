@@ -171,6 +171,7 @@ const handleCreate = async () => {
               <Input
                 placeholder="Enter Clue Order"
                 value={clueData.order}
+                type="number"
                 onChange={(e) => handleChange("order", e.target.value)}
                 className="mt-2 placeholder-[#9E9E9E]"
                 style={{

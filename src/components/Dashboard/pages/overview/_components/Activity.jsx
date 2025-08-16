@@ -1,104 +1,58 @@
-import { Button } from 'antd';
-import React from 'react';
+import React from "react";
 import { CiLocationOn } from "react-icons/ci";
+import dayjs from "dayjs";
 
-// Sample activities data
-const activities = [
-  {
-    id: 1,
-    title: 'Treasure Hunt in Cape Town',
-    location: 'Capetown Center Hall',
-    city: 'Cape Town',
-    time: 'Just Now',
-    status: 'joined',
-  },
-  {
-    id: 2,
-    title: 'Historical Riddle Adventure',
-    location: 'Bo-Kaap Museum',
-    city: 'Cape Town',
-    time: '2 mins ago',
-    status: 'participating',
-  },
-  {
-    id: 3,
-    title: 'Sunset Puzzle Trail',
-    location: 'Table Mountain Base',
-    city: 'Cape Town',
-    time: '5 mins ago',
-    status: 'dropped',
-  },
-  {
-    id: 4,
-    title: 'Sunset Puzzle Trail',
-    location: 'Table Mountain Base',
-    city: 'Cape Town',
-    time: '5 mins ago',
-    status: 'dropped',
-  },
-  {
-    id: 5,
-    title: 'Sunset Puzzle Trail',
-    location: 'Table Mountain Base',
-    city: 'Cape Town',
-    time: '5 mins ago',
-    status: 'dropped',
-  },
-];
-
-
-const statusStyles = {
-  joined: {
-    label: 'Joined',
-    bg: 'bg-[#2765A1]',
-  },
-  participating: {
-    label: 'Participating',
-    bg: 'bg-[#995900]',
-  },
-  dropped: {
-    label: 'Dropped Out',
-    bg: 'bg-[#E33629]',
-  },
-};
-
-const Activity = () => {
+const Activity = ({ topHunts }) => {
   return (
-    <div className="w-full md:w-1/2 bg-[#111827] rounded-xl p-6 text-white shadow-md">
+    <div className="w-full md:w-1/2 bg-[#111827] rounded-xl p-6 text-white shadow-lg">
+      {/* Title */}
       <h4 className="text-[18px] popreg font-semibold mb-4 border-b border-gray-700 pb-2">
-        Real Time Activity
+        Top Hunts
       </h4>
 
-<div className='h-80 overflow-y-auto'>
-          {activities.map((activity) => {
-        const status = statusStyles[activity.status];
+      {/* Scrollable List */}
+      <div className="h-80 overflow-y-auto pr-1 custom-scrollbar">
+        {topHunts?.length > 0 ? (
+          topHunts.map(({ id, title, ratings, start_date, end_date, location }) => {
+            const formattedStart = dayjs(start_date).format("MMM D, YYYY h:mm A");
+            const formattedEnd = dayjs(end_date).format("MMM D, YYYY h:mm A");
 
-        return (
-          <div
-            key={activity.id}
-            className="flex justify-between items-center bg-[#1f2937] p-4 rounded-lg shadow-sm hover:shadow-md transition mb-9"
-          >
-            <div className="space-y-2">
-              <h3 className="text-[18px] popmed">{activity.title}</h3>
-              <p className="text-[17px] popreg text-[#97BECA]">{activity.location}</p>
-              <div className="flex items-center gap-1 text-xs text-gray-300 mt-1">
-                <CiLocationOn  size={16} />
-                <span className="text-[12px] popreg">{activity.city}</span>
+            return (
+              <div
+                key={id}
+                className="flex justify-between items-center bg-[#1f2937] p-4 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 mb-4 group"
+              >
+                {/* Left: Details */}
+                <div className="space-y-2">
+                  <h3 className="text-[18px] popmed group-hover:text-[#38bdf8] transition">
+                    {title}
+                  </h3>
+                  <p className="text-[15px] popreg text-[#97BECA]">⭐ {ratings}</p>
+                  {location && (
+                    <p className="flex items-center text-[13px] text-gray-400">
+                      <CiLocationOn className="mr-1" /> {location}
+                    </p>
+                  )}
+                </div>
+
+                {/* Right: Dates with labels */}
+                <div className="text-right flex flex-col items-end space-y-1">
+                  <span className="text-[13px] text-gray-300">
+                    <span className="font-semibold text-gray-400">Start Date: </span>
+                    {formattedStart}
+                  </span>
+                  <span className="text-[13px] text-gray-300">
+                    <span className="font-semibold text-gray-400">End Date: </span>
+                    {formattedEnd}
+                  </span>
+                </div>
               </div>
-            </div>
-
-            <div className="text-right flex flex-col items-center justify-center">
-
-
-              <div  className={`mb-2 h-[32px] px-11 text-white flex justify-center items-center rounded-[32px] ${status.bg} hover:none popbold border-none hover:!bg-[${status.bg}] hover:!text-white hover:!border-none`}>
-                    {status.label}  
-              </div>
-              <p className="text-[13px] text-gray-400">{activity.time}</p>
-            </div>
-          </div>
-        );
-      })}
-</div>
+            );
+          })
+        ) : (
+          <p className="text-gray-500 text-center mt-10">No activity found.</p>
+        )}
+      </div>
     </div>
   );
 };

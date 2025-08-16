@@ -197,6 +197,7 @@ const handleCreate = async () => {
                 value={clueData.order}
                 onChange={(e) => handleChange("order", e.target.value)}
                 className="mt-2 placeholder-[#9E9E9E]"
+                type="number"
                 style={{
                   backgroundColor: "#030712",
                   color: "white",

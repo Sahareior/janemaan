@@ -13,7 +13,9 @@ import ParticipantProgress from "./_components/ParticipantProgress";
 import Activity from "./_components/Activity";
 import {
   useGetDashboardStatsQuery,
+  useGetHuntsQuery,
   useGetPrgressQuery,
+  useGetTopHuntQuery,
   useGetUserGrowthQuery,
   useGetUserRevinewQuery,
 } from "../../../../redux/slices/apiSlice";
@@ -46,6 +48,8 @@ const Overview = () => {
   const { data: overviewData } = useGetDashboardStatsQuery();
   const { data: userGrowthRaw } = useGetUserGrowthQuery();
   const { data: userRevinewRaw } = useGetUserRevinewQuery();
+  const {data: topHunts} = useGetTopHuntQuery()
+  const {data: huntsData} = useGetHuntsQuery()
 
   // USER GROWTH FILTERING
   const filteredGrowthData = userGrowthRaw?.filter(
@@ -55,6 +59,8 @@ const Overview = () => {
   const lastYearGrowthData = userGrowthRaw?.filter(
     (item) => item.year === selectedGrowthYear - 1
   ) || [];
+
+  console.log(overviewData)
 
   // Map last year for easy lookup
   const lastYearGrowthMap = new Map();
@@ -75,14 +81,26 @@ const Overview = () => {
       value: item.revenue_percentage,
     })) || [];
 
+
+const completedCount = huntsData?.results?.filter(item => item.status === 'completed').length;
+const totalCount = huntsData?.results.length;
+
+// Avoid division by zero
+const completionPercentage = totalCount > 0 
+  ? ((completedCount / totalCount) * 100).toFixed(2) 
+  : 0;
+
+console.log(`Hunt completion: ${completionPercentage}%`);
+
   return (
     <div className="p-5 space-y-12">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard color={true} title="Total Revenue" value={overviewData?.total_revenue} />
+        <StatCard color={true} title="Total Revenue" value={`${overviewData?.total_revenue} R`} />
         <StatCard color={true} title="New Users" value={overviewData?.total_user} />
-        <StatCard color={true} title="Hunt Completion" value="55%" />
-        <StatCard color={true} title="Drop out" value="23%" />
+        <StatCard color={true} title="Hunt Completion" value={`${completionPercentage}%`} />
+
+        <StatCard color={true} title="Subscriber" value={overviewData?.total_subscriber} />
       </div>
 
       {/* User Growth Year Selector */}
@@ -164,8 +182,8 @@ const Overview = () => {
       </div>
 
       <div className="flex justify-between gap-5">
-        <ParticipantProgress participants={progress} />
-        <Activity />
+        <ParticipantProgress participants={progress} hunts ={huntsData} />
+        <Activity topHunts ={topHunts} />
       </div>
     </div>
   );

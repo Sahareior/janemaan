@@ -1,71 +1,127 @@
-import React from "react";
+import React, { useState } from "react";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { useGetHuntProgressQuery } from "../../../../../redux/slices/apiSlice";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 
-const ParticipantProgress = ({ participants = [] }) => {
-  // Safely transform participants into progress data
-  const progressData = participants.map((p, index) => ({
-    label: p?.user || `User ${index + 1}`, // fallback if user field is missing
-    value: Number(p?.total_time_spent) || 0, // ensure numeric
-    color:
-      index % 4 === 0
-        ? "bg-[#2E4A5A]"
-        : index % 4 === 1
-        ? "bg-[#1C5C4B]"
-        : index % 4 === 2
-        ? "bg-[#3451C4]"
-        : "bg-[#C17A1E]",
-    pattern: index === 0, // example: pattern for first user only
-  }));
-
-  // Avoid NaN if no participants
+const ParticipantProgress = ({ participants = [], hunts }) => {
   const maxValue =
-    progressData.length > 0
-      ? Math.max(...progressData.map((item) => item.value))
+    hunts?.results?.length > 0
+      ? Math.max(...hunts.results.map((item) => item.hunters || 0))
       : 0;
+
+  const [openIndex, setOpenIndex] = useState(null);
+  const currentHuntId = openIndex !== null ? hunts.results[openIndex]?.id : undefined;
+
+  const { data, isLoading, error } = useGetHuntProgressQuery(currentHuntId ?? skipToken);
+
+  const toggleAccordion = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  // Utility for number formatting (optional)
+  const formatNumber = (num) => num.toLocaleString();
 
   return (
     <div className="bg-[#101625] text-white rounded-xl p-6 w-1/2 shadow-lg">
-      <h3 className="text-lg popreg font-semibold">Participant Progress</h3>
-      <p className="text-sm popreg text-[#9E9E9E] mb-6">
-        Hunt Name :{" "}
-        <span className="text-white font-medium">
-          Treasure Trail Cape Town
-        </span>
-      </p>
+      <h3 className="text-lg popreg font-semibold mb-4">Participant Progress</h3>
 
-      {progressData.length === 0 ? (
-        <p className="text-[#9E9E9E] italic">No participants yet</p>
-      ) : (
-        progressData.map((item, idx) => (
-          <div key={idx} className="mb-4 flex flex-row-reverse gap-3">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm">{item.label}</span>
-            </div>
-            <div className="w-full h-[47px] bg-gray-700 rounded overflow-hidden relative">
-              <div
-                className={`${item.color} h-full rounded`}
-                style={{
-                  width:
-                    maxValue > 0
-                      ? `${(item.value / maxValue) * 100}%`
-                      : "0%",
-                }}
-              ></div>
-              {item.pattern && (
-                <div
-                  className="absolute top-0 left-0 w-full h-full opacity-50"
-                  style={{
-                    backgroundImage:
-                      "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><path d='M0,4 L4,0 M-1,1 L1,-1 M3,5 L5,3' stroke='%23ffffff33' stroke-width='1'/></svg>\")",
-                  }}
-                ></div>
-              )}
-              <span className="text-sm absolute top-1/2 left-3 transform -translate-y-1/2">
-                {item.value}s
-              </span>
-            </div>
-          </div>
-        ))
-      )}
+      <div className="h-80 mt-1 overflow-y-auto">
+        {!hunts?.results?.length ? (
+          <p className="text-[#9E9E9E] italic text-center mt-20">No hunts yet</p>
+        ) : (
+          hunts.results.map((item, index) => {
+            const progressPercent =
+              maxValue > 0 ? ((item.hunters || 0) / maxValue) * 100 : 0;
+
+            return (
+              <div key={item.id ?? index} className="mb-4 last:mb-0 rounded-md">
+                <button
+                  onClick={() => toggleAccordion(index)}
+                  aria-expanded={openIndex === index}
+                  aria-controls={`hunt-panel-${index}`}
+                  className="flex items-center justify-between w-full cursor-pointer bg-gray-700  rounded-md px-2 py-1 transition-colors"
+                >
+                  <div className="flex items-center gap-3 w-full">
+                    {/* Background bar container */}
+                    <div className="relative flex-grow h-[47px]  rounded overflow-hidden">
+                      {/* Animated progress fill */}
+                      <div
+                        className="bg-[#2E4A5A] h-full rounded transition-all duration-500 ease-in-out"
+                        style={{ width: `${progressPercent}%` }}
+                        title={`${formatNumber(item.hunters || 0)} hunters`}
+                      />
+                      <span className="text-sm absolute top-1/2 left-3 transform -translate-y-1/2 whitespace-nowrap font-medium select-none">
+                        {item.title}
+                      </span>
+                    </div>
+
+                    {/* Hunters count */}
+                    <span className="min-w-[32px] text-right font-semibold select-none">
+                      {formatNumber(item.hunters || 0)}
+                    </span>
+                  </div>
+
+                  {/* Dropdown Icon */}
+                  <div
+                    className="text-xl text-gray-400 select-none ml-3"
+                    aria-hidden="true"
+                  >
+                    {openIndex === index ? <FiChevronUp /> : <FiChevronDown />}
+                  </div>
+                </button>
+
+                {/* Accordion Content */}
+                {openIndex === index && (
+                  <section
+                    id={`hunt-panel-${index}`}
+                    role="region"
+                    aria-labelledby={`hunt-header-${index}`}
+                    className="p-4 text-gray-300 rounded-b mt-2 bg-gradient-to-br from-[#1a1f3a] to-[#16212e] border border-gray-700"
+                  >
+                    {isLoading && <p>Loading progress data...</p>}
+                    {error && <p className="text-red-500">Error loading data</p>}
+                    {data ? (
+                      <>
+                        {/* Finished Hunt Badge */}
+                        {data.finished_hunt ? (
+                          <span className="inline-block mb-2 px-3 py-1 bg-green-600 text-green-100 rounded-full text-xs font-semibold">
+                            Finished Hunt
+                          </span>
+                        ) : null}
+
+  <div className="space-y-2">
+  {data?.clue_progress?.length > 0 ? (
+    data.clue_progress.map((clueObj, idx) => {
+      const clueName = Object.keys(clueObj)[0];
+      const clueValue = clueObj[clueName];
+      return (
+        <div
+          key={idx}
+          className="flex justify-between gap-8 border-gray-600 py-1"
+        >
+          <p className="font-medium">{clueName}:</p>
+          <p className="font-mono text-right text-[#38bdf8]">
+            {clueValue}%
+          </p>
+        </div>
+      );
+    })
+  ) : (
+    <p className="italic text-gray-500">No clues available</p>
+  )}
+</div>
+
+                      </>
+                    ) : (
+                      !isLoading && <p>No data available.</p>
+                    )}
+                  </section>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 };

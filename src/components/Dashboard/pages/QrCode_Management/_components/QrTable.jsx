@@ -36,6 +36,7 @@ const data = [
 const QrTable = ({qrCode}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  
   const [qrdata, setQrdata] = useState()
   const [deleteQrCode] = useDeleteQrCodeMutation()
     const { data,refetch } = useGetQrCodesQuery();
@@ -87,7 +88,10 @@ const columns = [
     key: "qr_image",
     render: (qr_image, record) => (
       <span
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setIsModalOpen(true);
+          setQrdata(record);
+        }}
         className="text-[17px] text-[#9E9E9E] flex justify-start items-center gap-3 px-3 py-2"
       >
         <img
@@ -190,6 +194,7 @@ const columns = [
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
+        data={qrdata}
       />
       <ClueModal
         edit={true}

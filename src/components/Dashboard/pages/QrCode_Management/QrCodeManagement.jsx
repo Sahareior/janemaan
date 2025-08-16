@@ -13,7 +13,7 @@ const QrCodeManagement = () => {
 
   // const sortedArray = qrCode.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
-  // console.log(sortedArray)
+  console.log(qrCode)
  const codes = qrCode || []; 
   // Filter by code (case-insensitive)
   const filteredCodes = useMemo(() => {

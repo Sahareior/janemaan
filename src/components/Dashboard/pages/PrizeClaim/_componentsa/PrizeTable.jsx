@@ -2,11 +2,56 @@ import React from "react";
 import { Button, Space, Table, Tag } from "antd";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import "antd/dist/reset.css";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import Swal from "sweetalert2";
+import { useDeleteClaimsMutation, useGetClaimsQuery } from "../../../../../redux/slices/apiSlice";
 
 
 
 const PrizeTable = ({ onOpenModal,data }) => {
+  const {data:claims, refetch} = useGetClaimsQuery()
+console.log("claimed", data)
+const [deleteClaims] = useDeleteClaimsMutation()
+
+const handleDelete = (hunt) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    background: "#1e1e2f",
+    color: "#fff",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await deleteClaims(hunt.id).unwrap();
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your hunt has been deleted.",
+          background: "#1e1e2f",
+          color: "#fff",
+          icon: "success",
+        });
+
+        // Correct the typo here:
+        refetch();
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: error.data?.message || "Failed to delete hunt",
+          background: "#1e1e2f",
+          color: "#fff",
+          icon: "error",
+        });
+      }
+    }
+  });
+};
+
 const columns = [
   {
     title: "Claim Id",
@@ -27,16 +72,16 @@ const columns = [
       </span>
     ),
   },
-  {
-    title: "Price",
-    dataIndex: ["user", "plan", "price"], // nested path to plan.price
-    key: "price",
-    render: (value) => (
-      <span className="text-[#9E9E9E] flex items-center gap-2 popreg text-[17px]">
-        R {value}
-      </span>
-    ),
-  },
+  // {
+  //   title: "Price",
+  //   dataIndex: ["user", "plan", "price"], // nested path to plan.price
+  //   key: "price",
+  //   render: (value) => (
+  //     <span className="text-[#9E9E9E] flex items-center gap-2 popreg text-[17px]">
+  //       R {value}
+  //     </span>
+  //   ),
+  // },
   {
     title: "Status",
     dataIndex: "status", // matches API
@@ -44,9 +89,9 @@ const columns = [
     render: (value) => {
       const color =
         {
-          Approved: "bg-white ",
-          pending: "bg-yellow-600/25 border-yellow-500", // lowercase from API
-          Rejected: "bg-red-600 border-red-500",
+          approved: "bg-white text-black ",
+          pending: "bg-yellow-600/25 text-white border-yellow-500", // lowercase from API
+          rejected: "bg-red-600 text-white border-red-500",
         }[value] || "bg-gray-500/25 border-gray-500";
 
       return (
@@ -76,18 +121,23 @@ const columns = [
       <div className="flex gap-3 items-center">
         <button
           onClick={() => onOpenModal({type:'view', data:record})}
-          className="f3"
+          className="text-slate-500 text-[24px]  cursor-pointer"
         >
-          <FaEye size={22} />
+          <EyeOutlined size={22} />
         
         </button>
         <button
         onClick={() => onOpenModal({ type: 'edit', data: record })}
-
+      className="text-[#9E9E9E] text-[22px] hover:text-yellow-400 cursor-pointer"
         >
 
-          <FaEdit size={22} />
+          <EditOutlined size={22} />
         </button>
+
+                  <DeleteOutlined
+            onClick={() => handleDelete(record)}
+            className="text-red-500 text-[22px] hover:text-red-700 cursor-pointer"
+          />
       </div>
     ),
   },

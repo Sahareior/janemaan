@@ -188,7 +188,7 @@ console.log("dsadad",selectedRecord)
       <Table
         columns={columns}
         dataSource={data}
-        pagination={{ pageSize: 3 }}
+        pagination={{ pageSize: 8 }}
         bordered={false}
         className="custom-ant-table bg-[#030712]"
       />

@@ -15,24 +15,24 @@ const Review = ({ selectedClaim }) => {
         {/* User Details */}
         <div className="space-y-3 popmed">
           <h3 className="text-white">
-            User Name: <span className="text-[#97BECA]">{selectedClaim.user.name}</span>
+            User Name: <span className="text-[#97BECA]">{selectedClaim?.user?.name}</span>
           </h3>
           <h3 className="text-white">
-            Email: <span className="text-[#97BECA]">{selectedClaim.user.email}</span>
+            Email: <span className="text-[#97BECA]">{selectedClaim?.user?.email}</span>
           </h3>
           <h3 className="text-white">
-            Plan: <span className="text-[#97BECA]">{selectedClaim.user.plan.name}</span>
+            Plan: <span className="text-[#97BECA]">{selectedClaim?.user?.plan?.name}</span>
           </h3>
           <h3 className="text-white">
             Current Status:{" "}
             <span className="text-yellow-400 font-semibold capitalize">
-              {selectedClaim.status}
+              {selectedClaim?.status}
             </span>
           </h3>
         </div>
 
         <h3 className="text-white">
-          Voucher ID: <span className="text-[#97BECA]">{selectedClaim.voucher}</span>
+          Voucher ID: <span className="text-[#97BECA]">{selectedClaim?.voucher}</span>
         </h3>
 
         {/* Verification Picture */}
@@ -41,7 +41,7 @@ const Review = ({ selectedClaim }) => {
 
           <div className="w-2/3 h-[180px] rounded-lg bg-[#1F2937] overflow-hidden">
             <img
-              src={selectedClaim.claimed_photo}
+              src={selectedClaim?.claimed_photo}
               alt="Claim Verification"
               className="w-full h-full object-cover rounded-md"
             />

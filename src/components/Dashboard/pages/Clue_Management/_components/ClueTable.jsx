@@ -7,34 +7,39 @@ import { PiQrCodeBold } from "react-icons/pi";
 import ClueModal from "./modal/ClueModal";
 import Swal from "sweetalert2";
 import { data } from 'react-router-dom';
+import { useDeleteClueMutation, useGetHuntsQuery } from "../../../../../redux/slices/apiSlice";
 
 const ClueTable = ({ filteredClues }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editClue, setEditClue] = useState({})
+  const [deleteClue] = useDeleteClueMutation()
+   const { data: fetchHuntdata, isLoading,refetch } = useGetHuntsQuery();
 
-  const handleDelete = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      background: "#1e1e2f",
-      color: "#fff",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          background: "#1e1e2f",
-          color: "#fff",
-          icon: "success",
-        });
-      }
-    });
-  };
+const handleDelete = (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    background: "#1e1e2f",
+    color: "#fff",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteClue(id);
+      refetch();
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        background: "#1e1e2f",
+        color: "#fff",
+        icon: "success",
+      });
+    }
+  });
+};
 
   console.log(editClue,"adadadadaa")
 
@@ -121,7 +126,7 @@ const ClueTable = ({ filteredClues }) => {
             className="text-[#9E9E9E] hover:text-yellow-400 text-2xl cursor-pointer"
           />
           <DeleteOutlined
-            onClick={() => handleDelete()}
+            onClick={() => handleDelete(record.id)}
             className="text-red-500 hover:text-red-700 text-[22px] cursor-pointer"
           />
         </Space>
