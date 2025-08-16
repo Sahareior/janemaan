@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 import QrTable from "./_components/QrTable";
 import ClueModal from "../Clue_Management/_components/modal/ClueModal";
 import { useGetQrCodesQuery } from "../../../../redux/slices/apiSlice";
@@ -8,19 +8,27 @@ import { useGetQrCodesQuery } from "../../../../redux/slices/apiSlice";
 const QrCodeManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const { data: qrCode } = useGetQrCodesQuery();
+  const { data: qrCode,isLoading } = useGetQrCodesQuery();
+  const codes = qrCode || []; 
 
 
   // const sortedArray = qrCode.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
   console.log(qrCode)
- const codes = qrCode || []; 
   // Filter by code (case-insensitive)
   const filteredCodes = useMemo(() => {
     if (!searchText.trim()) return codes;
     const lowerSearch = searchText.toLowerCase();
     return codes.filter((item) => item.code.toLowerCase().includes(lowerSearch));
   }, [searchText, codes]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-5">

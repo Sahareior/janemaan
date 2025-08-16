@@ -1,21 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 
-const token = localStorage.getItem('token')
 
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://chasethecashsa.com/api/v1/",
-    // http://10.10.13.19:8000/api/v1/hunts/  "http://10.10.13.19:8000/api/v1/cores/", hunts/create/
-    // http://10.10.13.19:8000/api/v1/qrcodes/5c989af1-95ec-4cd6-ac76-dfdd80da2baa/update/
-    // http://10.10.13.19:8000/api/v1/cores/dashboard-stats/ /api/v1/accounts/login/
-    // http://10.10.13.19:8000/api/v1/hunts/f9460baf-847c-405e-8330-96be17e33103/update/
-    // http://10.10.13.19:8000/api/v1/hunts/96ae9c5c-2269-44ae-b70f-df964398878b/update/
-    // http://10.10.13.19:8000/api/v1/subscriptions/plans/3/create/
-
+    
     prepareHeaders: (headers) => {
-
+      
+      const token = localStorage.getItem('token')
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

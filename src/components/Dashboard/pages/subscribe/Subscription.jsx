@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StatCard } from "../overview/Overview";
 import { FaPlus, FaSearch } from "react-icons/fa";
-import { Button, Input } from "antd";
+import { Button, Input, Spin } from "antd";
 import SubscriptionTable from "./_components/SubscriptionTable";
 import SubCreationModal from "./_components/SubCreationModal";
 import { useGetPlanQuery } from "../../../../redux/slices/apiSlice";
@@ -9,7 +9,15 @@ import { useGetPlanQuery } from "../../../../redux/slices/apiSlice";
 
 const Subscription = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-const {data} =useGetPlanQuery()
+const {data,isLoading} =useGetPlanQuery()
+
+if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
 console.log('plans', data)
   return (

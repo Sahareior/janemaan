@@ -1,7 +1,8 @@
 import { Button, Input, message } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSignInMutation } from "../../redux/slices/apiSlice";
+import { apiSlice, useSignInMutation } from "../../redux/slices/apiSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -10,28 +11,30 @@ const Login = () => {
   
   const navigate = useNavigate();
   const [signIn, { isLoading }] = useSignInMutation();
+  const dispatch = useDispatch();
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      message.error("Please enter both email and password");
-      return;
-    }
+const handleLogin = async () => {
+  if (!email || !password) {
+    message.error("Please enter both email and password");
+    return;
+  }
 
-    try {
-      const res = await signIn({ email, password }).unwrap();
-      message.success("Login successful!");
-      // Store token if needed
-      if(res){
+  try {
+    const res = await signIn({ email, password }).unwrap();
+    message.success("Login successful!");
+
+    if (res) {
       localStorage.setItem("token", res?.access_token);
-      navigate('/dashboard')
-      }
-      console.log(res)
-      
-    } catch (err) {
-      message.error(err?.data?.message || "Login failed. Please try again.");
-    }
-  };
 
+      // Refetch all queries that depend on token
+      dispatch(apiSlice.util.resetApiState());
+
+      navigate("/dashboard");
+    }
+  } catch (err) {
+    message.error(err?.data?.message || "Login failed. Please try again.");
+  }
+};
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="w-1/3 rounded-[25px] h-auto md:h-[708px] p-6 flex flex-col gap-7 bg-[#111827] shadow-lg">

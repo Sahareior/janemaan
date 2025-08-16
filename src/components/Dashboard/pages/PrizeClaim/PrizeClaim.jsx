@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatCard } from "../overview/Overview";
-import { Button, Dropdown, Input, Radio, Space } from "antd";
+import { Button, Dropdown, Input, Radio, Space, Spin } from "antd";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import PrizeTable from "./_componentsa/PrizeTable";
 import PrizeModal from "./_componentsa/Modal/PrizeModal";
@@ -10,8 +10,16 @@ const PrizeClaim = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 const [selectedStatus, setSelectedStatus] = useState(null);
 const [selectedClaim, setSelectedClaim] = useState(null); // <-- NEW stat
-const {data:claims} = useGetClaimsQuery()
+const {data:claims,isLoading} = useGetClaimsQuery()
 const [tableData, setTableData] = useState({})
+
+if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
 const items = [
   {

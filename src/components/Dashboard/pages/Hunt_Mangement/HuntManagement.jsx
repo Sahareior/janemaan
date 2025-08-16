@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { StatCard } from "../overview/Overview";
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import CustomTable from "./_components/Table";
 import CustomModal from "../../../others/CustomModal";
@@ -33,7 +33,9 @@ const HuntManagement = () => {
   const active = sortedHunts.filter((hunt) => hunt.status === "active");
 
   if (isLoading) {
-    return <div className="p-5 text-white">Loading...</div>;
+    return  <div className="flex justify-center items-center h-[80vh]">
+        <Spin size="large" />
+      </div>
   }
 
   // Format date helper
