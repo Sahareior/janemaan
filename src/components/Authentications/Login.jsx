@@ -21,9 +21,11 @@ const Login = () => {
       const res = await signIn({ email, password }).unwrap();
       message.success("Login successful!");
       // Store token if needed
-      navigate('/dashboard')
-      console.log(res)
+      if(res){
       localStorage.setItem("token", res?.access_token);
+      navigate('/dashboard')
+      }
+      console.log(res)
       
     } catch (err) {
       message.error(err?.data?.message || "Login failed. Please try again.");
