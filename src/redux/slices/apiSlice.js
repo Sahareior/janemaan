@@ -71,18 +71,14 @@ export const apiSlice = createApi({
       },
     }),
     // http://10.10.13.19:8000/api/v1/hunts/f9460baf-847c-405e-8330-96be17e33103/update/
-    updateHunt: build.mutation({
-      query: (data) => {
-        console.log(data.data, data.payload);
-        return {
-          url: `hunts/${data.data}/update/`,
-
-          method: "PATCH",
-          body: data.payload,
-        };
-      },
-    }),
-
+updateHunt: build.mutation({
+  query: ({ id, formData }) => ({
+    url: `hunts/${id}/update/`,
+    method: "PATCH",
+    body: formData,
+    // No Content-Type header needed - browser will set it automatically with boundary
+  }),
+}),
     deleteHunt: build.mutation({
       query: (id) => ({
         url: `hunts/${id}/delete/`,

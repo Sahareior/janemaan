@@ -17,7 +17,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const EditHunt = ({ handleCancel, handleCreate,data}) => {
-  const [updateHunt] = useUpdateHuntMutation()
+  const [updateHunt ] = useUpdateHuntMutation()
     const { data: e, refetch } = useGetHuntsQuery();
   const [formData, setFormData] = useState({
     title: "",
@@ -116,19 +116,58 @@ const payload = {
   start_date: startDateTime,
   end_date: endDateTime,
   is_premium_only: formData.isPremium,
-  image: FileList
+  image: fileList.length > 0
+    ? (fileList[0].originFileObj ?? fileList[0].url) // <--- always prefer originFileObj
+    : null,
 };
+
+
 
 
 const items ={
 data:data.id , payload
 }
-const handleUpdate = async() => {
-   const res = await updateHunt(items).unwrap();
-   refetch()
-   console.log("Hunt updated:", res);
-  //  console.log(payload)
-}
+
+const handleUpdate = async () => {
+  try {
+    const formDataObj = new FormData();
+
+    // Append all form fields
+    formDataObj.append("title", formData.title);
+    formDataObj.append("description", formData.description);
+    formDataObj.append("rules", formData.rules);
+    formDataObj.append("prize_amount", formData.prize);
+    formDataObj.append("difficulty_level", formData.difficulty);
+    formDataObj.append("duration", formData.duration);
+    formDataObj.append("city", formData.city);
+    formDataObj.append("label", "none");
+    formDataObj.append("status", formData.status);
+    formDataObj.append("start_date", startDateTime || "");
+    formDataObj.append("end_date", endDateTime || "");
+    formDataObj.append("is_premium_only", formData.isPremium);
+
+    // Handle Image - only append if it's a new file
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      formDataObj.append("image", fileList[0].originFileObj);
+    }
+
+    // For debugging - view all FormData entries
+    for (let [key, value] of formDataObj.entries()) {
+      console.log(key, value);
+    }
+
+    // Call the mutation with both ID and formData
+    const res = await updateHunt({
+      id: data.id, 
+      formData: formDataObj
+    }).unwrap();
+
+    refetch();
+    console.log("Hunt updated:", res);
+  } catch (error) {
+    console.error("Update failed:", error);
+  }
+};
 
 
 
