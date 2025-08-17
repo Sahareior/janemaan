@@ -156,14 +156,15 @@ const handleUpdate = async () => {
       console.log(key, value);
     }
 
+    console.log(formDataObj,"aaa")
     // Call the mutation with both ID and formData
-    const res = await updateHunt({
-      id: data.id, 
-      formData: formDataObj
-    }).unwrap();
+    // const res = await updateHunt({
+    //   id: data.id, 
+    //   formData: formDataObj
+    // }).unwrap();
 
-    refetch();
-    console.log("Hunt updated:", res);
+    // refetch();
+    // console.log("Hunt updated:", res);
   } catch (error) {
     console.error("Update failed:", error);
   }

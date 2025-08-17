@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "antd";
+import { Input, InputNumber } from "antd";
 import Swal from "sweetalert2";
 import { useCreateCluesMutation, useGetHuntsQuery } from "../../../../../../../redux/slices/apiSlice";
 
@@ -46,7 +46,8 @@ const handleCreate = async () => {
   try {
     const res = await createClues({ id: huntId, clues: clueData }).unwrap();
     console.log("Create Clue Response:", res);
-    refetch()
+    refetch();
+    
     Swal.fire({
       title: "Clue Created!",
       icon: "success",
@@ -54,6 +55,24 @@ const handleCreate = async () => {
       color: "#fff",
       draggable: true,
     });
+
+    // ✅ Reset the input fields
+    setClueData({
+      name: "",
+      riddle: "",
+      hint: "",
+      order: "",
+      qr_code: {
+        latitude: 0,
+        longitude: 0,
+        is_active: true,
+      },
+      is_final_clue: false,
+    });
+
+    // Optionally go back to Step 1
+    setIsQrcodeOpen(false);
+
   } catch (error) {
     console.error("Failed to create clue:", error);
 
@@ -67,6 +86,7 @@ const handleCreate = async () => {
     });
   }
 };
+
 
 
   const handleCancel = () => {
@@ -108,30 +128,38 @@ const handleCreate = async () => {
               <p className="text-[#9E9E9E]">
                 Set the location and status for your treasure hunt QR code
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-white text-[16px] block mb-1">Latitude</label>
-                  <Input
-                    placeholder="Enter Latitude"
-                    value={clueData.qr_code.latitude}
-                    onChange={(e) =>
-                      handleQrChange("latitude", parseFloat(e.target.value) || 0)
-                    }
-                    className="custom-dark-input placeholder-[#9E9E9E]"
-                  />
-                </div>
-                <div>
-                  <label className="text-white text-[16px] block mb-1">Longitude</label>
-                  <Input
-                    placeholder="Enter Longitude"
-                    value={clueData.qr_code.longitude}
-                    onChange={(e) =>
-                      handleQrChange("longitude", parseFloat(e.target.value) || 0)
-                    }
-                    className="custom-dark-input placeholder-[#9E9E9E]"
-                  />
-                </div>
-              </div>
+{/* import { InputNumber } from "antd"; */}
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div>
+    <label className="text-white text-[16px] block mb-1">Latitude</label>
+    <InputNumber
+      placeholder="Enter Latitude"
+      value={clueData.qr_code.latitude}
+      onChange={(value) => handleQrChange("latitude", value)}
+      className=" w-full"
+      type="number"
+      step={0.000001}  // allows floats
+      min={-90}         // optional: restrict range
+      max={90}          // optional
+    />
+  </div>
+  <div>
+    <label className="text-white text-[16px] block mb-1">Longitude</label>
+    <InputNumber
+      placeholder="Enter Longitude"
+      value={clueData.qr_code.longitude}
+      type="number"
+      onChange={(value) => handleQrChange("longitude", value)}
+      className=" w-full"
+      step={0.000001}  // allows floats
+      min={-180}        // optional: restrict range
+      max={180}         // optional
+    />
+  </div>
+</div>
+
+
               <div className="flex items-center gap-4 mt-4">
                 <Input
                   type="checkbox"
@@ -168,19 +196,25 @@ const handleCreate = async () => {
               <label className="text-white block mb-1 popmed text-sm sm:text-base">
                 Clue Order
               </label>
-              <Input
-                placeholder="Enter Clue Order"
-                value={clueData.order}
-                type="number"
-                onChange={(e) => handleChange("order", e.target.value)}
-                className="mt-2 placeholder-[#9E9E9E]"
-                style={{
-                  backgroundColor: "#030712",
-                  color: "white",
-                  height: "60px",
-                  paddingLeft: "16px",
-                }}
-              />
+<Input
+  placeholder="Enter Clue Order"
+  value={clueData.order}
+  type="number"
+  onChange={(e) => {
+    const val = e.target.value;
+    if (val === "" || parseInt(val) >= 0) {
+      handleChange("order", val);
+    }
+  }}
+  className="mt-2 placeholder-[#9E9E9E]"
+  style={{
+    backgroundColor: "#030712",
+    color: "white",
+    height: "60px",
+    paddingLeft: "16px",
+  }}
+/>
+
             </div>
 
             <div>

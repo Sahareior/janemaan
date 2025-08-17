@@ -42,65 +42,58 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
   };
 
   // Gather and send data on create
-  const handleSubmit = async () => {
-    const startDateTime =
-      startDate && startTime
-        ? `${startDate.format("YYYY-MM-DD")}T${startTime.format(
-            "HH:mm"
-          )}:00.000Z`
-        : null;
+const handleSubmit = async () => {
+  const startDateTime =
+    startDate && startTime
+      ? `${startDate.format("YYYY-MM-DD")}T${startTime.format("HH:mm")}:00.000Z`
+      : null;
 
-    const endDateTime =
-      endDate && endTime
-        ? `${endDate.format("YYYY-MM-DD")}T${endTime.format("HH:mm")}:00.000Z`
-        : null;
+  const endDateTime =
+    endDate && endTime
+      ? `${endDate.format("YYYY-MM-DD")}T${endTime.format("HH:mm")}:00.000Z`
+      : null;
 
-    const parseDuration = (input) => {
-      const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
-      const match = input.match(regex);
+  const parseDuration = (input) => {
+    const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
+    const match = input.match(regex);
 
-      if (!match) return "00:00:00";
+    if (!match) return "00:00:00";
 
-      const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
-      const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
+    const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
+    const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
 
-      return `${hours}:${minutes}:00`;
-    };
-
-    const formData = new FormData();
-    formData.append("title", huntTitle);
-    formData.append("city", city);
-    formData.append("prize_amount", prizeAmount.toString());
-    formData.append("description", description);
-    formData.append("rules", rules);
-    formData.append("start_date", startDateTime);
-    formData.append("end_date", endDateTime);
-    formData.append("is_premium_only", isPremium);
-    formData.append("duration", parseDuration(duration));
-    formData.append("status", status);
-    formData.append("difficulty_level", difficulty);
-    formData.append("label", "none");
-
-    if (fileList[0]?.originFileObj) {
-      formData.append("image", fileList[0].originFileObj);
-    }
-
-    try {
-      const res = await createHunts(formData).unwrap();
-      console.log("Hunt created:", res);
-      refetch();
-      handleCreate?.(); // If you have a callback
-    } catch (error) {
-      console.error("Failed to create hunt:", error);
-    }
-    const formDataObj = {};
-    for (const [key, value] of formData.entries()) {
-      formDataObj[key] = value;
-    }
-    const res = await createHunts(formDataObj).unwrap();
-    console.log("Hunt created:", res);
-    console.log("FormData contents:", formDataObj);
+    return `${hours}:${minutes}:00`;
   };
+
+  const formData = new FormData();
+  formData.append("title", huntTitle);
+  formData.append("city", city);
+  formData.append("prize_amount", prizeAmount.toString());
+  formData.append("description", description);
+  formData.append("rules", rules);
+  formData.append("start_date", startDateTime);
+  formData.append("end_date", endDateTime);
+  formData.append("is_premium_only", isPremium);
+  formData.append("duration", parseDuration(duration));
+  formData.append("status", status);
+  formData.append("difficulty_level", difficulty);
+  formData.append("label", "none");
+
+  if (fileList[0]?.originFileObj) {
+    formData.append("image", fileList[0].originFileObj); // ✅ File must be here
+  }
+
+  try {
+    // ONLY send FormData
+    const res = await createHunts(formData).unwrap();
+    console.log("Hunt created:", res);
+    refetch();
+    handleCreate?.();
+  } catch (error) {
+    console.error("Failed to create hunt:", error);
+  }
+};
+
 
   return (
     <div>
