@@ -1,22 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Input,
   DatePicker,
   TimePicker,
   Upload,
-  Select,
   Image,
   Button,
+  Spin,
 } from "antd";
 import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import { useCreateHuntsMutation } from "../../../redux/slices/apiSlice";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import imageCompression from "browser-image-compression";
 
 const { TextArea } = Input;
-const { Option } = Select;
+
+const mimeToExt = {
+  "image/jpeg": "jpg",
+  "image/jpg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+  "image/bmp": "bmp",
+  "image/tiff": "tiff",
+  "image/x-icon": "ico",
+};
+
+const baseName = (name) =>
+  name && name.includes(".")
+    ? name.slice(0, name.lastIndexOf("."))
+    : "upload";
 
 const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
-  // Add state for each input
   const [huntTitle, setHuntTitle] = useState("");
   const [city, setCity] = useState("");
   const [prizeAmount, setPrizeAmount] = useState("");
@@ -31,78 +46,165 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
   const [status, setStatus] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [fileList, setFileList] = useState([]);
+  const [compressing, setCompressing] = useState(false);
   const [createHunts] = useCreateHuntsMutation();
 
-  const handleRemove = () => {
+  // Reset form
+  const resetForm = () => {
+    setHuntTitle("");
+    setCity("");
+    setPrizeAmount("");
+    setDescription("");
+    setRules("");
+    setStartDate(null);
+    setStartTime(null);
+    setEndDate(null);
+    setEndTime(null);
+    setIsPremium(false);
+    setDuration("");
+    setStatus("");
+    setDifficulty("");
     setFileList([]);
   };
 
-  const handleChange = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  // Cleanup URLs
+  useEffect(() => {
+    return () => {
+      fileList.forEach((f) => f?.preview && URL.revokeObjectURL(f.preview));
+    };
+  }, [fileList]);
+
+  const handleRemove = () => {
+    fileList.forEach((f) => f?.preview && URL.revokeObjectURL(f.preview));
+    setFileList([]);
   };
 
-  // Gather and send data on create
-const handleSubmit = async () => {
-  const startDateTime =
-    startDate && startTime
-      ? `${startDate.format("YYYY-MM-DD")}T${startTime.format("HH:mm")}:00.000Z`
-      : null;
+  // Compress if > 1MB
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 0.8,
+      maxWidthOrHeight: 1280,
+      useWebWorker: true,
+    };
 
-  const endDateTime =
-    endDate && endTime
-      ? `${endDate.format("YYYY-MM-DD")}T${endTime.format("HH:mm")}:00.000Z`
-      : null;
+    const blob = await imageCompression(file, options);
 
-  const parseDuration = (input) => {
-    const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
-    const match = input.match(regex);
+    const extFromMime = mimeToExt[blob.type];
+    const originalExt = (file.name?.split(".").pop() || "").toLowerCase();
+    const chosenExt = extFromMime || originalExt || "jpg";
 
-    if (!match) return "00:00:00";
-
-    const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
-    const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
-
-    return `${hours}:${minutes}:00`;
+    const name = `${baseName(file.name)}.${chosenExt}`;
+    return new File([blob], name, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
   };
 
-  const formData = new FormData();
-  formData.append("title", huntTitle);
-  formData.append("city", city);
-  formData.append("prize_amount", prizeAmount.toString());
-  formData.append("description", description);
-  formData.append("rules", rules);
-  formData.append("start_date", startDateTime);
-  formData.append("end_date", endDateTime);
-  formData.append("is_premium_only", isPremium);
-  formData.append("duration", parseDuration(duration));
-  formData.append("status", status);
-  formData.append("difficulty_level", difficulty);
-  formData.append("label", "none");
+  const handleChange = async ({ fileList: newFileList }) => {
+    if (!newFileList?.length) {
+      setFileList([]);
+      return;
+    }
 
-  if (fileList[0]?.originFileObj) {
-    formData.append("image", fileList[0].originFileObj); // ✅ File must be here
-  }
+    const item = newFileList[0];
 
-  try {
-    // ONLY send FormData
-    const res = await createHunts(formData).unwrap();
-    console.log("Hunt created:", res);
-    refetch();
-    handleCreate?.();
-  } catch (error) {
-    console.error("Failed to create hunt:", error);
-  }
-};
+    if (item?.originFileObj) {
+      setCompressing(true);
+      try {
+        const raw = item.originFileObj;
 
+        let finalFile = raw;
+        if (raw.size / 1024 / 1024 > 1) {
+          // compress only if >1MB
+          finalFile = await compressImage(raw);
+        }
+
+        const previewURL = URL.createObjectURL(finalFile);
+        const updated = {
+          ...item,
+          name: finalFile.name,
+          type: finalFile.type,
+          size: finalFile.size,
+          originFileObj: finalFile,
+          preview: previewURL,
+          status: "done",
+          uid: item.uid || `${Date.now()}`,
+        };
+
+        if (item.preview && item.preview !== previewURL) {
+          URL.revokeObjectURL(item.preview);
+        }
+
+        setFileList([updated]);
+      } catch (err) {
+        console.error("Image handling error:", err);
+      } finally {
+        setCompressing(false);
+      }
+    } else {
+      setFileList(newFileList);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const startDateTime =
+      startDate && startTime
+        ? `${startDate.format("YYYY-MM-DD")}T${startTime.format(
+            "HH:mm"
+          )}:00.000Z`
+        : null;
+    const endDateTime =
+      endDate && endTime
+        ? `${endDate.format("YYYY-MM-DD")}T${endTime.format(
+            "HH:mm"
+          )}:00.000Z`
+        : null;
+
+    const parseDuration = (input) => {
+      const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
+      const match = input.match(regex);
+      if (!match) return "00:00:00";
+      const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
+      const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
+      return `${hours}:${minutes}:00`;
+    };
+
+    const formData = new FormData();
+    formData.append("title", huntTitle);
+    formData.append("city", city);
+    formData.append("prize_amount", String(prizeAmount || ""));
+    formData.append("description", description);
+    formData.append("rules", rules);
+    formData.append("start_date", startDateTime);
+    formData.append("end_date", endDateTime);
+    formData.append("is_premium_only", String(isPremium));
+    formData.append("duration", parseDuration(duration));
+    formData.append("status", status);
+    formData.append("difficulty_level", difficulty);
+    formData.append("label", "none");
+
+    const imgFile = fileList[0]?.originFileObj;
+    if (imgFile) {
+      formData.append("image", imgFile, imgFile.name);
+    }
+
+    try {
+      const res = await createHunts(formData).unwrap();
+      console.log("Hunt created:", res);
+      refetch();
+      resetForm();
+      handleCreate?.();
+    } catch (err) {
+      console.error("Failed to create hunt:", err);
+    }
+  };
 
   return (
     <div>
       <div className="space-y-6">
-        {/* Hunt Title */}
+        {/* Title */}
         <div>
-          <label className="text-white text-[16px] block mb-1">
-            Hunt Title
-          </label>
+          <label className="text-white text-[16px] block mb-1">Hunt Title</label>
           <Input
             placeholder="Enter Hunt title"
             value={huntTitle}
@@ -138,9 +240,7 @@ const handleSubmit = async () => {
 
         {/* Description */}
         <div>
-          <label className="text-white text-[16px] block mb-2">
-            Description
-          </label>
+          <label className="text-white text-[16px] block mb-2">Description</label>
           <TextArea
             rows={4}
             value={description}
@@ -162,45 +262,41 @@ const handleSubmit = async () => {
           />
         </div>
 
-        {/* Start & End Times */}
+        {/* Start & End */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="text-white text-[16px] block mb-1">
-              Start time
-            </label>
+            <label className="text-white text-[16px] block mb-1">Start time</label>
             <div className="flex gap-2">
               <DatePicker
                 className="custom-dark-input w-full"
                 value={startDate}
-                onChange={(value) => setStartDate(value)}
+                onChange={(v) => setStartDate(v)}
               />
               <TimePicker
                 className="custom-dark-input w-full"
                 value={startTime}
-                onChange={(value) => setStartTime(value)}
+                onChange={(v) => setStartTime(v)}
               />
             </div>
           </div>
           <div>
-            <label className="text-white text-[16px] block mb-2">
-              End time
-            </label>
+            <label className="text-white text-[16px] block mb-2">End time</label>
             <div className="flex gap-2">
               <DatePicker
                 className="custom-dark-input w-full"
                 value={endDate}
-                onChange={(value) => setEndDate(value)}
+                onChange={(v) => setEndDate(v)}
               />
               <TimePicker
                 className="custom-dark-input w-full"
                 value={endTime}
-                onChange={(value) => setEndTime(value)}
+                onChange={(v) => setEndTime(v)}
               />
             </div>
           </div>
         </div>
 
-        {/* Premium Checkbox */}
+        {/* Premium */}
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -208,9 +304,7 @@ const handleSubmit = async () => {
             onChange={(e) => setIsPremium(e.target.checked)}
             className="custom-dark-input w-4 h-4"
           />
-          <label className="text-white text-[16px] block mb-1">
-            Premium Only?
-          </label>
+          <label className="text-white text-[16px]">Premium Only?</label>
         </div>
 
         {/* Duration */}
@@ -232,8 +326,7 @@ const handleSubmit = async () => {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
-                // appearance-none removes default arrow, pr-10 for space for custom icon
+                className="w-full custom-dark-input text-white border-none pr-10"
               >
                 <option value="" disabled>
                   Select Interval
@@ -243,23 +336,18 @@ const handleSubmit = async () => {
                 <option value="completed">Completed</option>
                 <option value="cancelled">Cancelled</option>
               </select>
-              <RiArrowDropDownLine
-                className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-                aria-hidden="true"
-              />
+              {/* <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2" /> */}
             </div>
           </div>
           <div>
             <label className="text-white text-[16px] block mb-2">
               Difficulty
             </label>
-
             <div className="relative w-full">
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
-                className="w-full custom-dark-input custom-select-placeholder text-white  border-none focus:outline-none appearance-none pr-10"
-                // appearance-none removes default arrow, pr-10 for space for custom icon
+                className="w-full custom-dark-input text-white border-none pr-10"
               >
                 <option value="" disabled>
                   Select Interval
@@ -268,37 +356,36 @@ const handleSubmit = async () => {
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
               </select>
-              <RiArrowDropDownLine
-                className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
-                aria-hidden="true"
-              />
+              {/* <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2" /> */}
             </div>
           </div>
         </div>
 
-        {/* Image Upload */}
+        {/* Upload */}
         <div>
           <label className="text-white text-[16px] block mb-2">
             Hunt Picture
           </label>
           <Upload
+            accept="image/*"
             showUploadList={false}
             beforeUpload={() => false}
             fileList={fileList}
             onChange={handleChange}
           >
             {fileList.length === 0 ? (
-              <Button icon={<UploadOutlined />}>Upload Photo</Button>
+              <Button icon={<UploadOutlined />} disabled={compressing}>
+                {compressing ? "Compressing..." : "Upload Photo"}
+              </Button>
             ) : (
               <div style={{ position: "relative" }}>
-                <Image
-                  width={100}
-                  src={
-                    fileList[0].url ||
-                    URL.createObjectURL(fileList[0].originFileObj)
-                  }
-                  alt="Uploaded Image"
-                />
+                <Spin spinning={compressing}>
+                  <Image
+                    width={120}
+                    src={fileList[0].preview}
+                    alt="Uploaded Image"
+                  />
+                </Spin>
                 <CloseCircleOutlined
                   onClick={handleRemove}
                   style={{
@@ -315,7 +402,7 @@ const handleSubmit = async () => {
           </Upload>
         </div>
 
-        {/* Footer Buttons */}
+        {/* Buttons */}
         <div className="flex justify-end gap-4 mt-6">
           <button
             onClick={handleCancel}
@@ -325,6 +412,7 @@ const handleSubmit = async () => {
           </button>
           <button
             onClick={handleSubmit}
+            disabled={compressing}
             className="bg-[#2C739E] w-[135px] h-[52px] border border-blue-600 text-white hover:bg-[#1e5a7d]"
           >
             Create Hunt
