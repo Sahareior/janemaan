@@ -162,14 +162,14 @@ const [createHunts, { isLoading }] = useCreateHuntsMutation();
           )}:00.000Z`
         : null;
 
-    const parseDuration = (input) => {
-      const regex = /(?:(\d+)h)?\s*(?:(\d+)m)?/i;
-      const match = input.match(regex);
-      if (!match) return "00:00:00";
-      const hours = match[1] ? String(match[1]).padStart(2, "0") : "00";
-      const minutes = match[2] ? String(match[2]).padStart(2, "0") : "00";
-      return `${hours}:${minutes}:00`;
-    };
+const parseDuration = (input) => {
+  const regex = /^([0-1]?\d|2[0-3]):([0-5]?\d):([0-5]?\d)$/; // HH:MM:SS
+  if (!regex.test(input)) {
+    return "00:00:00"; // fallback if invalid
+  }
+  return input;
+};
+
 
     const formData = new FormData();
     formData.append("title", huntTitle);
@@ -313,12 +313,29 @@ const [createHunts, { isLoading }] = useCreateHuntsMutation();
         {/* Duration */}
         <div>
           <label className="text-white text-[16px] block mb-2">Duration</label>
-          <Input
-            placeholder="e.g., 2h 30m or 150 minutes"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            className="custom-dark-input placeholder-[#9E9E9E]"
-          />
+<Input
+  placeholder="HH:MM:SS"
+  value={duration}
+  onChange={(e) => {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // keep only digits
+    if (value.length > 6) value = value.slice(0, 6); // max 6 digits (HHMMSS)
+
+    // Auto-format to HH:MM:SS
+    let formatted = value;
+    if (value.length >= 5) {
+      formatted = `${value.slice(0, 2)}:${value.slice(2, 4)}:${value.slice(4, 6)}`;
+    } else if (value.length >= 3) {
+      formatted = `${value.slice(0, 2)}:${value.slice(2, 4)}`;
+    } else if (value.length >= 1) {
+      formatted = value;
+    }
+
+    setDuration(formatted);
+  }}
+  maxLength={8} // HH:MM:SS = 8 chars
+  className="custom-dark-input placeholder-[#9E9E9E]"
+/>
+
         </div>
 
         {/* Status & Difficulty */}

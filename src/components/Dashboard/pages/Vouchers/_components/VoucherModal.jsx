@@ -18,7 +18,7 @@ const VoucherModal = ({ open,huntId, onCancel, edit,data }) => {
 
     >
         {
-            edit? <UpdateVoucher voucher={data}  huntId={huntId} />:<CreateVoucher huntId={huntId} />
+            edit? <UpdateVoucher onCancel={onCancel} voucher={data}  huntId={huntId} />:<CreateVoucher onCancel={onCancel} huntId={huntId} />
         }
      
     </Modal>

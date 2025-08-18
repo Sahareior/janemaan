@@ -7,7 +7,7 @@ import { useCreateVoucherMutation, useGetAllVoucherQuery } from "../../../../../
 import Swal from "sweetalert2";
 import { CiCalendar, CiCalendarDate } from "react-icons/ci";
 
-const CreateVoucher = ({ huntId }) => {
+const CreateVoucher = ({ huntId,onCancel }) => {
   const [formData, setFormData] = useState({
     code: "",
     status: "active",
@@ -35,7 +35,7 @@ const handleSubmit = async (e) => {
     const res = await createVoucher({ payload, huntId }).unwrap();
     console.log("Voucher created successfully:", res);
     refetch()
-
+    onCancel()
     // Show success alert
     Swal.fire({
       title: "Voucher Created!",

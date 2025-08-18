@@ -16,6 +16,7 @@ import {
   useUpdateHuntMutation,
 } from "../../../redux/slices/apiSlice";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import Swal from "sweetalert2";
 
 const { TextArea } = Input;
 
@@ -29,7 +30,7 @@ const baseName = (filename) =>
   filename.substring(0, filename.lastIndexOf(".")) || filename;
 
 const EditHunt = ({ handleCancel, handleCreate,onCancel, data }) => {
-  const [updateHunt] = useUpdateHuntMutation();
+  const [updateHunt, {isLoading}] = useUpdateHuntMutation();
   const { refetch } = useGetHuntsQuery();
 
   const [formData, setFormData] = useState({
@@ -137,38 +138,61 @@ const EditHunt = ({ handleCancel, handleCreate,onCancel, data }) => {
       ? dayjs(`${formData.endDate.format("YYYY-MM-DD")} ${formData.endTime.format("HH:mm:ss")}`).toISOString()
       : null;
 
-  const handleUpdate = async () => {
-    setLoading(true);
-    try {
-      const formDataObj = new FormData();
-      Object.entries({
-        title: formData.title,
-        description: formData.description,
-        rules: formData.rules,
-        prize_amount: formData.prize,
-        difficulty_level: formData.difficulty,
-        duration: formData.duration,
-        city: formData.city,
-        label: "none",
-        status: formData.status,
-        start_date: startDateTime || "",
-        end_date: endDateTime || "",
-        is_premium_only: formData.isPremium,
-      }).forEach(([key, value]) => formDataObj.append(key, value));
+const handleUpdate = async () => {
+  setLoading(true);
+  try {
+    const formDataObj = new FormData();
+    Object.entries({
+      title: formData.title,
+      description: formData.description,
+      rules: formData.rules,
+      prize_amount: formData.prize,
+      difficulty_level: formData.difficulty,
+      duration: formData.duration,
+      city: formData.city,
+      label: "none",
+      status: formData.status,
+      start_date: startDateTime || "",
+      end_date: endDateTime || "",
+      is_premium_only: formData.isPremium,
+    }).forEach(([key, value]) => formDataObj.append(key, value));
 
-      if (fileList.length > 0 && fileList[0].originFileObj) {
-        formDataObj.append("image", fileList[0].originFileObj);
-      }
-
-      await updateHunt({ id: data.id, formData: formDataObj }).unwrap();
-      refetch();
-      onCancel()
-    } catch (err) {
-      console.error("Update failed:", err);
-    } finally {
-      setLoading(false);
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      formDataObj.append("image", fileList[0].originFileObj);
     }
-  };
+
+    await updateHunt({ id: data.id, formData: formDataObj }).unwrap();
+
+    await Swal.fire({
+      title: "Done!",
+      text: "Hunt updated successfully.",
+      icon: "success",
+      background: "#1e1e2f",
+      color: "#fff",
+      confirmButtonText: "OK",
+      draggable: true,
+    });
+
+    refetch();
+    onCancel();
+  } catch (err) {
+    console.error("Update failed:", err);
+    Swal.fire({
+      title: "Update failed",
+      text:
+        err?.data?.message ||
+        err?.message ||
+        "Something went wrong. Please try again.",
+      icon: "error",
+      background: "#1e1e2f",
+      color: "#fff",
+      confirmButtonText: "OK",
+      draggable: true,
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const payload = {
     ...formData,
@@ -372,16 +396,17 @@ const EditHunt = ({ handleCancel, handleCreate,onCancel, data }) => {
         >
           Cancel
         </button>
-        <Button
-          onClick={() => {
-            handleCreate(payload, fileList);
-            handleUpdate();
-          }}
-          className="bg-[#2C739E] w-[135px] h-[45px] border-none hover:bg-[#2C739E]/70 text-white"
-          loading={loading}
-        >
-          Update Hunt
-        </Button>
+<button
+  onClick={handleUpdate}
+  disabled={compressing || isLoading}
+  className="bg-[#2C739E] w-[135px] h-[45px] border border-blue-600 text-white hover:bg-[#1e5a7d] flex items-center justify-center"
+>
+  {isLoading ? (
+    <Spin size="small" className="text-white" />
+  ) : (
+    "Update Hunt"
+  )}
+</button>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useGetAllVoucherQuery, useUpdateVoucherMutation } from "../../../../../../redux/slices/apiSlice";
 import Swal from "sweetalert2";
 
-const UpdateVoucher = ({ voucher }) => {
+const UpdateVoucher = ({ voucher,onCancel }) => {
     console.log(voucher.hunt,'daadaddd')
   const [formData, setFormData] = useState({
     code: "",
@@ -48,10 +48,10 @@ const handleSubmit = async (e) => {
     console.log("Voucher updated successfully:", res);
     console.log("Updating voucher with:", { huntId, payload });
     refetch()
-    // Show success alert
+    onCancel()
     Swal.fire({
       title: "Voucher Updated!",
-      text: `Code: ${payload.code}`,
+      
       icon: "success",
       background: "#1e1e2f",
       color: "#fff",
