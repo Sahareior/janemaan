@@ -6,42 +6,65 @@ import { CiLocationOn } from "react-icons/ci";
 import { PiQrCodeBold } from "react-icons/pi";
 import ClueModal from "./modal/ClueModal";
 import Swal from "sweetalert2";
-import { data } from 'react-router-dom';
 import { useDeleteClueMutation, useGetHuntsQuery } from "../../../../../redux/slices/apiSlice";
 
-const ClueTable = ({ filteredClues }) => {
+const ClueTable = ({ filteredClues: initialClues }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editClue, setEditClue] = useState({})
-  const [deleteClue] = useDeleteClueMutation()
-   const { data: fetchHuntdata, isLoading,refetch } = useGetHuntsQuery();
+  const [editClue, setEditClue] = useState({});
+  const [deleteClue] = useDeleteClueMutation();
+  const { data: huntData, refetch } = useGetHuntsQuery();
 
-const handleDelete = (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    background: "#1e1e2f",
-    color: "#fff",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteClue(id);
-      refetch();
-      Swal.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        background: "#1e1e2f",
-        color: "#fff",
-        icon: "success",
-      });
-    }
-  });
-};
+  // Local state for instant updates
+  const [filteredClues, setFilteredClues] = useState(initialClues || []);
 
-  console.log(editClue,"adadadadaa")
+  // Keep filteredClues in sync if parent prop changes
+  React.useEffect(() => {
+    setFilteredClues(initialClues || []);
+  }, [initialClues]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      background: "#1e1e2f",
+      color: "#fff",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteClue(id)
+          .unwrap()
+          .then(() => {
+            // Remove clue locally for instant UI update
+            const updatedClues = filteredClues.filter((clue) => clue.id !== id);
+            setFilteredClues(updatedClues);
+
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              background: "#1e1e2f",
+              color: "#fff",
+              icon: "success",
+            });
+
+            // Optional: refetch hunts to keep backend in sync
+            refetch();
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong.",
+              icon: "error",
+              background: "#1e1e2f",
+              color: "#fff",
+            });
+          });
+      }
+    });
+  };
 
   const columns = [
     {
@@ -49,9 +72,7 @@ const handleDelete = (id) => {
       dataIndex: "order",
       key: "order",
       render: (value) => (
-        <span className="text-[#97BECA] font-medium popbold text-[16px]">
-          {value}
-        </span>
+        <span className="text-[#97BECA] font-medium popbold text-[16px]">{value}</span>
       ),
     },
     {
@@ -59,9 +80,7 @@ const handleDelete = (id) => {
       dataIndex: "name",
       key: "name",
       render: (value) => (
-        <span className="text-[#97BECA] popmed truncate max-w-[160px] block">
-          {value}
-        </span>
+        <span className="text-[#97BECA] popmed truncate max-w-[160px] block">{value}</span>
       ),
     },
     {
@@ -98,7 +117,6 @@ const handleDelete = (id) => {
       key: "status",
       render: (_, record) => {
         const isActive = record?.qr_code?.is_active;
-        console.log(isActive)
         const color = isActive
           ? "bg-[#2765A1]/25 border border-[#2765A1]"
           : "bg-[#995900]/25 border border-[#995900]";
@@ -121,7 +139,7 @@ const handleDelete = (id) => {
           <EditOutlined
             onClick={() => {
               setIsModalOpen(true);
-              setEditClue(record)
+              setEditClue(record);
             }}
             className="text-[#9E9E9E] hover:text-yellow-400 text-2xl cursor-pointer"
           />

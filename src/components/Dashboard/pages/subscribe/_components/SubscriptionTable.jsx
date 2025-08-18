@@ -90,16 +90,18 @@ const columns = [
       <span className="text-[#9E9E9E] popreg font-bold text-[17px]">{discount}%</span>
     ),
   },
-  {
-    title: "Created On",
-    dataIndex: "created_at",
-    key: "created_at",
-    render: (date) => (
-      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
-        {new Date(date).toLocaleDateString()}
-      </span>
-    ),
-  },
+{
+  title: "Created On",
+  dataIndex: "created_at",
+  key: "created_at",
+  render: (date) => (
+    <span className="text-gray-400 text-[17px] popreg">
+      {new Date(date).toLocaleDateString()}
+    </span>
+  ),
+  // Optional: explicitly align the column
+  align: "left",
+},
   {
     title: "Actions",
     key: "actions",

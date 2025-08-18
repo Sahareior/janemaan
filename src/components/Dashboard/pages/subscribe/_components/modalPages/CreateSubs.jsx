@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 const { TextArea } = Input;
 
-const CreateSubs = () => {
+const CreateSubs = ({onCancel}) => {
   const [createPlans] = useCreatePlansMutation();
   const {data,refetch} =useGetPlanQuery()
   const [formData, setFormData] = useState({
@@ -38,6 +38,7 @@ const handleSubmit = async () => {
     const res = await createPlans(payload).unwrap();
     console.log(res, "res check");
 
+
     Swal.fire({
       title: "Success",
       text: "Plan created successfully!",
@@ -47,6 +48,7 @@ const handleSubmit = async () => {
     });
 
     refetch();
+    onCancel()
   } catch (error) {
     console.error("Failed to create plan:", error);
 
@@ -107,9 +109,9 @@ const handleSubmit = async () => {
               <option value="" disabled>
                 Select Currency
               </option>
+              <option value="zar">ZAR</option>
               <option value="usd">USD</option>
               <option value="eur">EUR</option>
-              <option value="bdt">BDT</option>
             </select>
             <RiArrowDropDownLine
               className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none"
@@ -157,12 +159,7 @@ const handleSubmit = async () => {
       </div>
 
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <button
-          onClick={handleSubmit}
-          className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
-        >
-          Create Plan
-        </button>
+
         <button
           className="w-full h-[46px] border border-[#9E9E9E] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
           type="button"
@@ -178,6 +175,13 @@ const handleSubmit = async () => {
           }
         >
           Cancel
+        </button>
+
+                <button
+          onClick={handleSubmit}
+          className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
+        >
+          Create Plan
         </button>
       </div>
     </div>

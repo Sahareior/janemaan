@@ -35,10 +35,10 @@ const ClueModal = ({ open, onCancel, edit,huntId,data,position }) => {
     position ? (
       <EditQrPage data={data} />
     ) : (
-      <EditClue data={data} huntId={huntId} />
+      <EditClue onCancel={onCancel} data={data} huntId={huntId} />
     )
   ) : (
-    <CreateClue huntId={huntId} />
+    <CreateClue onCancel={onCancel} huntId={huntId} />
   )
 }
 

@@ -31,7 +31,7 @@ const baseName = (name) =>
     ? name.slice(0, name.lastIndexOf("."))
     : "upload";
 
-const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
+const CreateHunt = ({ handleCancel, handleCreate, refetch,onCancel }) => {
   const [huntTitle, setHuntTitle] = useState("");
   const [city, setCity] = useState("");
   const [prizeAmount, setPrizeAmount] = useState("");
@@ -47,7 +47,9 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
   const [difficulty, setDifficulty] = useState("");
   const [fileList, setFileList] = useState([]);
   const [compressing, setCompressing] = useState(false);
-  const [createHunts] = useCreateHuntsMutation();
+// mutation hook
+const [createHunts, { isLoading }] = useCreateHuntsMutation();
+
 
   // Reset form
   const resetForm = () => {
@@ -194,6 +196,7 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
       refetch();
       resetForm();
       handleCreate?.();
+      onCancel()
     } catch (err) {
       console.error("Failed to create hunt:", err);
     }
@@ -374,7 +377,10 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
             onChange={handleChange}
           >
             {fileList.length === 0 ? (
-              <Button icon={<UploadOutlined />} disabled={compressing}>
+              <Button   style={{
+    color: compressing ? "white" : "red", // white for compressing, red for normal
+    opacity: 1, // override disabled opacity
+  }} className="text-red-600" icon={<UploadOutlined />} disabled={compressing}>
                 {compressing ? "Compressing..." : "Upload Photo"}
               </Button>
             ) : (
@@ -410,13 +416,18 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch }) => {
           >
             Cancel
           </button>
-          <button
-            onClick={handleSubmit}
-            disabled={compressing}
-            className="bg-[#2C739E] w-[135px] h-[52px] border border-blue-600 text-white hover:bg-[#1e5a7d]"
-          >
-            Create Hunt
-          </button>
+<button
+  onClick={handleSubmit}
+  disabled={compressing || isLoading}
+  className="bg-[#2C739E] w-[135px] h-[52px] border border-blue-600 text-white hover:bg-[#1e5a7d] flex items-center justify-center"
+>
+  {isLoading ? (
+    <Spin size="small" className="text-white" />
+  ) : (
+    "Create Hunt"
+  )}
+</button>
+
         </div>
       </div>
     </div>

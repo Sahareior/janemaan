@@ -119,8 +119,8 @@ const EditableClaims = ({ id }) => {
           </Col>
         </Row>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
+        <Form.Item className='flex justify-end'>
+          <Button className='px-9 py-4 bg-[#2C739E]' type="primary" htmlType="submit">
             Update
           </Button>
         </Form.Item>

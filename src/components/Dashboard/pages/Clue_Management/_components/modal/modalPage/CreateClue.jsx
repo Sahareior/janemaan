@@ -5,7 +5,7 @@ import { useCreateCluesMutation, useGetHuntsQuery } from "../../../../../../../r
 
 const { TextArea } = Input;
 
-const CreateClue = ({huntId}) => {
+const CreateClue = ({huntId,onCancel}) => {
   const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
   const [createClues] = useCreateCluesMutation()
    const { data: huntData, isLoading,refetch } = useGetHuntsQuery();
@@ -47,7 +47,7 @@ const handleCreate = async () => {
     const res = await createClues({ id: huntId, clues: clueData }).unwrap();
     console.log("Create Clue Response:", res);
     refetch();
-    
+    onCancel()
     Swal.fire({
       title: "Clue Created!",
       icon: "success",
@@ -116,10 +116,22 @@ const handleCreate = async () => {
   return (
     <div>
       <div className="h-[65vh] overflow-y-auto pb-9">
-        <div className="flex justify-center my-5 items-center gap-14 text-[23px]">
-          <h3 className={isQrcodeOpen ? "" : "text-[#97BECA]"}>Step 1: Create Clue</h3>
-          <h3 className={isQrcodeOpen ? "text-[#97BECA]" : ""}>Step 2: Create Qr Code</h3>
-        </div>
+<div className="flex justify-center my-5 items-center gap-14 text-[23px]">
+  <h3
+    className={`${!isQrcodeOpen ? "text-[#97BECA]" : "text-white"} cursor-pointer`}
+    onClick={() => setIsQrcodeOpen(false)}
+  >
+    Step 1: Create Clue
+  </h3>
+  <h3
+    className={`${isQrcodeOpen ? "text-[#97BECA]" : "text-white"} cursor-pointer`}
+    onClick={() => setIsQrcodeOpen(true)}
+  >
+    Step 2: Create Qr Code
+  </h3>
+</div>
+
+
 
         {isQrcodeOpen ? (
           // Step 2 - QR Code
@@ -133,29 +145,21 @@ const handleCreate = async () => {
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
   <div>
     <label className="text-white text-[16px] block mb-1">Latitude</label>
-    <InputNumber
-      placeholder="Enter Latitude"
-      value={clueData.qr_code.latitude}
-      onChange={(value) => handleQrChange("latitude", value)}
-      className=" w-full"
-      type="number"
-      step={0.000001}  // allows floats
-      min={-90}         // optional: restrict range
-      max={90}          // optional
-    />
+ <Input
+                    placeholder="Enter Latitude"
+                    value={clueData.qr_code.latitude}
+                    onChange={(e) => handleQrChange("latitude", e.target.value)}
+                    className="w-full"
+                  />
   </div>
   <div>
     <label className="text-white text-[16px] block mb-1">Longitude</label>
-    <InputNumber
-      placeholder="Enter Longitude"
-      value={clueData.qr_code.longitude}
-      type="number"
-      onChange={(value) => handleQrChange("longitude", value)}
-      className=" w-full"
-      step={0.000001}  // allows floats
-      min={-180}        // optional: restrict range
-      max={180}         // optional
-    />
+ <Input
+                    placeholder="Enter Longitude"
+                    value={clueData.qr_code.longitude}
+                    onChange={(e) => handleQrChange("longitude", e.target.value)}
+                    className="w-full"
+                  />
   </div>
 </div>
 
@@ -173,16 +177,16 @@ const handleCreate = async () => {
               </div>
               <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
                 <button
-                  onClick={handleCreate}
-                  className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
-                >
-                  Create Clue
-                </button>
-                <button
                   onClick={() => setIsQrcodeOpen(false)}
                   className="w-full h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
                 >
                   Cancel
+                </button>
+                             <button
+                  onClick={handleCreate}
+                  className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
+                >
+                  Create Clue
                 </button>
               </div>
             </div>
@@ -285,16 +289,16 @@ const handleCreate = async () => {
               </div>
               <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
                 <button
-                  onClick={() => setIsQrcodeOpen(true)}
-                  className="w-full sm:w-auto px-6 h-[46px] rounded-md bg-[#2C739E] text-white shadow-md hover:bg-[#1f5471] hover:shadow-lg transition-all duration-300"
-                >
-                  Create Clue
-                </button>
-                <button
                   onClick={handleCancel}
-                  className="w-full sm:w-[135px] h-[46px] rounded-md bg-black text-white hover:bg-[#1a1a1a] transition-all duration-300"
+                  className=" sm:w-[135px] h-[46px] rounded-md bg-black text-white hover:bg-[#1a1a1a] transition-all duration-300"
                 >
                   Cancel
+                </button>
+                                <button
+                  onClick={() => setIsQrcodeOpen(true)}
+                  className=" sm:w-auto px-6 h-[46px] w-[165px] rounded-md bg-[#2C739E] text-white shadow-md hover:bg-[#1f5471] hover:shadow-lg transition-all duration-300"
+                >
+                 Next Step
                 </button>
               </div>
             </div>

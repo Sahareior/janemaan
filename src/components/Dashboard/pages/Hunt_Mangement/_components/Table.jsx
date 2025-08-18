@@ -140,7 +140,7 @@ const handleDelete = (hunt) => {
 
         return (
           <Tag
-            className={`${color} text-white border-none font-bold w-[100px] popbold h-[36px] px-20 text-[16px] flex justify-center items-center rounded-[22px]`}
+            className={`${color} text-white border-none font-bold w-[30px] popbold h-[36px] px-16 text-[16px] flex justify-center items-center rounded-[22px]`}
           >
             {capitalized}
           </Tag>

@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import ClueTable from "./_components/ClueTable";
 import ClueModal from "./_components/modal/ClueModal";
@@ -21,11 +21,27 @@ const ClueManagement = () => {
   const {data} = useGetCluesQuery()
   const huntData = location.state?.data || {}; // Get hunt data from state
  const { data: fetchHuntdata, isLoading,refetch } = useGetHuntsQuery();
-
+const [filteredClues, setFilteredClues] = useState([]);
 
   const filteredHunts = fetchHuntdata?.results?.filter(hunts => hunts.id === huntData?.id)
   
- 
+  useEffect(() => {
+    const filteredHunts = fetchHuntdata?.results?.find(
+      (hunt) => hunt.id === huntData?.id
+    );
+
+    if (filteredHunts) {
+      setFilteredClues(filteredHunts.clues || []);
+    }
+  }, [fetchHuntdata, huntData]);
+
+  // This function will be passed to ClueTable to update clues locally
+  const handleClueDelete = (deletedId) => {
+    setFilteredClues((prev) => prev.filter((clue) => clue.id !== deletedId));
+    // Optional: refetch hunts from server for consistency
+    refetch();
+  };
+
   console.log('ada',huntData)
   return (
     <div className="p-5">
@@ -123,7 +139,10 @@ const ClueManagement = () => {
         <h3 className="text-[25px] font-semibold text-white pt-7 px-6 ">
           All Clues
         </h3>
-        <ClueTable filteredClues={ filteredHunts?.[0].clues} data={data} />
+          <ClueTable
+          filteredClues={filteredClues}
+          onClueDelete={handleClueDelete} // Pass handler to update state on delete
+        />
       </div>
 
       <ClueModal
@@ -131,6 +150,7 @@ const ClueManagement = () => {
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
         huntId={filteredHunts?.[0].id}
+        refetch={refetch}
       />
     </div>
   );

@@ -90,9 +90,9 @@ const CustomModal = ({ open, onCancel, edit,data,refetch }) => {
       <div className="space-y-4 p-2 h-[70vh] overflow-y-scroll">
         {edit ? (
           
-   <EditHunt data={data} handleCreate={handleCreate} refetch={refetch} handleCancel={handleCancel} />
+   <EditHunt onCancel={onCancel} data={data} handleCreate={handleCreate} refetch={refetch} handleCancel={handleCancel} />
         ) : (
-<CreateHunt handleCreate={handleCreate} refetch={refetch} handleCancel={handleCancel} />
+<CreateHunt onCancel={onCancel} handleCreate={handleCreate} refetch={refetch} handleCancel={handleCancel} />
         )}
       </div>
     </Modal>

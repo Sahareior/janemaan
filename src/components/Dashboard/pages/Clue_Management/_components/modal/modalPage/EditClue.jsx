@@ -5,7 +5,7 @@ import { data } from "react-router-dom";
 import { useGetHuntsQuery, useUpdateCluesMutation } from "../../../../../../../redux/slices/apiSlice";
 const { TextArea } = Input;
 
-const EditClue = ({data}) => {
+const EditClue = ({data,onCancel}) => {
   const [isQrcodeOpen, setIsQrcodeOpen] = React.useState(false);
   const [updateClues] = useUpdateCluesMutation()
    const { data: huntData, isLoading,refetch } = useGetHuntsQuery();
@@ -75,6 +75,7 @@ const handleCreate = async () => {
     });
 
     refetch();
+    onCancel()
   } catch (error) {
     console.error("Failed to update clue:", error);
 
@@ -116,10 +117,20 @@ const handleCreate = async () => {
   return (
     <div>
       <div className="h-[65vh] pb-9 overflow-y-auto ">
-        <div className="flex justify-center my-5 items-center gap-14 text-[23px]">
-          <h3 className={isQrcodeOpen ? "" : "text-[#97BECA]"}>Step 1: Edit Clue</h3>
-          <h3 className={isQrcodeOpen ? "text-[#97BECA]" : ""}>Step 2: Edit Qr Code</h3>
-        </div>
+<div className="flex justify-center my-5 items-center gap-14 text-[23px]">
+  <h3
+    className={`${!isQrcodeOpen ? "text-[#97BECA]" : "text-white"} cursor-pointer`}
+    onClick={() => setIsQrcodeOpen(false)}
+  >
+    Step 1: Create Clue
+  </h3>
+  <h3
+    className={`${isQrcodeOpen ? "text-[#97BECA]" : "text-white"} cursor-pointer`}
+    onClick={() => setIsQrcodeOpen(true)}
+  >
+    Step 2: Create Qr Code
+  </h3>
+</div>
 
         {isQrcodeOpen ? (
           <div className="space-y-6 p-5">
@@ -129,30 +140,22 @@ const handleCreate = async () => {
               </p>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
   <div>
-    <label className="text-white text-[16px] block mb-1">Edit Latitude</label>
-    <InputNumber
-      placeholder="Enter Latitude"
-      value={clueData.qr_code.latitude}
-      onChange={(value) => handleQrChange("latitude", value)}
-      type="number"
-      className=" w-full"
-      step={0.000001} // allows decimals
-      min={-90}       // optional: restrict valid latitude
-      max={90}        // optional
-    />
+    <label className="text-white text-[16px] block mb-1">Latitude</label>
+ <Input
+                    placeholder="Enter Latitude"
+                    value={clueData.qr_code.latitude}
+                    onChange={(e) => handleQrChange("latitude", e.target.value)}
+                    className="w-full"
+                  />
   </div>
   <div>
-    <label className="text-white text-[16px] block mb-1">Edit Longitude</label>
-    <InputNumber
-      placeholder="Enter Longitude"
-      value={clueData.qr_code.longitude}
-      onChange={(value) => handleQrChange("longitude", value)}
-      type="number"
-      className=" w-full"
-      step={0.000001} // allows decimals
-      min={-180}      // optional: restrict valid longitude
-      max={180}       // optional
-    />
+    <label className="text-white text-[16px] block mb-1">Longitude</label>
+ <Input
+                    placeholder="Enter Longitude"
+                    value={clueData.qr_code.longitude}
+                    onChange={(e) => handleQrChange("longitude", e.target.value)}
+                    className="w-full"
+                  />
   </div>
 </div>
               <div className="flex items-center gap-4 mt-4">
@@ -277,18 +280,19 @@ const handleCreate = async () => {
               </div>
 
               <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+                             <button
+                  onClick={handleCancel}
+                  className="w-full sm:w-[135px] h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
+                >
+                  Cancel
+                </button>
                 <button
                   onClick={() => setIsQrcodeOpen(true)}
                   className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full sm:w-[135px] h-[46px] rounded-md shadow-md hover:shadow-lg"
                 >
                   Edit Create Clue
                 </button>
-                <button
-                  onClick={handleCancel}
-                  className="w-full sm:w-[135px] h-[46px] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
-                >
-                  Cancel
-                </button>
+   
               </div>
             </div>
           </div>

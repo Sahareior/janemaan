@@ -92,7 +92,7 @@ const columns = [
           approved: "bg-white text-black ",
           pending: "bg-yellow-600/25 text-white border-yellow-500", // lowercase from API
           rejected: "bg-red-600 text-white border-red-500",
-        }[value] || "bg-gray-500/25 border-gray-500";
+        }[value] || "bg-green-500 text-white border-gray-500";
 
       return (
         <Tag

@@ -120,7 +120,9 @@ const columns = [
           {status}
         </Tag>
       );
+      
     },
+     align: "left",
   },
   {
     title: "Scans",
@@ -129,36 +131,40 @@ const columns = [
       <span className="text-[#9E9E9E] font-bold text-[17px]">—</span>
     ), // No scans in your object, placeholder used
   },
-  {
-    title: "Location",
-    key: "location",
-    render: (record) => (
-      <span className="text-[#9E9E9E] flex justify-center items-center gap-3 text-[17px] popreg">
-        <CiLocationOn size={18} />
-        {record.latitude}, {record.longitude}
-      </span>
-    ),
-  },
-  {
-    title: "Created On",
-    dataIndex: "created_at",
-    key: "created_at",
-    render: (date) => (
-      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
-        <MdOutlineCalendarToday /> {new Date(date).toLocaleDateString()}
-      </span>
-    ),
-  },
-  {
-    title: "Expires On",
-    dataIndex: "updated_at", // Not in object, but using updated_at as placeholder
-    key: "updated_at",
-    render: (date) => (
-      <span className="text-gray-400 flex justify-center items-center gap-3 text-[17px] popreg">
-        <MdOutlineCalendarToday /> {new Date(date).toLocaleDateString()}
-      </span>
-    ),
-  },
+{
+  title: "Location",
+  key: "location",
+  render: (record) => (
+    <span className="text-[#9E9E9E] flex items-center gap-2 text-[17px] popreg">
+      <CiLocationOn size={18} />
+      {record.latitude ?? "—"}, {record.longitude ?? "—"}
+    </span>
+  ),
+  align: "left",
+},
+{
+  title: "Created On",
+  dataIndex: "created_at",
+  key: "created_at",
+  render: (date) => (
+    <span className="text-gray-400 flex items-center gap-2 text-[17px] popreg">
+      <MdOutlineCalendarToday /> {date ? new Date(date).toLocaleDateString() : "—"}
+    </span>
+  ),
+  align: "left",
+},
+{
+  title: "Expires On",
+  dataIndex: "updated_at",
+  key: "updated_at",
+  render: (date) => (
+    <span className="text-gray-400 flex items-center gap-2 text-[17px] popreg">
+      <MdOutlineCalendarToday /> {date ? new Date(date).toLocaleDateString() : "—"}
+    </span>
+  ),
+  align: "left",
+},
+
   {
       title: "Actions",
       key: "actions",

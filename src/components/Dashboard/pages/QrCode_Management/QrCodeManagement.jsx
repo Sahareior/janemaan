@@ -51,7 +51,7 @@ const QrCodeManagement = () => {
       </div>
 
       <div className="mt-7">
-        <h3 className="text-[25px] text-white px-5">All Clues</h3>
+        <h3 className="text-[25px] text-white px-5">All Qr Codes</h3>
         <QrTable qrCode={filteredCodes} />
       </div>
 

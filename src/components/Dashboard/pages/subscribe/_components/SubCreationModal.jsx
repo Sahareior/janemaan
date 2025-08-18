@@ -35,9 +35,9 @@ const SubCreationModal = ({ open, onCancel, edit,data }) => {
       {edit === "view" ? (
         <ViewSubs />
       ) : edit === "edit" ? (
-        <EditSubs data={data} />
+        <EditSubs onCancel={onCancel} data={data} />
       ) : (
-        <CreateSubs />
+        <CreateSubs onCancel={onCancel} />
       )}
     </Modal>
   );

@@ -82,7 +82,7 @@ const handleClick = (key) => {
     {
       key: 'dashboard/subscription',
       icon: <MdOutlineSubscriptions size={20} />,
-      label: 'Subscription',
+      label: 'Plans',
     },
     {
       key: 'dashboard/prize',

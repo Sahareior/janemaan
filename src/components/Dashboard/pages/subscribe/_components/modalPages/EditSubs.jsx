@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 
 const { TextArea } = Input;
 
-const EditSubs = ({ data }) => {
+const EditSubs = ({ data,onCancel }) => {
   const [updatePlans] = useUpdatePlansMutation()
  const {data:demo,refetch} =useGetPlanQuery()
   const id = data?.id
@@ -66,6 +66,7 @@ const handleSubmit = async () => {
         color: "#fff",
       });
       refetch();
+      onCancel()
     }
 
     console.log(res);
@@ -166,15 +167,15 @@ const handleSubmit = async () => {
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <button
+          className="w-full h-[46px] border border-[#9E9E9E] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
+        >
+          Cancel
+        </button>
+                <button
           onClick={handleSubmit}
           className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
         >
           Edit Plan
-        </button>
-        <button
-          className="w-full h-[46px] border border-[#9E9E9E] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
-        >
-          Cancel
         </button>
       </div>
     </div>
