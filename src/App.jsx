@@ -12,6 +12,7 @@ import Login from './components/Authentications/Login';
 import Subscription from "./components/Dashboard/pages/subscribe/Subscription";
 import DefaultLandingPage from "./components/DefaultLandingPage/DefaultLandingPage";
 import ProtectedRoute from "./components/Authentications/ProtectedRoute";
+import Vouchers from "./components/Dashboard/pages/Vouchers/Vouchers";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
     <Route path="hunt-management" element={<HuntManagement />} />
     <Route path="clue-management" element={<ClueManagement />} />
     <Route path="qr-management" element={<QrCodeManagement />} />
+    <Route path="voucher" element={<Vouchers />} />
+
     <Route path="subscription" element={<Subscription />} />
     <Route path="prize" element={<PrizeClaim />} />
     <Route path="settings" element={<Settings />} />

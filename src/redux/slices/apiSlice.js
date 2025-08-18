@@ -251,11 +251,47 @@ getHuntProgress: build.query({
     getUsers: build.query({
       query: () => "accounts/users/",
     }),
+
+    getAllVoucher: build.query({
+      query: () => '/vouchers'
+    }),
+
+    createVoucher: build.mutation({
+      query: ({huntId,payload}) =>{
+        console.log(payload,huntId)
+        return{
+          url: `vouchers/${huntId}/create/`,
+          method:"POST",
+          body:payload
+        }
+      }
+    }),
+
+    updateVoucher: build.mutation({
+        query: ({payload,huntId}) =>{
+        console.log(payload,huntId)
+        return{
+          url: `vouchers/${huntId}/update/`,
+          method:"PATCH",
+          body:payload
+        }
+      }
+    }),
+        deleteVoucher: build.mutation({
+      query: (id) => ({
+        url: `/vouchers/${id}/delete/`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
 export const {
   useClaimsUpdateMutation,
+  useDeleteVoucherMutation,
+  useUpdateVoucherMutation,
+  useGetAllVoucherQuery,
+  useCreateVoucherMutation,
   useGetPrgressQuery,
   useGetDashboardStatsQuery,
   useGetPolicyQuery,

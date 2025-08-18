@@ -1,10 +1,13 @@
 import { Button } from "antd";
 import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTicketAlt, FaPuzzlePiece } from "react-icons/fa"
+// import { FaPlus } from "react-icons/fa";
 import ClueTable from "./_components/ClueTable";
 import ClueModal from "./_components/modal/ClueModal";
-import { data, useLocation } from "react-router-dom";
-import { useGetCluesQuery, useGetHuntsQuery } from "../../../../redux/slices/apiSlice";
+import {  useLocation } from "react-router-dom";
+import { useGetAllVoucherQuery, useGetCluesQuery, useGetHuntsQuery } from "../../../../redux/slices/apiSlice";
+import VoucherModal from "../Vouchers/_components/VoucherModal";
+import VoucherTable from "../Vouchers/_components/VoucherTable";
 
 // Helper to chunk array into rows of 4
 const chunkArray = (arr, chunkSize) => {
@@ -17,12 +20,13 @@ const chunkArray = (arr, chunkSize) => {
 
 const ClueManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [voucherOpen,setVoucherOpen] = useState(false)
   const location = useLocation();
   const {data} = useGetCluesQuery()
   const huntData = location.state?.data || {}; // Get hunt data from state
  const { data: fetchHuntdata, isLoading,refetch } = useGetHuntsQuery();
 const [filteredClues, setFilteredClues] = useState([]);
-
+  const { data: vouchers  } = useGetAllVoucherQuery();
   const filteredHunts = fetchHuntdata?.results?.filter(hunts => hunts.id === huntData?.id)
   
   useEffect(() => {
@@ -41,6 +45,10 @@ const [filteredClues, setFilteredClues] = useState([]);
     // Optional: refetch hunts from server for consistency
     refetch();
   };
+
+  const filteredVouchers = vouchers?.filter(data => data.hunt === huntData.id)
+
+  console.log('filtered', filteredVouchers)
 
   console.log('ada',huntData)
   return (
@@ -119,36 +127,88 @@ const [filteredClues, setFilteredClues] = useState([]);
         </div>
 </div>
       </div>
-      <div className="flex gap-5 mt-11">
-        <div className="bg-[#030712] border-[#5D87A3] border text-[17px] popreg w-[198px] h-[50px] text-white flex items-center justify-between px-4">
-          Total clues
-          <span className="bg-[#97BECA] text-[#2C739E] popbold w-7 h-7 rounded-full flex items-center justify-center text-sm">
-            {filteredHunts?.[0].clues.length}
-          </span>
-        </div>
+<div className="flex flex-wrap gap-5 mt-11">
+  {/* Total Clues */}
+  <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] 
+                  border border-[#3b82f6]/40 rounded-xl shadow-lg
+                  text-[17px] popreg w-[220px] h-[60px] 
+                  text-white flex items-center justify-between px-5">
+    <div className="flex items-center gap-2">
+      <FaPuzzlePiece className="text-[#38bdf8]" />
+      <span className="tracking-wide">Total Clues</span>
+    </div>
+    <span className="bg-[#38bdf8] text-black font-bold w-8 h-8 rounded-full 
+                     flex items-center justify-center text-sm shadow-lg">
+      {filteredHunts?.[0].clues.length}
+    </span>
+  </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-[#123D74] text-white flex justify-center items-center gap-3 hover:bg-blue-950 border-none text-[17px] popreg w-[198px] h-[50px]"
-        >
-          <FaPlus size={14} /> Add New Clue
-        </button>
-      </div>
+  {/* Total Vouchers */}
+  <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] 
+                  border border-[#8b5cf6]/40 rounded-xl shadow-lg
+                  text-[17px] popreg w-[220px] h-[60px] 
+                  text-white flex items-center justify-between px-5">
+    <div className="flex items-center gap-4">
+      <FaTicketAlt className="text-[#a78bfa]" />
+      <span className="tracking-wide">Total Vouchers</span>
+    </div>
+    <span className="bg-[#a78bfa] text-black font-bold w-8 h-8 rounded-full 
+                     flex items-center justify-center text-sm shadow-lg">
+      {filteredVouchers?.length}
+    </span>
+  </div>
+
+  {/* Add New Clue */}
+  <button
+    onClick={() => setIsModalOpen(true)}
+    className="bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] 
+               text-white flex justify-center items-center gap-3 
+               rounded-xl shadow-md hover:shadow-blue-500/50 
+               transition-all duration-200 ease-in-out 
+               w-[220px] h-[60px] text-[17px] popreg"
+  >
+    <FaPlus size={16} /> Add New Clue
+  </button>
+
+  {/* Add New Voucher */}
+  <button
+    onClick={() => setVoucherOpen(true)}
+    className="bg-gradient-to-r from-[#9333ea] to-[#6d28d9] 
+               text-white flex justify-center items-center gap-3 
+               rounded-xl shadow-md hover:shadow-purple-500/50 
+               transition-all duration-200 ease-in-out 
+               w-[220px] h-[60px] text-[17px] popreg"
+  >
+    <FaPlus size={16} /> Add New Voucher
+  </button>
+</div>
 
       <div className="mt-7">
         <h3 className="text-[25px] font-semibold text-white pt-7 px-6 ">
-          All Clues
+          All Clues for This Hunt
         </h3>
           <ClueTable
           filteredClues={filteredClues}
           onClueDelete={handleClueDelete} // Pass handler to update state on delete
         />
       </div>
+     <div className="mt-7">
+        <h3 className="text-[25px] text-white px-5">All Vouchers for This Hunt</h3>
+        <VoucherTable vouchers={filteredVouchers} />
+      </div>
 
       <ClueModal
         open={isModalOpen}
         onOk={() => setIsModalOpen(false)}
         onCancel={() => setIsModalOpen(false)}
+        huntId={filteredHunts?.[0].id}
+        refetch={refetch}
+      />
+
+      <VoucherModal 
+      open={voucherOpen}
+        onOk={() => setVoucherOpen(false)}
+        onCancel={() => setVoucherOpen(false)}
         huntId={filteredHunts?.[0].id}
         refetch={refetch}
       />

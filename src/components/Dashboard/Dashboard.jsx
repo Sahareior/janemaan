@@ -13,8 +13,9 @@ import {
   MdLogout,
   MdOutlineSubscriptions,
 } from 'react-icons/md';
-import { GiTreasureMap } from 'react-icons/gi';
+import { GiTicket, GiTreasureMap } from 'react-icons/gi';
 import { useNavigate, Outlet,  useLocation, Link } from 'react-router-dom';
+import { useGetAllVoucherQuery } from '../../redux/slices/apiSlice';
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -23,7 +24,9 @@ const Dashboard = () => {
 
  const navigate = useNavigate();
   const location = useLocation();
-  
+  const {data} = useGetAllVoucherQuery()
+
+  console.log(data,'vouchers')
   // Redirect to /dashboard/overview when base path is accessed
   useEffect(() => {
     if (location.pathname === '/dashboard' || location.pathname === '/dashboard/') {
@@ -83,6 +86,11 @@ const handleClick = (key) => {
       key: 'dashboard/subscription',
       icon: <MdOutlineSubscriptions size={20} />,
       label: 'Plans',
+    },
+    {
+      key: 'dashboard/voucher',
+      icon: <GiTicket size={20} />,
+      label: 'Vouchers',
     },
     {
       key: 'dashboard/prize',

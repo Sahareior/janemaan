@@ -157,7 +157,7 @@ const ClueTable = ({ filteredClues: initialClues }) => {
       <Table
         columns={columns}
         dataSource={filteredClues}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 8 }}
         bordered={false}
         rowKey="id"
         className="custom-ant-table bg-[#030712]"
