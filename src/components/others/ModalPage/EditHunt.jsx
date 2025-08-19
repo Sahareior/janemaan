@@ -307,7 +307,7 @@ const handleUpdate = async () => {
           onChange={handleCheckboxChange}
           className="custom-dark-input w-4 h-4"
         />
-        <label className="text-white text-[14px] block">Premium Only?</label>
+        <label className="text-white text-[14px] block">Subscriber Only?</label>
       </div>
 
       {/* Duration */}

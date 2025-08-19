@@ -203,7 +203,7 @@ const parseDuration = (input) => {
   };
 
   return (
-    <div>
+    <div className="">
       <div className="space-y-6">
         {/* Title */}
         <div>
@@ -307,7 +307,7 @@ const parseDuration = (input) => {
             onChange={(e) => setIsPremium(e.target.checked)}
             className="custom-dark-input w-4 h-4"
           />
-          <label className="text-white text-[16px]">Premium Only?</label>
+          <label className="text-white text-[16px]">Subscriber Only?</label>
         </div>
 
         {/* Duration */}

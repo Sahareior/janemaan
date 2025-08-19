@@ -92,7 +92,7 @@ const handleSubmit = async (e) => {
             style={{
               backgroundColor: "#030712",
               color: "white",
-              height: "60px",
+              height: "50px",
               paddingLeft: "16px",
               border: "1px solid #1f2937",
               borderRadius: "8px",
@@ -128,7 +128,7 @@ const handleSubmit = async (e) => {
               width: "100%",
               backgroundColor: "#030712",
               color: "white",
-              height: "60px",
+              height: "50px",
               border: "1px solid #1f2937",
               borderRadius: "8px",
               paddingLeft: "16px",

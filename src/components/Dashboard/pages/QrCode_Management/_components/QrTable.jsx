@@ -12,26 +12,7 @@ import Swal from "sweetalert2";
 import { useDeleteQrCodeMutation, useGetQrCodesQuery } from "../../../../../redux/slices/apiSlice";
 
 
-const data = [
-  {
-    key: 1,
-    qrcode: "QRCODE001",
-    status: "scanned",
-    scans: 480,
-    location: "Cape Town",
-    created: "2023-10-01",
-    expires: "2024-10-01",
-  },
-  {
-    key: 2,
-    qrcode: "QRCODE002",
-    status: "expired",
-    scans: 342,
-    location: "Cape Town",
-    created: "2023-11-15",
-    expires: "2024-11-15",
-  },
-];
+
 
 const QrTable = ({qrCode}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

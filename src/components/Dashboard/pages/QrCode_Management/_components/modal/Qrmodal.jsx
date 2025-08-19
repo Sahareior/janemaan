@@ -4,16 +4,18 @@ import 'leaflet/dist/leaflet.css';
 import './modal.css'; // your dark mode styles
 
 const Qrmodal = ({ open, onCancel, data }) => {
-  const handleDownload = () => {
-    if (data?.qr_image) {
-      const link = document.createElement('a');
-      link.href = data.qr_image;
-      link.download = `${data.code || 'QR_Code'}.png`; // File name
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
+const handleDownload = () => {
+  if (data?.qr_image) {
+    const link = document.createElement("a");
+    link.href = data.qr_image; // already base64
+    link.download = `${data.code || "QR_Code"}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
+
+
 
   return (
     <Modal

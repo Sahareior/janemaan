@@ -21,7 +21,7 @@ const ClueModal = ({ open, onCancel, edit,huntId,data,position }) => {
       onCancel={onCancel}
       footer={null}
       className="custom-dark-modal p-1 sm:p-8"
-      width="45%"
+      width="50%"
       style={{ maxWidth: "960px", top: 20 }}
       title={
         <div>

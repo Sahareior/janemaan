@@ -61,7 +61,7 @@ const CustomModal = ({ open, onCancel, edit,data,refetch }) => {
       onCancel={onCancel}
       footer={null}
       className="custom-dark-modal"
-      width="45%"
+      width="50%"
       style={{ top: 20 }}
       title={
         <div>

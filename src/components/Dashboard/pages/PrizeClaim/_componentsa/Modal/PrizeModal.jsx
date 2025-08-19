@@ -22,7 +22,7 @@ const PrizeModal = ({ open, onCancel,location,id,selectedClaim }) => {
   title={
     <div className="space-y-2 mt-4 pb-4">
       <h2 className="text-white text-base sm:text-lg md:text-xl popmed font-bold">
-        Claim Review - CRM-001
+        Claim Review
       </h2>
       <p className="text-gray-400 text-sm sm:text-base popreg">
         Review claim details and verification photos
