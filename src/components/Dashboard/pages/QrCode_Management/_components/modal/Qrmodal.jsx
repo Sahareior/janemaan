@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 import 'leaflet/dist/leaflet.css';
+import { BsSuitDiamondFill } from "react-icons/bs";
 import './modal.css'; // your dark mode styles
 
 const Qrmodal = ({ open, onCancel, data }) => {

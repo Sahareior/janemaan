@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 const { TextArea } = Input;
 
-const CreateSubs = ({onCancel}) => {
+const CreateSubs = ({onCancel,handleCancel}) => {
   const [createPlans] = useCreatePlansMutation();
   const {data,refetch} =useGetPlanQuery()
   const [formData, setFormData] = useState({
@@ -164,14 +164,17 @@ const handleSubmit = async () => {
           className="w-full h-[46px] border border-[#9E9E9E] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
           type="button"
           onClick={() =>
-            setFormData({
+           {
+             setFormData({
               name: "",
               description: "",
               price: "",
               currency: "",
               interval: "",
               discount_percent: "",
-            })
+            }),
+          handleCancel()
+           }
           }
         >
           Cancel

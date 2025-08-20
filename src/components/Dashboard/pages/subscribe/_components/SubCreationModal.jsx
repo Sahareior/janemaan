@@ -3,8 +3,34 @@ import { Modal } from "antd";
 import EditSubs from "./modalPages/EditSubs";
 import CreateSubs from "./modalPages/CreateSubs";
 import ViewSubs from "./modalPages/ViewSubs";
+import Swal from "sweetalert2";
 
 const SubCreationModal = ({ open, onCancel, edit,data }) => {
+
+    const handleCancel = () => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it!",
+        background: "#1e1e2f",
+        color: "#fff",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          onCancel()
+          Swal.fire({
+            title: "Cancelled!",
+            text: "Done.",
+            icon: "success",
+            background: "#1e1e2f",
+            color: "#fff",
+          });
+        }
+      });
+    };
 
   console.log("dada",data)
   return (
@@ -35,9 +61,9 @@ const SubCreationModal = ({ open, onCancel, edit,data }) => {
       {edit === "view" ? (
         <ViewSubs />
       ) : edit === "edit" ? (
-        <EditSubs onCancel={onCancel} data={data} />
+        <EditSubs onCancel={onCancel} handleCancel={handleCancel} data={data} />
       ) : (
-        <CreateSubs onCancel={onCancel} />
+        <CreateSubs handleCancel={handleCancel} onCancel={onCancel} />
       )}
     </Modal>
   );

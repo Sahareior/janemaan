@@ -1,7 +1,7 @@
 import React from "react";
 import Swal from "sweetalert2";
 import { Input } from "antd";
-import { useGetQrCodesQuery, useUpdateQrCodeMutation } from "../../../../../redux/slices/apiSlice";
+import { useGetHuntsQuery, useGetQrCodesQuery, useUpdateQrCodeMutation } from "../../../../../redux/slices/apiSlice";
 
 const EditQrPage = ({ data }) => {
   const [qrData, setQrData] = React.useState({
@@ -12,7 +12,8 @@ const EditQrPage = ({ data }) => {
 
   const id = data?.id;
   const [updateQrCode] = useUpdateQrCodeMutation();
-  const { refetch } = useGetQrCodesQuery();
+  const { data: huntData, refetch } = useGetHuntsQuery();
+ 
 
   React.useEffect(() => {
     if (data) {
@@ -24,8 +25,8 @@ const EditQrPage = ({ data }) => {
     }
   }, [data]);
 
+  // For numbers only
   const handleQrChange = (field, value) => {
-    // Only allow digits, dot, minus
     if (/^-?\d*\.?\d*$/.test(value) || value === "") {
       setQrData((prev) => ({
         ...prev,
@@ -34,22 +35,31 @@ const EditQrPage = ({ data }) => {
     }
   };
 
+  // For checkbox only
+  const handleCheckboxChange = (field, checked) => {
+    setQrData((prev) => ({
+      ...prev,
+      [field]: checked,
+    }));
+  };
+
   const handleSave = async () => {
     try {
-      // Convert string inputs to floats
       const payload = {
         ...qrData,
         latitude: parseFloat(qrData.latitude),
         longitude: parseFloat(qrData.longitude),
       };
 
-      const res = await updateQrCode({ id, qrData: payload }).unwrap();
+      await updateQrCode({ id, qrData: payload }).unwrap();
+
       Swal.fire({
         title: "QR Code Updated!",
         icon: "success",
         background: "#1e1e2f",
         color: "#fff",
       });
+
       refetch();
     } catch (error) {
       Swal.fire({
@@ -104,7 +114,7 @@ const EditQrPage = ({ data }) => {
         <Input
           type="checkbox"
           checked={qrData.is_active}
-          onChange={(e) => handleQrChange("is_active", e.target.checked)}
+          onChange={(e) => handleCheckboxChange("is_active", e.target.checked)}
           className="custom-dark-input w-4 h-4"
         />
         <label className="text-[#97BECA] text-[16px] block mb-1">

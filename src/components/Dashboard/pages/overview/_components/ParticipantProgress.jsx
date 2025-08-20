@@ -9,14 +9,17 @@ const ParticipantProgress = ({ participants = [], hunts }) => {
       ? Math.max(...hunts.results.map((item) => item.hunters || 0))
       : 0;
 
+      console.log(participants,'this is participatents')
   const [openIndex, setOpenIndex] = useState(null);
   const currentHuntId = openIndex !== null ? hunts.results[openIndex]?.id : undefined;
-
-  const { data, isLoading, error } = useGetHuntProgressQuery(currentHuntId ?? skipToken);
+  console.log(currentHuntId,'curee')
+  const { data, isLoading, error } = useGetHuntProgressQuery('3606dd93-1c21-4735-9e95-bdf9c7d90f80');
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  console.log('hunt progress', data)
 
   // Utility for number formatting (optional)
   const formatNumber = (num) => num.toLocaleString();

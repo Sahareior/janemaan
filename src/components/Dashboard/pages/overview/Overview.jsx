@@ -116,7 +116,7 @@ const Overview = () => {
         <StatCard
           color={true}
           title="Total Revenue"
-          value={`${overviewData?.total_revenue ?? 0} R`}
+          value={`R ${overviewData?.total_revenue ?? 0} `}
         />
         <StatCard
           color={true}

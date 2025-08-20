@@ -23,6 +23,7 @@ const EditClue = ({data,onCancel}) => {
     is_final_clue: false,
   });
 
+  console.log(data,'this is data')
   // Initialize clueData state from incoming data prop on mount or when data changes
 React.useEffect(() => {
   if (data) {
