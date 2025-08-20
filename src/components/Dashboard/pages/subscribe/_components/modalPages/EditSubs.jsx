@@ -42,8 +42,8 @@ const EditSubs = ({ data,onCancel }) => {
 const handleSubmit = async () => {
   const dataToLog = {
     ...formData,
-    price: parseFloat(formData.price) || 0,
-    discount_percent: parseFloat(formData.discount_percent) || 0
+    price: parseFloat(formData.price, 10) || 0,
+    discount_percent: parseFloat(formData.discount_percent, 10) || 0,
   };
 
   try {
@@ -125,10 +125,12 @@ const handleSubmit = async () => {
             value={formData.currency}
             onChange={(e) => handleChange("currency", e.target.value)}
           >
-            <option value="" disabled>Select Currency</option>
-            <option value="usd">USD</option>
-            <option value="eur">EUR</option>
-            <option value="gbp">GBP</option>
+            <option value="" disabled>
+                Select Currency
+              </option>
+              <option value="zar">ZAR</option>
+              <option value="usd">USD</option>
+              <option value="eur">EUR</option>
           </select>
         </div>
       </div>

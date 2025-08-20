@@ -26,18 +26,17 @@ const CreateSubs = ({onCancel}) => {
   };
 
 const handleSubmit = async () => {
-  // Convert price and discount_percent to numbers before sending
+  // Convert price and discount_percent to integers
   const payload = {
     ...formData,
-    price: Number(formData.price) || 0,
-    discount_percent: Number(formData.discount_percent) || 0,
+    price: parseFloat(formData.price, 10) || 0,
+    discount_percent: parseFloat(formData.discount_percent, 10) || 0,
   };
 
   console.log(payload);
   try {
     const res = await createPlans(payload).unwrap();
     console.log(res, "res check");
-
 
     Swal.fire({
       title: "Success",
@@ -48,7 +47,7 @@ const handleSubmit = async () => {
     });
 
     refetch();
-    onCancel()
+    onCancel();
   } catch (error) {
     console.error("Failed to create plan:", error);
 
@@ -61,6 +60,7 @@ const handleSubmit = async () => {
     });
   }
 };
+
 
 
   return (

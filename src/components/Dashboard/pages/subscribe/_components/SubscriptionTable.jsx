@@ -16,6 +16,7 @@ const SubscriptionTable = ({plans}) => {
   const [deletePlan] = useDeletePlanMutation()
   const {data,refetch} =useGetPlanQuery()
 
+  console.log('plans',plans)
 const handleDelete = async (id) => {
   const result = await Swal.fire({
     title: "Are you sure?",
