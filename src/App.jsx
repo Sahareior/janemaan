@@ -13,6 +13,7 @@ import Subscription from "./components/Dashboard/pages/subscribe/Subscription";
 import DefaultLandingPage from "./components/DefaultLandingPage/DefaultLandingPage";
 import ProtectedRoute from "./components/Authentications/ProtectedRoute";
 import Vouchers from "./components/Dashboard/pages/Vouchers/Vouchers";
+import Notification from "./components/Dashboard/pages/Settings/_components/Notification";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
     <Route path="settings" element={<Settings />} />
     <Route path="settings/privacy" element={<Privacy />} />
     <Route path="settings/terms" element={<Terms />} />
+    <Route path="settings/notification" element={<Notification />} />
   </Route>
 
   <Route path="/login" element={<Login />} />

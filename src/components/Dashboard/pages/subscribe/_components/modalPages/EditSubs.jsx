@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from "antd";
 import { RiArrowDropDownLine } from 'react-icons/ri';
-import { useGetClaimsQuery, useGetPlanQuery, useUpdatePlansMutation } from '../../../../../../redux/slices/apiSlice';
+import { useGetPlanQuery, useUpdatePlansMutation } from '../../../../../../redux/slices/apiSlice';
 import Swal from 'sweetalert2';
 
 const { TextArea } = Input;
 
-const EditSubs = ({ data,onCancel,handleCancel }) => {
-  const [updatePlans] = useUpdatePlansMutation()
- const {data:demo,refetch} =useGetPlanQuery()
-  const id = data?.id
+const EditSubs = ({ data, onCancel, handleCancel }) => {
+  const [updatePlans] = useUpdatePlansMutation();
+  const { data: demo, refetch } = useGetPlanQuery();
+  const id = data?.id;
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -24,10 +25,10 @@ const EditSubs = ({ data,onCancel,handleCancel }) => {
       setFormData({
         name: data.name || "",
         description: data.description || "",
-        price: data.price !== undefined ? data.price.toString() : "",
+        price: data.price !== undefined ? (data.price / 100).toString() : "",
         currency: data.currency || "",
         interval: data.interval || "",
-        discount_percent: data.discount_percent !== undefined ? data.discount_percent.toString() : ""
+        discount_percent: data.discount_percent !== undefined ? (data.discount_percent / 100).toString() : ""
       });
     }
   }, [data]);
@@ -39,52 +40,53 @@ const EditSubs = ({ data,onCancel,handleCancel }) => {
     }));
   };
 
-const handleSubmit = async () => {
-  const dataToLog = {
-    ...formData,
-    // convert dollar string to float, then multiply by 100 → integer cents
-    price: formData.price
-      ? Math.round(parseFloat(formData.price) * 100)
-      : null,
-    discount_percent: formData.discount_percent
-      ? Math.round(parseFloat(formData.discount_percent)*100)
-      : null,
-  };
+  const handleSubmit = async () => {
+    const dataToLog = {
+      ...formData,
+      price: formData.price ? Math.round(parseFloat(formData.price) * 100) : null,
+      discount_percent: formData.discount_percent ? Math.round(parseFloat(formData.discount_percent) * 100) : null,
+    };
 
-  try {
-    const res = await updatePlans({ id, dataToLog });
+    try {
+      const res = await updatePlans({ id, dataToLog });
 
-    if (res?.error) {
+      if (res?.error) {
+        Swal.fire({
+          title: "Error",
+          text: res.error?.data?.message || "Something went wrong.",
+          icon: "error",
+          background: "#1e1e2f",
+          color: "#fff",
+        });
+      } else {
+        Swal.fire({
+          title: "Success",
+          text: "Plan updated successfully!",
+          icon: "success",
+          background: "#1e1e2f",
+          color: "#fff",
+        });
+        refetch();
+        onCancel();
+          setFormData({
+              name: "",
+              description: "",
+              price: "",
+              currency: "",
+              interval: "",
+              discount_percent: "",
+            })
+      }
+    } catch (err) {
       Swal.fire({
         title: "Error",
-        text: res.error?.data?.message || "Something went wrong.",
+        text: err.message || "Unexpected error occurred.",
         icon: "error",
         background: "#1e1e2f",
         color: "#fff",
       });
-    } else {
-      Swal.fire({
-        title: "Success",
-        text: "Plan updated successfully!",
-        icon: "success",
-        background: "#1e1e2f",
-        color: "#fff",
-      });
-      refetch();
-      onCancel();
     }
-  } catch (err) {
-    Swal.fire({
-      title: "Error",
-      text: err.message || "Unexpected error occurred.",
-      icon: "error",
-      background: "#1e1e2f",
-      color: "#fff",
-    });
-  }
-};
-
-
+  };
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 pb-12 mt-4 p-2 rounded-xl text-white">
@@ -118,7 +120,7 @@ const handleSubmit = async () => {
           <Input
             placeholder="0.00"
             className="custom-dark-input"
-            value={(formData.price / 100).toFixed(2)}
+            value={formData.price}
             onChange={(e) => handleChange("price", e.target.value)}
           />
         </div>
@@ -129,12 +131,10 @@ const handleSubmit = async () => {
             value={formData.currency}
             onChange={(e) => handleChange("currency", e.target.value)}
           >
-            <option value="" disabled>
-                Select Currency
-              </option>
-              <option value="zar">ZAR</option>
-              <option value="usd">USD</option>
-              <option value="eur">EUR</option>
+            <option value="" disabled>Select Currency</option>
+            <option value="zar">ZAR</option>
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
           </select>
         </div>
       </div>
@@ -164,7 +164,7 @@ const handleSubmit = async () => {
           <Input
             placeholder="0%"
             className="custom-dark-input"
-           value={(formData.discount_percent / 100).toFixed(2)}
+            value={formData.discount_percent}
             onChange={(e) => handleChange("discount_percent", e.target.value)}
           />
         </div>
@@ -173,12 +173,12 @@ const handleSubmit = async () => {
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <button
-        onClick={handleCancel}
+          onClick={handleCancel}
           className="w-full h-[46px] border border-[#9E9E9E] bg-black text-white hover:bg-gray-800 transition-all duration-300 rounded-md shadow-md hover:shadow-lg"
         >
           Cancel
         </button>
-                <button
+        <button
           onClick={handleSubmit}
           className="bg-[#2C739E] hover:bg-[#1f5471] transition-all duration-300 text-white w-full h-[46px] rounded-md shadow-md hover:shadow-lg"
         >

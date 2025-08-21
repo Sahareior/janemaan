@@ -148,7 +148,7 @@ const QrTable = () => {
       dataIndex: "order",
       key: "order",
       render: (order) => (
-        <span className="text-indigo-300 text-[15px]">{order}</span>
+        <span className="text-indigo-300 text-[16px]">{order}</span>
       ),
     },
     {
@@ -156,7 +156,7 @@ const QrTable = () => {
       dataIndex: "name",
       key: "name",
       render: (name) => (
-        <span className="text-indigo-300 text-[15px]">{name}</span>
+        <span className="text-indigo-300 text-[16px]">{name}</span>
       ),
     },
     {
@@ -181,10 +181,19 @@ const QrTable = () => {
       ),
     },
     {
+      title: "Qr Scans",
+      key: "scan_count",
+      render: (record) => (
+        <span className="text-indigo-300 text-[16px] flex items-center gap-2">
+      {record.qr_code?.scan_count}
+        </span>
+      ),
+    },
+    {
       title: "Location",
       key: "location",
       render: (record) => (
-        <span className="text-indigo-300 flex items-center gap-2">
+        <span className="text-indigo-300 text-[16px] flex items-center gap-2">
           <CiLocationOn /> {record.qr_code?.latitude}, {record.qr_code?.longitude}
         </span>
       ),

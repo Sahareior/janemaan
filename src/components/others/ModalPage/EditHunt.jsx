@@ -69,6 +69,7 @@ const EditHunt = ({ handleCancel, handleCreate,onCancel, data }) => {
         duration: data.duration || "",
         status: data.status || "",
         difficulty: data.difficulty_level || "",
+        label: data.label || " "
       });
 
       if (data.image) {
@@ -87,6 +88,12 @@ const EditHunt = ({ handleCancel, handleCreate,onCancel, data }) => {
 
   const handleInputChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleLabelChange =(name,value) =>{
+    setFormData({
+      ...formData, [name]: value
+    })
+  }
 
   const handleSelectChange = (name, value) =>
     setFormData({ ...formData, [name]: value });
@@ -150,11 +157,12 @@ const handleUpdate = async () => {
       difficulty_level: formData.difficulty,
       duration: formData.duration,
       city: formData.city,
-      label: "none",
+      label: formData.label,
       status: formData.status,
       start_date: startDateTime || "",
       end_date: endDateTime || "",
       is_premium_only: formData.isPremium,
+
     }).forEach(([key, value]) => formDataObj.append(key, value));
 
     if (fileList.length > 0 && fileList[0].originFileObj) {
@@ -323,35 +331,62 @@ const handleUpdate = async () => {
       </div>
 
       {/* Status & Difficulty */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="relative w-full">
-          <select
-            value={formData.status}
-            onChange={(e) => handleSelectChange("status", e.target.value)}
-            className="w-full custom-dark-input text-white border-none focus:outline-none appearance-none pr-10"
-          >
-            <option value="" disabled>Select Status</option>
-            <option value="draft">Draft</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-          </select>
-          <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none" />
-        </div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  {/* Status */}
+  <div>
+    <label className="text-white text-[16px] block mb-2">Status</label>
+    <div className="relative w-full">
+      <select
+        value={formData.status}
+        onChange={(e) => handleSelectChange("status", e.target.value)}
+        className="w-full custom-dark-input text-white border-none focus:outline-none appearance-none pr-10"
+      >
+        <option value="" disabled>Select Status</option>
+        <option value="draft">Draft</option>
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
+      </select>
+      <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+    </div>
+  </div>
 
-        <div className="relative w-full">
-          <select
-            value={formData.difficulty}
-            onChange={(e) => handleSelectChange("difficulty", e.target.value)}
-            className="w-full custom-dark-input text-white border-none focus:outline-none appearance-none pr-10"
-          >
-            <option value="" disabled>Select Difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-          <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none" />
-        </div>
-      </div>
+  {/* Level */}
+  <div>
+    <label className="text-white text-[16px] block mb-2">Level</label>
+    <div className="relative w-full">
+      <select
+        value={formData.label}
+        onChange={(e) => handleLabelChange("label", e.target.value)}
+        className="w-full custom-dark-input text-white border-none pr-10"
+      >
+        <option value="" disabled>Select Level</option>
+        <option value="none">None</option>
+        <option value="featured">Featured</option>
+        <option value="new">New</option>
+        <option value="popular">Popular</option>
+      </select>
+    </div>
+  </div>
+
+  {/* Difficulty */}
+  <div>
+    <label className="text-white text-[16px] block mb-2">Difficulty</label>
+    <div className="relative w-full">
+      <select
+        value={formData.difficulty}
+        onChange={(e) => handleSelectChange("difficulty", e.target.value)}
+        className="w-full custom-dark-input text-white border-none focus:outline-none appearance-none pr-10"
+      >
+        <option value="" disabled>Select Difficulty</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+    </div>
+  </div>
+</div>
+
 
       {/* Image Upload */}
       <div>

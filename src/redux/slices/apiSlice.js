@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://chasethecashsa.com/api/v1/",
+        baseUrl: "https://chasethecashsa.com/api/v1/",
     // http://10.10.13.19:8000/
     prepareHeaders: (headers) => {
       
@@ -87,6 +87,13 @@ updateHunt: build.mutation({
 getHuntProgress: build.query({
   query: (id) => `/hunt-progress/${id}/`
 }),
+
+getHProgress: build.query({
+  query: (id) => `/hunt-progress/${id}/`
+}),
+// huntProgressByID: build.m({
+//   query: (id) => `/hunt-progress/${id}/`
+// }),
     // claims
 
     getClaims: build.query({
@@ -283,11 +290,33 @@ getHuntProgress: build.query({
         method: "DELETE",
       }),
     }),
+
+    notificationSend: build.mutation({
+      query: (data) => {
+        console.log(data,'apislice data')
+        return{
+          url:'notifications/send/',
+          method: 'POST',
+          body:data
+        }
+      }
+    }),
+
+    changePassword: build.mutation({
+      query: (data)=>({
+        url: 'accounts/change-password/',
+        method: "POST",
+        body: data
+      })
+    })
   }),
 });
 
 export const {
   useClaimsUpdateMutation,
+  useGetHProgressQuery,
+  useNotificationSendMutation,
+  useChangePasswordMutation,
   useDeleteVoucherMutation,
   useUpdateVoucherMutation,
   useGetAllVoucherQuery,

@@ -44,6 +44,7 @@ const CustomModal = ({ open, onCancel, edit,data,refetch }) => {
       color: "#fff",
     }).then((result) => {
       if (result.isConfirmed) {
+        onCancel()
         Swal.fire({
           title: "Cancelled!",
           text: "Done.",

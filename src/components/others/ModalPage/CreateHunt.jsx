@@ -42,6 +42,7 @@ const CreateHunt = ({ handleCancel, handleCreate, refetch,onCancel }) => {
   const [endDate, setEndDate] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
+  const [level, setLevel] = useState("none"); 
   const [duration, setDuration] = useState("");
   const [status, setStatus] = useState("");
   const [difficulty, setDifficulty] = useState("");
@@ -183,13 +184,13 @@ const parseDuration = (input) => {
     formData.append("duration", parseDuration(duration));
     formData.append("status", status);
     formData.append("difficulty_level", difficulty);
-    formData.append("label", "none");
+    formData.append("label", level);
 
     const imgFile = fileList[0]?.originFileObj;
     if (imgFile) {
       formData.append("image", imgFile, imgFile.name);
     }
-
+console.log(formData)
     try {
       const res = await createHunts(formData).unwrap();
       console.log("Hunt created:", res);
@@ -339,7 +340,7 @@ const parseDuration = (input) => {
         </div>
 
         {/* Status & Difficulty */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="text-white text-[16px] block mb-2">Status</label>
             <div className="relative w-full">
@@ -359,6 +360,25 @@ const parseDuration = (input) => {
               {/* <RiArrowDropDownLine className="text-white text-3xl absolute right-2 top-1/2 transform -translate-y-1/2" /> */}
             </div>
           </div>
+        
+<div>
+  <label className="text-white text-[16px] block mb-2">Level</label>
+  <div className="relative w-full">
+    <select
+      value={level}
+      onChange={(e) => setLevel(e.target.value)}
+      className="w-full custom-dark-input text-white border-none pr-10"
+    >
+      <option value="" disabled>
+        Select Level
+      </option>
+      <option value="none">None</option>
+      <option value="featured">Featured</option>
+      <option value="new">New</option>
+      <option value="popular">Popular</option>
+    </select>
+  </div>
+</div>
           <div>
             <label className="text-white text-[16px] block mb-2">
               Difficulty

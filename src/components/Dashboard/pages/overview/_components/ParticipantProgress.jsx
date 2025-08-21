@@ -1,31 +1,32 @@
 import React, { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { useGetHuntProgressQuery } from "../../../../../redux/slices/apiSlice";
-import { skipToken } from "@reduxjs/toolkit/query/react";
 
-const ParticipantProgress = ({ participants = [], hunts }) => {
+const ParticipantProgress = ({ hunts }) => {
   const maxValue =
     hunts?.results?.length > 0
       ? Math.max(...hunts.results.map((item) => item.hunters || 0))
       : 0;
 
-      console.log(participants,'this is participatents')
   const [openIndex, setOpenIndex] = useState(null);
-  const currentHuntId = openIndex !== null ? hunts.results[openIndex]?.id : undefined;
-  console.log(currentHuntId,'curee')
-  const { data, isLoading, error } = useGetHuntProgressQuery('3606dd93-1c21-4735-9e95-bdf9c7d90f80');
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  console.log('hunt progress', data)
-
-  // Utility for number formatting (optional)
   const formatNumber = (num) => num.toLocaleString();
 
+  // 🌌 Dark futuristic gradient palette
+  const colors = [
+    "from-[#0f2027] to-[#2c5364]", // deep teal → steel blue
+    "from-[#232526] to-[#414345]", // dark graphite → slate gray
+    "from-[#1e3c72] to-[#2a5298]", // deep navy → blue steel
+    "from-[#42275a] to-[#734b6d]", // plum → muted violet
+    "from-[#16222a] to-[#3a6073]", // dark cyan → steel teal
+    "from-[#141e30] to-[#243b55]", // midnight blue gradient
+  ];
+
   return (
-    <div className="bg-[#101625] text-white rounded-xl p-6 w-1/2 shadow-lg">
+    <div className="bg-[#0b0f1a] text-white rounded-xl p-6 w-1/2 shadow-lg">
       <h3 className="text-lg popreg font-semibold mb-4">Participant Progress</h3>
 
       <div className="h-80 mt-1 overflow-y-auto">
@@ -36,20 +37,22 @@ const ParticipantProgress = ({ participants = [], hunts }) => {
             const progressPercent =
               maxValue > 0 ? ((item.hunters || 0) / maxValue) * 100 : 0;
 
+            const colorClass = colors[index % colors.length];
+
             return (
               <div key={item.id ?? index} className="mb-4 last:mb-0 rounded-md">
                 <button
                   onClick={() => toggleAccordion(index)}
                   aria-expanded={openIndex === index}
                   aria-controls={`hunt-panel-${index}`}
-                  className="flex items-center justify-between w-full cursor-pointer bg-gray-700  rounded-md px-2 py-1 transition-colors"
+                  className={`flex items-center justify-between w-full cursor-pointer rounded-md px-2 py-1
+                  transition-transform transform hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(0,180,255,0.25)]
+                  bg-gradient-to-r ${colorClass}`}
                 >
                   <div className="flex items-center gap-3 w-full">
-                    {/* Background bar container */}
-                    <div className="relative flex-grow h-[47px]  rounded overflow-hidden">
-                      {/* Animated progress fill */}
+                    <div className="relative flex-grow h-[47px] rounded overflow-hidden bg-black/30">
                       <div
-                        className="bg-[#2E4A5A] h-full rounded transition-all duration-500 ease-in-out"
+                        className="h-full rounded transition-all duration-500 ease-in-out bg-gradient-to-r from-[#38bdf8]/30 to-[#9333ea]/30"
                         style={{ width: `${progressPercent}%` }}
                         title={`${formatNumber(item.hunters || 0)} hunters`}
                       />
@@ -57,16 +60,13 @@ const ParticipantProgress = ({ participants = [], hunts }) => {
                         {item.title}
                       </span>
                     </div>
-
-                    {/* Hunters count */}
                     <span className="min-w-[32px] text-right font-semibold select-none">
                       {formatNumber(item.hunters || 0)}
                     </span>
                   </div>
 
-                  {/* Dropdown Icon */}
                   <div
-                    className="text-xl text-gray-400 select-none ml-3"
+                    className="text-xl text-gray-200 drop-shadow-md select-none ml-3"
                     aria-hidden="true"
                   >
                     {openIndex === index ? <FiChevronUp /> : <FiChevronDown />}
@@ -79,44 +79,25 @@ const ParticipantProgress = ({ participants = [], hunts }) => {
                     id={`hunt-panel-${index}`}
                     role="region"
                     aria-labelledby={`hunt-header-${index}`}
-                    className="p-4 text-gray-300 rounded-b mt-2 bg-gradient-to-br from-[#1a1f3a] to-[#16212e] border border-gray-700"
+                    className="p-4 text-gray-300 rounded-b mt-2 
+                    bg-gradient-to-br from-[#0f172a] to-[#1e293b] border border-gray-700"
                   >
-                    {isLoading && <p>Loading progress data...</p>}
-                    {error && <p className="text-red-500">Error loading data</p>}
-                    {data ? (
-                      <>
-                        {/* Finished Hunt Badge */}
-                        {data.finished_hunt ? (
-                          <span className="inline-block mb-2 px-3 py-1 bg-green-600 text-green-100 rounded-full text-xs font-semibold">
-                            Finished Hunt
-                          </span>
-                        ) : null}
-
-  <div className="space-y-2">
-  {data?.clue_progress?.length > 0 ? (
-    data.clue_progress.map((clueObj, idx) => {
-      const clueName = Object.keys(clueObj)[0];
-      const clueValue = clueObj[clueName];
-      return (
-        <div
-          key={idx}
-          className="flex justify-between gap-8 border-gray-600 py-1"
-        >
-          <p className="font-medium">{clueName}:</p>
-          <p className="font-mono text-right text-[#38bdf8]">
-            {clueValue}%
-          </p>
-        </div>
-      );
-    })
-  ) : (
-    <p className="italic text-gray-500">No clues available</p>
-  )}
-</div>
-
-                      </>
+                    {item.clues?.length > 0 ? (
+                      <div className="space-y-2">
+                        {item.clues.map((clue) => (
+                          <div
+                            key={clue.id}
+                            className="flex justify-between gap-8 border-gray-600 py-1"
+                          >
+                            <p className="font-medium">{clue.name}</p>
+                            <p className="font-mono text-right text-[#38bdf8]">
+                              {clue.qr_code?.scan_count ?? 0} scans
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     ) : (
-                      !isLoading && <p>No data available.</p>
+                      <p className="italic text-gray-500">No clues available</p>
                     )}
                   </section>
                 )}

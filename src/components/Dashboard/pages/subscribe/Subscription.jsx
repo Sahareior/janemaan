@@ -11,6 +11,7 @@ const Subscription = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 const {data,isLoading} =useGetPlanQuery()
 
+
 if (isLoading) {
     return (
       <div className="flex justify-center items-center h-[80vh]">
