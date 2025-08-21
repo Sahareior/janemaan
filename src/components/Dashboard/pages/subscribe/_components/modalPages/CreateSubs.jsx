@@ -29,8 +29,12 @@ const handleSubmit = async () => {
   // Convert price and discount_percent to integers
   const payload = {
     ...formData,
-    price: parseFloat(formData.price, 10) || 0,
-    discount_percent: parseFloat(formData.discount_percent, 10) || 0,
+    price: formData.price
+      ? Math.round(parseFloat(formData.price) * 100)
+      : null,
+    discount_percent: formData.discount_percent
+      ? Math.round(parseFloat(formData.discount_percent)*100)
+      : null,
   };
 
   console.log(payload);

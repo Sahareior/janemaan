@@ -42,8 +42,13 @@ const EditSubs = ({ data,onCancel,handleCancel }) => {
 const handleSubmit = async () => {
   const dataToLog = {
     ...formData,
-    price: parseFloat(formData.price, 10) || 0,
-    discount_percent: parseFloat(formData.discount_percent, 10) || 0,
+    // convert dollar string to float, then multiply by 100 → integer cents
+    price: formData.price
+      ? Math.round(parseFloat(formData.price) * 100)
+      : null,
+    discount_percent: formData.discount_percent
+      ? Math.round(parseFloat(formData.discount_percent)*100)
+      : null,
   };
 
   try {
@@ -66,10 +71,8 @@ const handleSubmit = async () => {
         color: "#fff",
       });
       refetch();
-      onCancel()
+      onCancel();
     }
-
-    console.log(res);
   } catch (err) {
     Swal.fire({
       title: "Error",
@@ -80,6 +83,7 @@ const handleSubmit = async () => {
     });
   }
 };
+
 
 
   return (
@@ -114,7 +118,7 @@ const handleSubmit = async () => {
           <Input
             placeholder="0.00"
             className="custom-dark-input"
-            value={formData.price}
+            value={(formData.price / 100).toFixed(2)}
             onChange={(e) => handleChange("price", e.target.value)}
           />
         </div>
@@ -160,7 +164,7 @@ const handleSubmit = async () => {
           <Input
             placeholder="0%"
             className="custom-dark-input"
-            value={formData.discount_percent}
+           value={(formData.discount_percent / 100).toFixed(2)}
             onChange={(e) => handleChange("discount_percent", e.target.value)}
           />
         </div>

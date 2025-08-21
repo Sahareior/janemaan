@@ -71,7 +71,8 @@ const columns = [
     key: "price",
     render: (price, record) => (
       <span className="text-[#9E9E9E] font-bold popreg text-[17px]">
-        {record.currency?.toUpperCase()} {price}
+        {record.currency?.toUpperCase()} {(price / 100).toFixed(2)
+}
       </span>
     ),
   },
@@ -88,7 +89,7 @@ const columns = [
     dataIndex: "discount_percent",
     key: "discount_percent",
     render: (discount) => (
-      <span className="text-[#9E9E9E] popreg font-bold text-[17px]">{discount}%</span>
+      <span className="text-[#9E9E9E] popreg font-bold text-[17px]">{(discount / 100).toFixed(2)}%</span>
     ),
   },
 {
